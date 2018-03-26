@@ -22,7 +22,7 @@ def actual(request: HttpRequest, actual_item_name: str) -> HttpResponse:
         return HttpResponse(status=400)
 
     # Get device and corresponding item from the database
-    device = get_object_or_404(Device, pk=device_id)
+    device = get_object_or_404(Device, device_id=device_id)
     item = get_object_or_404(device.item_set, name=actual_item_name)
 
     if item.type != 'actual':

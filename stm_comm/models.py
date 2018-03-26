@@ -7,7 +7,7 @@ from django.db import models
 # Create your models here.
 class Device(models.Model):
     # Serial number (or other ID) of device
-    pk = models.CharField(max_length=20)
+    device_id = models.CharField(primary_key=True, max_length=20)
     # online/offline
     status = models.CharField(max_length=7)
     fw_version = models.CharField(max_length=10)
