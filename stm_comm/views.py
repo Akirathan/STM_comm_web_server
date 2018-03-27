@@ -47,7 +47,7 @@ def actual(request: HttpRequest, actual_item_name: str) -> HttpResponse:
 def connect(request: HttpRequest, device_id: str) -> HttpResponse:
     """ First message from STM device """
     # Check if the device is in the device database
-    device = get_object_or_404(Device, pk=device_id)
+    device = get_object_or_404(Device, device_id=device_id)
     device.set_online()
 
     ConnectionManager.add_device(device_id, request.get_host(), request.get_port())
