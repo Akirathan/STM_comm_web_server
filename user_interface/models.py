@@ -1,3 +1,7 @@
 from django.db import models
 
-# Create your models here.
+
+class User(models.Model):
+    """
+    Every User may have many devices.
+    """
