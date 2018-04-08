@@ -27,12 +27,14 @@
         <!-- No user logged in -->
         {% else %}
             <form action="{% url 'user_interface:user_login' %}" method="post">
+            {% csrf_token %}
                 <div class="form-group">
                     <label for="input_username"> Username </label>
-                    <input class="form-control" id="input_username" type="text"  tabindex="-1" placeholder="Enter username">
+                    <input class="form-control" name="username" id="input_username" type="text"  tabindex="-1"
+                           placeholder="Enter username">
 
                     <label for="input_password"> Password </label>
-                    <input class="form-control" id="input_password" type="password" tabindex="-1"
+                    <input class="form-control" name="password" id="input_password" type="password" tabindex="-1"
                            placeholder="Enter password">
 
                     <button class="btn btn-primary" type="submit" tabindex="-1" > Sign in </button>
