@@ -10,13 +10,39 @@
 
 <body>
 <div class="username">
-    <button class="btn dropdown-toggle" data-hover="dropdown" data-toggle="dropdown" data-delay="1000">
-        Anonymous
+    <button class="btn dropdown-toggle" data-hover="dropdown" data-toggle="dropdown">
+        {% if user.is_authenticated %}
+            {{ user.get_username }}
+        {% else %}
+            Login
+        {% endif %}
     </button>
-    <ul class="dropdown-menu">
-        <li><a class="dropdown-item" tabindex="-1"> devices </a></li>
-        <li><a class="dropdown-item" tabindex="-1"> user details </a></li>
-        <li><a class="dropdown-item" tabindex="-1"> logout </a></li>
-    </ul>
-</div>
+    <div class="dropdown-menu">
+        <!-- Authenticated user -->
+        {% if user.is_authenticated %}
+            <a class="dropdown-item" tabindex="-1"> User details </a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" tabindex="-1"> Logout </a>
+
+        <!-- No user logged in -->
+        {% else %}
+            <form action="{% url 'user_interface:user_login' %}" method="post">
+                <div class="form-group">
+                    <label for="input_username"> Username </label>
+                    <input class="form-control" id="input_username" type="text"  tabindex="-1" placeholder="Enter username">
+
+                    <label for="input_password"> Password </label>
+                    <input class="form-control" id="input_password" type="password" tabindex="-1"
+                           placeholder="Enter password">
+
+                    <button class="btn btn-primary" type="submit" tabindex="-1" > Sign in </button>
+                </div>
+            </form>
+
+            <div class="dropdown-divider"></div>
+
+            <a class="dropdown-item" href=""> Register </a>
+        {% endif %}
+    </div> <!-- dropdown-menu -->
+</div> <!-- username -->
 </body>
