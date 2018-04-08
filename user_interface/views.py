@@ -1,6 +1,6 @@
 from django.shortcuts import render
-from django.http import HttpResponse, HttpRequest
-from django.contrib.auth import login, authenticate
+from django.http import HttpResponse, HttpRequest, HttpResponseRedirect
+from django.contrib.auth import login, authenticate, logout
 
 
 def index(request: HttpRequest) -> HttpResponse:
@@ -18,4 +18,9 @@ def user_login(request: HttpRequest) -> HttpResponse:
         return HttpResponse(404)  # TODO
 
     login(request, user)
+    return render(request, 'index.html')
+
+
+def user_logout(request: HttpRequest) -> HttpResponse:
+    logout(request)
     return render(request, 'index.html')
