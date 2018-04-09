@@ -28,6 +28,24 @@ class Device(models.Model):
 class Item(models.Model):
     device = models.ForeignKey('Device', on_delete=models.CASCADE)
     name = models.CharField(max_length=20)
+    # actual/config
     type = models.CharField(max_length=10)
     value = models.CharField(max_length=30)
     time = models.DateTimeField()
+
+    def render(self) -> str:
+        raise NotImplementedError()
+
+
+class ActualItem(Item):
+    type = 'actual'
+
+    def render(self) -> str:
+        raise NotImplementedError()
+
+
+class TempItem(ActualItem):
+    name = 'temp'
+
+    def render(self) -> str:
+        return '<strong>' + self.value + '</strong>'
