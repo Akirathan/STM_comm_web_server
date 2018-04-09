@@ -1,5 +1,5 @@
 from django.db import models
-from user_interface.models import User
+from django.conf import settings
 
 # Primary key (serial number or other ID) of Device is expected to be set
 # before the device attempts to connect for the first time.
@@ -9,7 +9,7 @@ from user_interface.models import User
 class Device(models.Model):
     # Serial number (or other ID) of device
     device_id = models.CharField(primary_key=True, max_length=20)
-    user = models.ForeignKey('user_interface.User', on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     # online/offline
     status = models.CharField(max_length=7)
     fw_version = models.CharField(max_length=10)
