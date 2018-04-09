@@ -1,0 +1,58 @@
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <ul class="nav navbar-nav">
+            <li class="active">
+                <a href=""> Home </a>
+            </li>
+            <li>
+                <a href=""> Devices </a>
+            </li>
+        </ul>
+
+        <!-- User login -->
+        <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="">
+                    {% if user.is_authenticated %}
+                        {{ user.get_username }}
+                    {% else %}
+                        Login
+                    {% endif %}
+                    <span class="caret"></span>
+                </a>
+
+                <div class="dropdown-menu">
+                    <!-- Authenticated user -->
+                    {% if user.is_authenticated %}
+                        <a class="dropdown-item" tabindex="1" href="{% url 'user_interface:user_details' %}">
+                            User details
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="{% url 'user_interface:user_logout' %}" tabindex="2"> Logout </a>
+
+                    <!-- No user logged in -->
+                    {% else %}
+                        <form action="{% url 'user_interface:user_login' %}" method="post">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label for="input_username"> Username </label>
+                                <input class="form-control" name="username" id="input_username" type="text"  tabindex="1"
+                                       placeholder="Enter username">
+
+                                <label for="input_password"> Password </label>
+                                <input class="form-control" name="password" id="input_password" type="password" tabindex="2"
+                                       placeholder="Enter password">
+
+                                <button class="btn btn-primary" type="submit" tabindex="3" > Sign in </button>
+                            </div>
+                        </form>
+
+                        <div class="dropdown-divider"></div>
+
+                        <a class="dropdown-item" href=""> Register </a>
+                    {% endif %}
+                </div> <!-- dropdown-menu -->
+            </li>
+        </ul>
+    </div> <!-- container-fluid -->
+</nav>
