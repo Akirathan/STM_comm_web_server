@@ -1,6 +1,4 @@
 .gitignore
-venv
+.idea/*
+venv/
 *.pyc
-stm_comm/__pycache__/
-
-\.idea/workspace\.xml
