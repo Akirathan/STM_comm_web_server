@@ -38,14 +38,18 @@ class Item(models.Model):
 
 
 class ActualItem(Item):
-    type = 'actual'
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.type = 'actual'
 
     def render(self) -> str:
         raise NotImplementedError()
 
 
 class TempItem(ActualItem):
-    name = 'temp'
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.name = 'temp'
 
     def render(self) -> str:
         return '<strong>' + self.value + '</strong>'
