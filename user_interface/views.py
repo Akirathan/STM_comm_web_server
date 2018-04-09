@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpRequest, HttpResponseRedirect
 from django.contrib.auth import login, authenticate, logout
+from django.views import View
 
 
 def index(request: HttpRequest) -> HttpResponse:
@@ -24,3 +25,8 @@ def user_login(request: HttpRequest) -> HttpResponse:
 def user_logout(request: HttpRequest) -> HttpResponse:
     logout(request)
     return render(request, 'index.html')
+
+
+class DevicesView(View):
+    def get(self):
+        return
