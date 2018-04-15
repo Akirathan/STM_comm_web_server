@@ -1,0 +1,26 @@
+<!--
+ Gets "devices_model_list" = list of user model devices.
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags by Bootstrap -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    {% include "stylesheets.html" %}
+</head>
+
+<body>
+{% include "navbar.html" %}
+
+{% for device_model in devices_model_list %}
+    {% include "device_overview.html" with device_model=device_model %}
+{% endfor %}
+
+{% include "javascripts.html" %}
+</body>
+
+</html>
