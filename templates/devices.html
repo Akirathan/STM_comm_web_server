@@ -16,9 +16,15 @@
 <body>
 {% include "navbar.html" %}
 
+<table>
+<tr>
+  <td> Device ID </td>
+  <td> Status </td>
+</tr>
 {% for device_model in devices_model_list %}
     {% include "device_overview.html" with device_model=device_model %}
 {% endfor %}
+</table>
 
 {% include "javascripts.html" %}
 </body>
