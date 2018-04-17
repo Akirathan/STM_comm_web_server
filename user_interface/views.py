@@ -23,6 +23,10 @@ def user_login(request: HttpRequest) -> HttpResponse:
     return render(request, 'index.html')
 
 
+def user_details(request: HttpRequest) -> HttpResponse:
+    return render(request, 'user_details.html')
+
+
 def user_logout(request: HttpRequest) -> HttpResponse:
     logout(request)
     return render(request, 'index.html')
