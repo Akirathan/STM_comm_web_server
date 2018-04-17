@@ -40,4 +40,4 @@ class DevicesView(View):
 
     def get(self, request: HttpRequest) -> HttpResponse:
         devices = get_user_devices(request)
-        return render(request, 'devices.html', {'active_navbar_item': 'devices'})
+        return render(request, 'devices.html')
