@@ -2,7 +2,13 @@
  Gets "device_model" as Device model
 -->
 
-<tr>
-  <td> {{ device_model.device_id }} </td>
-  <td> {{ device_model.status }} </td>
-</tr>
+<table class="table table-bordered">
+  <tr>
+    <th> Device ID </th>
+    <th> status </th>
+  </tr>
+  <tr>
+    <td> {{ device_model.device_id }} </td>
+    <td> {{ device_model.status }} </td>
+  </tr>
+</table>
