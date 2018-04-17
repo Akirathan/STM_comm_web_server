@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpRequest, HttpResponseRedirect
 from django.contrib.auth import login, authenticate, logout
 from django.views import View
+from stm_comm.models import Device
 
 
 def index(request: HttpRequest) -> HttpResponse:
@@ -27,6 +28,16 @@ def user_logout(request: HttpRequest) -> HttpResponse:
     return render(request, 'index.html')
 
 
+def get_user_devices(request: HttpRequest) -> [Device]:
+    user = request.user
+    if not user.is_authenticated:
+        return []
+
+    return user.device_set.all()
+
+
 class DevicesView(View):
-    def get(self):
-        return
+
+    def get(self, request: HttpRequest) -> HttpResponse:
+        devices = get_user_devices(request)
+        return render(request, 'devices.html', {'active_navbar_item': 'devices'})

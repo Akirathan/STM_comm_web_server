@@ -1,12 +1,28 @@
+<!--
+Context variables:
+  active_navbar_item ... string variable
+-->
+
 <nav class="navbar navbar-default">
   <div class="container-fluid">
     <ul class="nav navbar-nav">
-      <li class="active">
-        <a href=""> Home </a>
-      </li>
-      <li>
-        <a href="{% url 'user_interface:devices' %}"> Devices </a>
-      </li>
+      <!-- Home -->
+      {% if active_navbar_item == "home" %}
+        <li class="active">
+      {% else %}
+        <li>
+      {% endif %}
+          <a href=""> Home </a>
+        </li>
+
+      <!-- Devices -->
+      {% if active_navbar_item == "devices" %}
+        <li class="active">
+      {% else %}
+        <li>
+      {% endif %}
+          <a href="{% url 'user_interface:devices' %}"> Devices </a>
+        </li>
     </ul>
 
     <!-- User login -->
