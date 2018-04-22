@@ -25,8 +25,19 @@ class Device(models.Model):
         self.status = 'offline'
         return
 
+    def __get_all_items__(self):
+        temp_item = self.tempitem_set
+        if temp_item.count() > 1:
+            raise Exception('Too much temp items for one device')
+        return temp_item
+
     def render_all_items(self) -> str:
-        pass
+        all_items_str = []
+        all_items = self.__get_all_items__()
+        for item in all_items:
+            all_items_str += item.render()
+
+        return all_items_str
 
 
 class Item(models.Model):
