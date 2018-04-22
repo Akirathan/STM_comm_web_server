@@ -44,4 +44,4 @@ class DevicesView(View):
 
     def get(self, request: HttpRequest) -> HttpResponse:
         devices = get_user_devices(request)
-        return render(request, 'devices.html', {'devices_model_list': devices})
+        return render(request, 'devices/devices.html', {'devices_model_list': devices})
