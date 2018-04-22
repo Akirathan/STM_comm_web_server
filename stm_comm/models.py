@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from django.template.loader import render_to_string
 
 # Primary key (serial number or other ID) of Device is expected to be set
 # before the device attempts to connect for the first time.
@@ -55,4 +56,4 @@ class TempItem(ActualItem):
         self.name = 'temp'
 
     def render(self) -> str:
-        return '<strong>' + self.value + '</strong>'
+        return render_to_string('items/temp_item.html', {'temperature': self.value})
