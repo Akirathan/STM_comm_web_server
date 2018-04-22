@@ -24,6 +24,9 @@ class Device(models.Model):
         self.status = 'offline'
         return
 
+    def render_all_items(self) -> str:
+        pass
+
 
 class Item(models.Model):
     device = models.ForeignKey('Device', on_delete=models.CASCADE)
