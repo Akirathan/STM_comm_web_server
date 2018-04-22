@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 from django.template.loader import render_to_string
+from django.utils import timezone
 
 # Primary key (serial number or other ID) of Device is expected to be set
 # before the device attempts to connect for the first time.
@@ -41,30 +42,23 @@ class Device(models.Model):
 
 
 class Item(models.Model):
-    device = models.ForeignKey('Device', on_delete=models.CASCADE)
+    class Meta:
+        abstract = True
+
     name = models.CharField(max_length=20)
     # actual/config
     type = models.CharField(max_length=10)
-    value = models.CharField(max_length=30)
-    time = models.DateTimeField()
+    value = models.CharField(max_length=30, default=0)
+    time = models.DateTimeField(default=timezone.now)
 
     def render(self) -> str:
         raise NotImplementedError()
 
 
-class ActualItem(Item):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.type = 'actual'
-
-    def render(self) -> str:
-        raise NotImplementedError()
-
-
-class TempItem(ActualItem):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.name = 'temp'
+class TempItem(Item):
+    device = models.ForeignKey('Device', default=None, on_delete=models.CASCADE)
+    name = 'temp'
+    type = 'actual'
 
     def render(self) -> str:
         return render_to_string('items/temp_item.html', {'temperature': self.value})
