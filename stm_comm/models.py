@@ -55,10 +55,16 @@ class Item(models.Model):
         raise NotImplementedError()
 
 
-class TempItem(Item):
+class ActualItem(Item):
+    class Meta:
+        abstract = True
+
+    type = 'actual'
+
+
+class TempItem(ActualItem):
     device = models.ForeignKey('Device', default=None, on_delete=models.CASCADE)
     name = 'temp'
-    type = 'actual'
 
     def render(self) -> str:
         return render_to_string('items/temp_item.html', {'temperature': self.value})
