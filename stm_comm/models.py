@@ -28,15 +28,20 @@ class Device(models.Model):
         return
 
     def __get_all_items__(self):
-        temp_item = self.tempitem_set
-        if temp_item.count() > 1:
+        temp_items = self.tempitem_set
+        if temp_items.count() > 1:
             raise Exception('Too much temp items for one device')
-        return temp_item
+
+        intervals_items = self.intervalsitem_set
+        if intervals_items.count() > 1:
+            raise Exception('Too much interval items for one device')
+
+        return [temp_items.first(), intervals_items.first()]
 
     def render_all_items(self) -> str:
         all_items_str = ""
         all_items = self.__get_all_items__()
-        for item in all_items.all():
+        for item in all_items:
             all_items_str += item.render()
 
         return all_items_str
