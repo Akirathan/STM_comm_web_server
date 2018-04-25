@@ -30,6 +30,8 @@
 <!-- Device details collapsed -->
 <div id="device_details" class="collapse panel panel-default">
   <div class="panel-body">
-    {{ device_model.render_all_items }}
+    {% autoescape off %}
+      {{ device_model.render_all_items }}
+    {% endautoescape %}
   </div>
 </div>
