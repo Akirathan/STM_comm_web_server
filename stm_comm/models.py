@@ -34,9 +34,9 @@ class Device(models.Model):
         return temp_item
 
     def render_all_items(self) -> str:
-        all_items_str = []
+        all_items_str = ""
         all_items = self.__get_all_items__()
-        for item in all_items:
+        for item in all_items.all():
             all_items_str += item.render()
 
         return all_items_str
