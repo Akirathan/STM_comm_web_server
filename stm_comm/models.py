@@ -2,6 +2,7 @@ from django.db import models
 from django.conf import settings
 from django.template.loader import render_to_string
 from django.utils import timezone
+import json
 
 # Primary key (serial number or other ID) of Device is expected to be set
 # before the device attempts to connect for the first time.
@@ -48,7 +49,7 @@ class Item(models.Model):
     name = models.CharField(max_length=20)
     # actual/config
     type = models.CharField(max_length=10)
-    value = models.CharField(max_length=30, default=0)
+    value = models.CharField(max_length=60, default=0)
     time = models.DateTimeField(default=timezone.now)
 
     def render(self) -> str:
@@ -101,7 +102,8 @@ class IntervalsItem(ConfigItem):
         """
         Parses all the intervals that are in self.value in JSON format
         """
-        from_time = Time(12, 30)
-        to_time = Time(13, 00)
-        interval = Interval(from_time, to_time, 23)
+        json_object = json.loads(self.value)
+        from_time = Time(json_object['from']['hours'], json_object['from']['minutes'])
+        to_time = Time(json_object['to']['hours'], json_object['to']['minutes'])
+        interval = Interval(from_time, to_time, json_object['temp'])
         return [interval]
