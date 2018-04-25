@@ -62,9 +62,46 @@ class ActualItem(Item):
     type = 'actual'
 
 
+class ConfigItem(Item):
+    class Meta:
+        abstract = True
+
+    type = 'config'
+
+
 class TempItem(ActualItem):
     device = models.ForeignKey('Device', default=None, on_delete=models.CASCADE)
     name = 'temp'
 
     def render(self) -> str:
         return render_to_string('items/temp_item.html', {'temperature': self.value})
+
+
+class Time:
+    def __init__(self, hours: int, minutes: int):
+        self.hours = hours
+        self.minutes = minutes
+
+
+class Interval:
+    def __init__(self, from_time: Time, to_time: Time, temp: int):
+        self.from_time = from_time
+        self.to_time = to_time
+        self.temp = temp
+
+
+class IntervalsItem(ConfigItem):
+    device = models.ForeignKey('Device', default=None, on_delete=models.CASCADE)
+    name = 'intervals'
+
+    def render(self) -> str:
+        return render_to_string('items/intervals.html', {'interval_list': self.__get_intervals__()})
+
+    def __get_intervals__(self) -> [Interval]:
+        """
+        Parses all the intervals that are in self.value in JSON format
+        """
+        from_time = Time(12, 30)
+        to_time = Time(13, 00)
+        interval = Interval(from_time, to_time, 23)
+        return [interval]

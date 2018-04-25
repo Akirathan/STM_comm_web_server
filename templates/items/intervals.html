@@ -1,0 +1,104 @@
+<!--
+ Gets "interval_list" as [Interval]
+-->
+
+<style>
+  .interval {
+    position: relative; /* Make this a container */
+    border: 1px solid black;
+    font-family: sans-serif;
+    font-size: 110%;
+    width: 120px;
+    height: 50px;
+  }
+  .to::before {
+    content: "-";
+  }
+  .temp::after {
+    content: "°";
+  }
+  .interval > .from {
+    position: absolute;
+    top: 5%;
+    bottom: 50%;
+    right: 45%;
+    left: 5%;
+  }
+  .interval > .to {
+    position: absolute;
+    top: 5%;
+    bottom: 50%;
+    right: 5%;
+    left: 45%;
+  }
+  .interval > .temp {
+    position: absolute;
+    /* top needs to be in pixels because of inserted buttons */
+    top: 23px;
+    left: 40%;
+  }
+  .edit-hideable-buttons {
+    position: absolute;
+    left: 15%;
+    bottom: 5%;
+    display: none;
+  }
+</style>
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    Intervals
+    <!-- Edit Intervals button -->
+    <button id="edit_button" onclick="toggleEditButtons()" class="btn btn-primary" type="button"
+            style="position: relative; left: 40px;">
+      Edit
+    </button>
+  </div> <!-- panel-heading -->
+  <div class="panel-body">
+    <div class="container-fluid">
+      <div class="row">
+        {% for interval in interval_list %}
+          <div class="col-md-1">
+            <div class="interval">
+              <div class="from">
+                {{ interval.from_time.hours }}:{{ interval.from_time.minutes }}
+              </div>
+              <div class="to">
+                {{ interval.to_time.hours }}:{{ interval.to_time.minutes }}
+              </div>
+              <div class="temp">
+                {{ interval.temp }}
+              </div>
+
+              <!-- edit interval buttons -->
+              <div class="edit-hideable-buttons btn-group" role="group">
+                <button class="btn btn-default" type="button" style="padding: 0 3px;">
+                  edit
+                </button>
+                <button class="btn btn-default" type="button" style="padding: 0 3px;">
+                  delete
+                </button>
+              </div> <!-- btn-group -->
+            </div> <!-- interval -->
+          </div> <!-- col-md-1 -->
+        {% endfor %}
+      </div>
+    </div> <!-- container-fluid -->
+  </div> <!-- panel-body -->
+</div>
+
+<script>
+var toggled = false;
+
+function toggleEditButtons() {
+    if (!toggled) {
+        $(".interval").css("height", "70px");
+        $(".edit-hideable-buttons").show();
+        $("#edit_button");
+        toggled = true;
+    }
+    else {
+        toggled = false;
+    }
+}
+</script>
