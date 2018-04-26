@@ -6,7 +6,7 @@
   <div class="panel-heading">
     Intervals
     <!-- Edit Intervals button -->
-    <button id="edit_button" onclick="toggleEditButtons()" class="btn btn-primary" type="button"
+    <button id="edit_button" onclick="editAll(event)" class="btn btn-primary" type="button"
             style="position: relative; left: 40px;">
       Edit
     </button>
@@ -26,36 +26,41 @@
               <div class="temp">
                 {{ interval.temp }}
               </div>
-
-              <!-- edit interval buttons -->
-              <div class="edit-hideable-buttons btn-group" role="group">
-                <button class="btn btn-default" type="button" style="padding: 0 3px;">
-                  edit
-                </button>
-                <button class="btn btn-default" type="button" style="padding: 0 3px;">
-                  delete
-                </button>
-              </div> <!-- btn-group -->
             </div> <!-- interval -->
+
+            <!-- Editable interval (hidden) -->
+            <div class="editable-interval" style="display: none">
+              <!-- from textarea -->
+              <div style="position: absolute; top: 3%; left: 2%;">
+                <textarea maxlength="5"
+                          style="resize: none; width: 45px; height: 25px;"
+                >{{ interval.from_time.hours }}:{{ interval.from_time.minutes }}</textarea>
+                <span style="position: relative; bottom: 5px;">
+                  -
+                </span>
+              </div>
+              <!-- to textarea -->
+              <textarea maxlength="5"
+                        style="resize: none; width: 45px; height: 25px;
+                               position: absolute; top: 3%; left: 55%;"
+              >{{ interval.to_time.hours }}:{{ interval.to_time.minutes }}</textarea>
+              <!-- temp teaxtarea -->
+              <div style="position: absolute; top: 30px; left: 35%;">
+                <textarea maxlength="2"
+                          style="resize: none; width: 25px; height: 25px;">{{ interval.temp }}</textarea>
+                <span style="position: relative; bottom: 8px; right: 2px">
+                  °
+                </span>
+              </div>
+              <!-- delete button -->
+              <button class="btn btn-danger" onclick="deleteInterval(event)" type="button"
+                      style="position: absolute; bottom: 3%; left: 30%; padding: 0 3px">
+                delete
+              </button>
+            </div> <!-- interval (editable interval) -->
           </div> <!-- col-md-1 -->
         {% endfor %}
       </div> <!-- row -->
     </div> <!-- container-fluid -->
   </div> <!-- panel-body -->
 </div>
-
-<script>
-var toggled = false;
-
-function toggleEditButtons() {
-    if (!toggled) {
-        $(".interval").css("height", "70px");
-        $(".edit-hideable-buttons").show();
-        $("#edit_button");
-        toggled = true;
-    }
-    else {
-        toggled = false;
-    }
-}
-</script>
