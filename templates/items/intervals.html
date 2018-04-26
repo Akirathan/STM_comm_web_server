@@ -2,49 +2,6 @@
  Gets "interval_list" as [Interval]
 -->
 
-<style>
-  .interval {
-    position: relative; /* Make this a container */
-    border: 1px solid black;
-    font-family: sans-serif;
-    font-size: 110%;
-    width: 120px;
-    height: 50px;
-  }
-  .to::before {
-    content: "-";
-  }
-  .temp::after {
-    content: "°";
-  }
-  .interval > .from {
-    position: absolute;
-    top: 5%;
-    bottom: 50%;
-    right: 45%;
-    left: 5%;
-  }
-  .interval > .to {
-    position: absolute;
-    top: 5%;
-    bottom: 50%;
-    right: 5%;
-    left: 45%;
-  }
-  .interval > .temp {
-    position: absolute;
-    /* top needs to be in pixels because of inserted buttons */
-    top: 23px;
-    left: 40%;
-  }
-  .edit-hideable-buttons {
-    position: absolute;
-    left: 15%;
-    bottom: 5%;
-    display: none;
-  }
-</style>
-
 <div class="panel panel-default">
   <div class="panel-heading">
     Intervals
@@ -82,7 +39,7 @@
             </div> <!-- interval -->
           </div> <!-- col-md-1 -->
         {% endfor %}
-      </div>
+      </div> <!-- row -->
     </div> <!-- container-fluid -->
   </div> <!-- panel-body -->
 </div>

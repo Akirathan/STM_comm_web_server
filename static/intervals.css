@@ -1,0 +1,44 @@
+.interval, .editable-interval {
+    position: relative; /* Make this a container */
+    border: 1px solid black;
+    font-family: sans-serif;
+    font-size: 110%;
+    width: 120px;
+    height: 50px;
+}
+
+.editable-interval {
+    height: 90px;
+    min-height: 90px;
+}
+
+.to::before {
+    content: "-";
+}
+
+.temp::after {
+    content: "°";
+}
+
+.interval > .from {
+    position: absolute;
+    top: 5%;
+    bottom: 50%;
+    right: 45%;
+    left: 5%;
+}
+
+.interval > .to {
+    position: absolute;
+    top: 5%;
+    bottom: 50%;
+    right: 5%;
+    left: 45%;
+}
+
+.interval > .temp {
+    position: absolute;
+    /* top needs to be in pixels because of inserted buttons */
+    top: 23px;
+    left: 40%;
+}
