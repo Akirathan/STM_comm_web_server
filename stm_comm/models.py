@@ -87,6 +87,10 @@ class Time:
     def __init__(self, hours: int, minutes: int):
         self.hours = hours
         self.minutes = minutes
+        return
+
+    def to_json(self) -> str:
+        return '{"hours":%d,"minutes":%d}' % (self.hours, self.minutes)
 
 
 class Interval:
@@ -94,21 +98,46 @@ class Interval:
         self.from_time = from_time
         self.to_time = to_time
         self.temp = temp
+        return
+
+    def to_json(self) -> str:
+        return '{"from":%s,"to":%s,"temp":%d}' % (self.from_time.to_json(), self.to_time.to_json(), self.temp)
 
 
 class IntervalsItem(ConfigItem):
     device = models.ForeignKey('Device', default=None, on_delete=models.CASCADE)
     name = 'intervals'
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.intervals_num = 0
+        self.value = '[]'
+        return
+
     def render(self) -> str:
         return render_to_string('items/intervals.html', {'interval_list': self.__get_intervals__()})
+
+    def __parse_one_interval__(self, interval_dict: dict) -> Interval:
+        from_time = Time(interval_dict['from']['hours'], interval_dict['from']['minutes'])
+        to_time = Time(interval_dict['to']['hours'], interval_dict['to']['minutes'])
+        return Interval(from_time, to_time, interval_dict['temp'])
 
     def __get_intervals__(self) -> [Interval]:
         """
         Parses all the intervals that are in self.value in JSON format
         """
-        json_object = json.loads(self.value)
-        from_time = Time(json_object['from']['hours'], json_object['from']['minutes'])
-        to_time = Time(json_object['to']['hours'], json_object['to']['minutes'])
-        interval = Interval(from_time, to_time, json_object['temp'])
-        return [interval]
+        json_objects = json.loads(self.value)
+        intervals = []
+        for json_object in json_objects:
+            intervals.append(self.__parse_one_interval__(json_object))
+        return intervals
+
+    def add_interval(self, interval: Interval):
+        # Remove last array bracket
+        self.value = self.value.replace(']', '')
+
+        self.value += interval.to_json()
+        self.value += ']'
+
+        self.intervals_num += 1
+        return
