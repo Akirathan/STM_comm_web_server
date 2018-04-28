@@ -116,8 +116,7 @@ class IntervalsItem(ConfigItem):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.intervals_num = 0
-        self.value = '[]'
+        self.intervals_num = len(self.__get_intervals__())
         return
 
     def __str__(self):
