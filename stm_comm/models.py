@@ -85,15 +85,29 @@ class TempItem(ActualItem):
 
 class Time:
     def __init__(self, hours: int, minutes: int):
-        self.hours = hours
-        self.minutes = minutes
+        self.__hours_num = hours
+        self.__minutes_num = minutes
         return
 
     def to_json(self) -> str:
-        return '{"hours":%d,"minutes":%d}' % (self.hours, self.minutes)
+        return '{"hours":%d,"minutes":%d}' % (self.__hours_num, self.__minutes_num)
 
     def __str__(self):
-        return '%d:%d' % (self.hours, self.minutes)
+        return '%s:%s' % (self.hours, self.minutes)
+
+    @property
+    def minutes(self) -> str:
+        if self.__minutes_num < 10:
+            return '0%d' % self.__minutes_num
+        else:
+            return str(self.__minutes_num)
+
+    @property
+    def hours(self) -> str:
+        if self.__hours_num < 10:
+            return '0%d' % self.__hours_num
+        else:
+            return str(self.__hours_num)
 
 
 class Interval:
