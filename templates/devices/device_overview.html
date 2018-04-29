@@ -5,6 +5,9 @@
  Gets "device_model" as Device model
 -->
 
+{% load static %}
+<script src="{% static 'device_overview.js' %}"></script>
+
 <table class="table table-bordered">
   <tr>
     <th> Device ID </th>
@@ -26,10 +29,10 @@
       <!-- "save into device" and "discard changes" buttons -->
       <div id="save_to_device_group" class="btn-group" style="display: none; position: relative; left: 70%;">
         <!-- save into device button -->
-        <button class="btn btn-success" role="button">
+        <button class="btn btn-success" onclick="saveIntoDevice(event)" role="button">
           Save into device
         </button>
-        <button class="btn btn-warning" role="button">
+        <button class="btn btn-warning" onclick="discardChanges(event)" role="button">
           Discard changes
         </button>
       </div> <!-- btn-group -->

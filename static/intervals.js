@@ -1,5 +1,75 @@
 var intervalsChanged = false;
 
+/**
+ *
+ * @param hours str
+ * @param minutes str
+ * @constructor
+ */
+function Time(hours, minutes) {
+    this.hours = hours;
+    this.minutes = minutes;
+}
+
+/**
+ *
+ * @param fromTime Time
+ * @param toTime Time
+ * @param temp int
+ * @constructor
+ */
+function Interval(fromTime, toTime, temp) {
+    this.fromTime = fromTime;
+    this.toTime = toTime;
+    this.temp = temp;
+}
+
+var intervalCollector = {
+    /**
+     * @return Interval[]
+     */
+    collectIntervals : function() {
+        var columns = $(".row").children();
+        var intervals = new [];
+        columns.forEach(function() {
+            var interval = this.collectInterval(columnElement);
+            intervals.append(interval);
+        });
+        return intervals;
+    },
+
+    collectInterval : function(columnElement) {
+        var fromString = $(columnElement).find(".from").html();
+        var fromHours = fromString.substr(0, 2);
+        var fromMinutes = fromString.substr(3);
+
+        var toString = $(columnElement).find(".to").html();
+        var toHours = toString.substr(0, 2);
+        var toMinutes = toString.substr(3);
+
+        var tempString = $(columnElement).find(".temp").html();
+
+        return new Interval(new Time(fromHours, fromMinutes), new Time(toHours, toMinutes), tempString)
+    }
+};
+
+/**
+ * Saves current interval values into DB, with 'now' timestamp.
+ * @note Some intervals were surely edited.
+ * @note Called by device_overview.js when "Save into device" button is pressed.
+ */
+function saveUpdatedIntervalValues() {
+    var intervals = intervalCollector.collectIntervals();
+    $.ajax({
+        url: "...",
+        data: intervals,
+        contentType: "application/json",
+        method: "POST"
+    }).success(function(data, textStatus, jqXHR) {
+        console.log("Successfully saved intervals into server");
+    });
+}
+
 function editAll(event) {
     $(".interval").hide();
     $(".editable-interval").show();
@@ -100,6 +170,11 @@ function getAssociatedOverviewInterval(editableIntervalId) {
     return $("#" + overviewIntervalId);
 }
 
+/**
+ *
+ * @param textAreaElement
+ * @return {string}
+ */
 function findParentEditableIntervalId(textAreaElement) {
     var parentElement = textAreaElement.parentElement;
     while (!parentElement.id.startsWith("editable_")) {
