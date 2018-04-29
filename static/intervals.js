@@ -34,8 +34,11 @@ function showSaveButton() {
 function intervalChanged(event) {
     intervalsChanged = true;
 
-    var overviewInterval = getAssociatedOverviewInterval(event.target.id);
-    overviewInterval.html(event.target.value);
+    // Update value in corresponding (overview) interval.
+    var editableIntervalId = findParentEditableIntervalId(event.target);
+    var overviewInterval = getAssociatedOverviewInterval(editableIntervalId);
+    var fromId;
+    $("#" + fromId).html(event.target.value);
 }
 
 function deleteInterval(event) {
@@ -47,3 +50,10 @@ function getAssociatedOverviewInterval(editableIntervalId) {
     return $("#" + overviewIntervalId);
 }
 
+function findParentEditableIntervalId(textAreaElement) {
+    var parentElement = textAreaElement.parentElement;
+    while (!parentElement.id.startsWith("editable_")) {
+        parentElement = parentElement.parentElement;
+    }
+    return parentElement.id;
+}
