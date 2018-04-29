@@ -51,6 +51,7 @@
               <!-- temp teaxtarea -->
               <div style="position: absolute; top: 30px; left: 35%;">
                 <textarea id="editable_temp_{{ forloop.counter0 }}" maxlength="2"
+                          onchange="intervalChanged(event)"
                           style="resize: none; width: 25px; height: 25px;">{{ interval.temp }}</textarea>
                 <span style="position: relative; bottom: 8px; right: 2px">
                   °
