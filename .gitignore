@@ -1,4 +1,5 @@
 .gitignore
+notes.txt
 .idea/*
 venv/
 *.pyc
