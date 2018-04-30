@@ -63,7 +63,7 @@ function saveUpdatedIntervalValues() {
     var intervals = intervalCollector.collectIntervals();
     $.ajax({
         url: intervalsUrl,
-        data: intervals,
+        data: JSON.stringify(intervals),
         contentType: "application/json",
         method: "POST",
         success: function(data, textStatus, jqXHR) {
