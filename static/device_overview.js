@@ -31,18 +31,18 @@ function ensureCsrf() {
     });
 }
 
+/**
+ * All config items ie. items that can be changed and later saved into device.
+ * @type {*[]}
+ */
+const configItems = [intervals];
+
 function saveIntoDevice(event) {
     ensureCsrf();
 
-    var intervals = getUpdatedIntervalValues();
-
-    $.ajax({
-        url: intervalsUrl,
-        data: JSON.stringify(intervals),
-        contentType: "application/json",
-        method: "POST",
-        success: function (data, textStatus, jqXHR) {
-            console.log("Successfully saved intervals into server");
+    configItems.forEach(function(configItem) {
+        if (configItem.isChanged()) {
+            configItem.saveIntoDevice(deviceId);
         }
     });
 }

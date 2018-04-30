@@ -1,6 +1,32 @@
 var intervalsChanged = false;
 
 /**
+ * Implementation of "common config_item interface".
+ * @type {{isChanged: intervals.isChanged, saveIntoDevice: intervals.saveIntoDevice}}
+ */
+var intervals = {
+    url: "intervals",
+
+    isChanged: function() {
+        return intervalsChanged;
+    },
+
+    saveIntoDevice: function(deviceId) {
+        var intervals = intervalCollector.collectIntervals();
+
+        $.ajax({
+            url: this.url,
+            data: JSON.stringify(intervals),
+            contentType: "application/json",
+            method: "POST",
+            success: function (data, textStatus, jqXHR) {
+                console.log("Successfully saved intervals into server");
+            }
+        });
+    }
+};
+
+/**
  *
  * @param hours str
  * @param minutes str
@@ -52,15 +78,6 @@ var intervalCollector = {
         return new Interval(new Time(fromHours, fromMinutes), new Time(toHours, toMinutes), tempString)
     }
 };
-
-/**
- * Saves current interval values into DB, with 'now' timestamp.
- * @note Some intervals were surely edited.
- * @note Called by device_overview.js when "Save into device" button is pressed.
- */
-function getUpdatedIntervalValues() {
-    return intervalCollector.collectIntervals();
-}
 
 function editAll(event) {
     $(".interval").hide();
