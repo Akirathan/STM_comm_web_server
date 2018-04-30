@@ -8,6 +8,10 @@
 {% load static %}
 <script src="{% static 'device_overview.js' %}"></script>
 
+<script>
+  setDeviceId({{ device_model.device_id }});
+</script>
+
 <table class="table table-bordered">
   <tr>
     <th> Device ID </th>

@@ -36,6 +36,7 @@ function ensureCsrf() {
  * @type {*[]}
  */
 const configItems = [intervals];
+var deviceId = undefined;
 
 function saveIntoDevice(event) {
     ensureCsrf();
@@ -45,6 +46,10 @@ function saveIntoDevice(event) {
             configItem.saveIntoDevice(deviceId);
         }
     });
+}
+
+function setDeviceId(devId) {
+    deviceId = devId;
 }
 
 function discardChanges(event) {
