@@ -30,10 +30,10 @@ var intervalCollector = {
      */
     collectIntervals : function() {
         var columns = $(".row").children();
-        var intervals = new [];
-        columns.forEach(function() {
-            var interval = this.collectInterval(columnElement);
-            intervals.append(interval);
+        var intervals = [];
+        $.each(columns, function(index, value) {
+            var interval = intervalCollector.collectInterval(value);
+            intervals.push(interval);
         });
         return intervals;
     },
