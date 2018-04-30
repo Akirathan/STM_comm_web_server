@@ -19,6 +19,8 @@ function csrfSafeMethod(method) {
     return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
 }
 
+var csrftoken = getCookie('csrftoken');
+
 $.ajaxSetup({
     beforeSend: function(xhr, settings) {
         if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
@@ -28,9 +30,6 @@ $.ajaxSetup({
 });
 
 function saveIntoDevice(event) {
-    // Assure CSRF protection, because of POSTs
-    var csrftoken = getCookie('csrftoken');
-
     saveUpdatedIntervalValues();
 }
 
