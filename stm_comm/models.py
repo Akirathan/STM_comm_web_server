@@ -120,6 +120,12 @@ class Interval:
     def to_json(self) -> str:
         return '{"from":%s,"to":%s,"temp":%d}' % (self.from_time.to_json(), self.to_time.to_json(), self.temp)
 
+    @staticmethod
+    def from_json(json_dict: dict) -> 'Interval':
+        from_time = Time(json_dict['from']['hours'], json_dict['from']['minutes'])
+        to_time = Time(json_dict['to']['hours'], json_dict['to']['minutes'])
+        return Interval(from_time, to_time, json_dict['temp'])
+
     def __str__(self):
         return 'from: %s, to: %s, temp: %d' % (self.from_time, self.to_time, self.temp)
 
@@ -145,9 +151,7 @@ class IntervalsItem(ConfigItem):
         return render_to_string('items/intervals.html', {'interval_list': self.__get_intervals__()})
 
     def __parse_one_interval__(self, interval_dict: dict) -> Interval:
-        from_time = Time(interval_dict['from']['hours'], interval_dict['from']['minutes'])
-        to_time = Time(interval_dict['to']['hours'], interval_dict['to']['minutes'])
-        return Interval(from_time, to_time, interval_dict['temp'])
+        return Interval.from_json(interval_dict)
 
     def __get_intervals__(self) -> [Interval]:
         """
