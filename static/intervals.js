@@ -1,5 +1,4 @@
 var intervalsChanged = false;
-const intervalsUrl = "intervals";
 
 /**
  *
@@ -59,17 +58,8 @@ var intervalCollector = {
  * @note Some intervals were surely edited.
  * @note Called by device_overview.js when "Save into device" button is pressed.
  */
-function saveUpdatedIntervalValues() {
-    var intervals = intervalCollector.collectIntervals();
-    $.ajax({
-        url: intervalsUrl,
-        data: JSON.stringify(intervals),
-        contentType: "application/json",
-        method: "POST",
-        success: function(data, textStatus, jqXHR) {
-            console.log("Successfully saved intervals into server");
-        }
-    });
+function getUpdatedIntervalValues() {
+    return intervalCollector.collectIntervals();
 }
 
 function editAll(event) {

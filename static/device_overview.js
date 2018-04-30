@@ -33,7 +33,18 @@ function ensureCsrf() {
 
 function saveIntoDevice(event) {
     ensureCsrf();
-    saveUpdatedIntervalValues();
+
+    var intervals = getUpdatedIntervalValues();
+
+    $.ajax({
+        url: intervalsUrl,
+        data: JSON.stringify(intervals),
+        contentType: "application/json",
+        method: "POST",
+        success: function (data, textStatus, jqXHR) {
+            console.log("Successfully saved intervals into server");
+        }
+    });
 }
 
 function discardChanges(event) {
