@@ -21,15 +21,12 @@
         {% for interval in interval_list %}
           <div class="col-md-1">
             <div class="interval" id="interval_{{ forloop.counter0 }}">
-              <div id="from_{{ forloop.counter0 }}" class="from">
-                {{ interval.from_time.hours }}:{{ interval.from_time.minutes }}
-              </div>
-              <div id="to_{{ forloop.counter0 }}" class="to">
-                {{ interval.to_time.hours }}:{{ interval.to_time.minutes }}
-              </div>
-              <div id="temp_{{ forloop.counter0 }}" class="temp">
-                {{ interval.temp }}
-              </div>
+              <div id="from_{{ forloop.counter0 }}"
+                   class="from">{{ interval.from_time.hours }}:{{ interval.from_time.minutes }}</div>
+              <div id="to_{{ forloop.counter0 }}"
+                   class="to">{{ interval.to_time.hours }}:{{ interval.to_time.minutes }}</div>
+              <div id="temp_{{ forloop.counter0 }}"
+                   class="temp">{{ interval.temp }}</div>
             </div> <!-- interval -->
 
             <!-- Editable interval (hidden) -->
