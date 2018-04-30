@@ -8,4 +8,5 @@ urlpatterns = [
     path('accounts/logout', views.user_logout, name='user_logout'),
     path('accounts/details', views.user_logout, name='user_details'),
     path('devices', views.DevicesView.as_view(), name='devices'),
+    path('intervals', views.save_intervals_to_db, name='intervals')
 ]

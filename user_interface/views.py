@@ -45,3 +45,7 @@ class DevicesView(View):
     def get(self, request: HttpRequest) -> HttpResponse:
         devices = get_user_devices(request)
         return render(request, 'devices/devices.html', {'devices_model_list': devices})
+
+
+def save_intervals_to_db(request: HttpRequest) -> HttpResponse:
+    pass

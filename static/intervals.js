@@ -1,4 +1,5 @@
 var intervalsChanged = false;
+const intervalsUrl = "intervals";
 
 /**
  *
@@ -61,12 +62,13 @@ var intervalCollector = {
 function saveUpdatedIntervalValues() {
     var intervals = intervalCollector.collectIntervals();
     $.ajax({
-        url: "...",
+        url: intervalsUrl,
         data: intervals,
         contentType: "application/json",
-        method: "POST"
-    }).success(function(data, textStatus, jqXHR) {
-        console.log("Successfully saved intervals into server");
+        method: "POST",
+        success: function(data, textStatus, jqXHR) {
+            console.log("Successfully saved intervals into server");
+        }
     });
 }
 
