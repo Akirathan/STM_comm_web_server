@@ -31,27 +31,35 @@ function ensureCsrf() {
     });
 }
 
-/**
- * All config items ie. items that can be changed and later saved into device.
- * @type {*[]}
- */
-const configItems = [intervals];
-var deviceId = undefined;
+var deviceOverview = {
+    /**
+     * All config items ie. items that can be changed and later saved into device.
+     * @type {*[]}
+     */
+    _configItems: [],
+    _deviceId: 0,
 
-function saveIntoDevice(event) {
-    ensureCsrf();
+    addConfigItem: function(configItem) {
+        // Check if it is configItem
+        // ...
+        this._configItems.push(configItem);
+    },
 
-    configItems.forEach(function(configItem) {
-        if (configItem.isChanged()) {
-            configItem.saveIntoDevice(deviceId);
-        }
-    });
-}
+    setDeviceId: function(deviceId) {
+        this._deviceId = deviceId;
+    },
 
-function setDeviceId(devId) {
-    deviceId = devId;
-}
+    saveIntoDevice: function(event) {
+        ensureCsrf();
 
-function discardChanges(event) {
+        this._configItems.forEach(function(configItem) {
+            if (configItem.isChanged()) {
+                configItem.saveIntoDevice(deviceId);
+            }
+        });
+    },
 
-}
+    discardChanges: function(event) {
+
+    }
+};

@@ -9,7 +9,7 @@
 <script src="{% static 'device_overview.js' %}"></script>
 
 <script>
-  setDeviceId({{ device_model.device_id }});
+  deviceOverview.setDeviceId("{{ device_model.device_id }}");
 </script>
 
 <table class="table table-bordered">
@@ -33,10 +33,10 @@
       <!-- "save into device" and "discard changes" buttons -->
       <div id="save_to_device_group" class="btn-group" style="display: none; position: relative; left: 70%;">
         <!-- save into device button -->
-        <button class="btn btn-success" onclick="saveIntoDevice(event)" role="button">
+        <button class="btn btn-success" onclick="deviceOverview.saveIntoDevice(event)" role="button">
           Save into device
         </button>
-        <button class="btn btn-warning" onclick="discardChanges(event)" role="button">
+        <button class="btn btn-warning" onclick="deviceOverview.discardChanges(event)" role="button">
           Discard changes
         </button>
       </div> <!-- btn-group -->
