@@ -1,4 +1,4 @@
-var deviceList = new class {
+class DeviceList {
     constructor() {
         this._devices = [];
     }
@@ -8,7 +8,7 @@ var deviceList = new class {
             this._devices.push(device);
         }
     }
-};
+}
 
 class Device {
    constructor(deviceId) {

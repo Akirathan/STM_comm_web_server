@@ -1,4 +1,8 @@
 class Intervals extends ConfigItem {
+    constructor(deviceId) {
+        super(deviceId);
+    }
+
     isChanged() {
         // ...
     }

@@ -4,6 +4,8 @@
  Gets "devices_model_list" = list of user model devices.
 -->
 
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -23,6 +25,21 @@
 {% endfor %}
 
 {% include "javascripts.html" %}
+<script src="{% static 'config_items/config_item.js' %}"></script>
+<script src="{% static 'config_items/intervals.js' %}"></script>
+<script src="{% static 'devices.js' %}"></script>
+
+<script>
+  let deviceList = new DeviceList();
+  $(document).ready(function() {
+      {% for device_model in devices_model_list %}
+          let device = new Device("{{ device_model.device_id }}");
+          let intervals = new Intervals("{{ device_model.device_id }}");
+          device.addConfigItem(intervals);
+          deviceList.addDevice(device);
+      {% endfor %}
+  })
+</script>
 </body>
 
 </html>
