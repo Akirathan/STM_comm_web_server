@@ -16,7 +16,7 @@
       {{ device_model.status }}
       <!-- details button -->
       <a class="btn btn-primary" id="details_button" role="button" data-toggle="collapse"
-         href="#device_details" aria-expanded="false" aria-controls="device_details"
+         href="#{{ device_model.device_id }}_device_details" aria-expanded="false" aria-controls="device_details"
          style="position: relative; left: 70%"
       >
         Details
@@ -24,7 +24,8 @@
         <span id="details_chevron_up" class="glyphicon glyphicon-chevron-up" style="display: none"></span>
       </a>
       <!-- "save into device" and "discard changes" buttons -->
-      <div id="save_to_device_group" class="btn-group" style="display: none; position: relative; left: 70%;">
+      <div id="{{ device_model.device_id }}_save_to_device_group" class="btn-group"
+           style="display: none; position: relative; left: 70%;">
         <!-- save into device button -->
         <button class="btn btn-success" onclick="deviceOverview.saveIntoDevice(event)" role="button">
           Save into device
@@ -38,7 +39,7 @@
 </table>
 
 <!-- Device details collapsed -->
-<div id="device_details" class="collapse panel panel-default">
+<div id="{{ device_model.device_id }}_device_details" class="collapse panel panel-default">
   <div class="panel-body">
     {% autoescape off %}
       {{ device_model.render_all_items }}
