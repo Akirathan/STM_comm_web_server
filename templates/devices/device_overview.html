@@ -5,13 +5,6 @@
  Gets "device_model" as Device model
 -->
 
-{% load static %}
-<script src="{% static 'device_overview.js' %}"></script>
-
-<script>
-  deviceOverview.setDeviceId("{{ device_model.device_id }}");
-</script>
-
 <table class="table table-bordered">
   <tr>
     <th> Device ID </th>
