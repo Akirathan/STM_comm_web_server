@@ -2,7 +2,8 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpRequest, HttpResponseRedirect
 from django.contrib.auth import login, authenticate, logout
 from django.views import View
-from stm_comm.models import Device
+from stm_comm.models import Device, Interval
+import json
 
 
 def index(request: HttpRequest) -> HttpResponse:
@@ -48,4 +49,6 @@ class DevicesView(View):
 
 
 def save_intervals_to_db(request: HttpRequest) -> HttpResponse:
-    pass
+    body_str = request.body.decode('utf-8')
+    intervals = Interval.parse_intervals(body_str)
+
