@@ -126,6 +126,14 @@ class Interval:
         to_time = Time(json_dict['to']['hours'], json_dict['to']['minutes'])
         return Interval(from_time, to_time, json_dict['temp'])
 
+    @staticmethod
+    def parse_intervals(json_str: str) -> '[Interval]':
+        json_dicts = json.loads(json_str)
+        intervals = []
+        for json_dict in json_dicts:
+            intervals.append(Interval.from_json(json_dict))
+        return intervals
+
     def __str__(self):
         return 'from: %s, to: %s, temp: %d' % (self.from_time, self.to_time, self.temp)
 
@@ -157,11 +165,7 @@ class IntervalsItem(ConfigItem):
         """
         Parses all the intervals that are in self.value in JSON format
         """
-        json_objects = json.loads(self.value)
-        intervals = []
-        for json_object in json_objects:
-            intervals.append(self.__parse_one_interval__(json_object))
-        return intervals
+        return Interval.parse_intervals(self.value)
 
     def add_interval(self, interval: Interval):
         # Remove last array bracket
