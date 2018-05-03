@@ -1,6 +1,9 @@
 class Intervals extends ConfigItem {
     constructor(deviceId) {
         super(deviceId);
+        this._container = null;
+
+        this._findContainer();
     }
 
     isChanged() {
@@ -12,8 +15,15 @@ class Intervals extends ConfigItem {
         // ...
     }
 
-    static onEditAll(event) {
+    _findContainer() {
+        this._container = $(".interval").filter(function(index, element) {
+            return element.id.startsWith(this._domContainerId) &&
+                element.id.endsWith("_interval");
+        });
+    }
 
+    static onEditAll(event) {
+        // Hide all (overview) intervals
     }
 
     static onIntervalFromFieldChange(event) {
