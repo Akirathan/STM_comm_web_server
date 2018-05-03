@@ -66,7 +66,32 @@ class Intervals extends ConfigItem {
  */
 class Interval {
     constructor($intervalElement) {
+        this._$overviewIntervalElem = $intervalElement;
+        this._$editableIntervalElem = this._findEditableIntervalElem($intervalElement);
+        this._fromTimeElem = this._findFromTimeElem($intervalElement);
+        this._toTimeElem = this._findToTimeElem($intervalElement);
+        this._tempElem = this._findTempElem($intervalElement);
+    }
 
+    _findEditableIntervalElem($intervalElement) {
+        let parentElement = $intervalElement.parentElement;
+        for (let child in parentElement.children) {
+            if (child.id.contains("editable")) {
+                return $(child);
+            }
+        }
+    }
+
+    _findFromTimeElem($intervalElement) {
+        return $intervalElement.find(".from")[0];
+    }
+
+    _findToTimeElem($intervalElement) {
+        return $intervalElement.find(".to")[0];
+    }
+
+    _findTempElem($intervalElement) {
+        return $intervalElement.find(".temp")[0];
     }
 
     /**
@@ -80,7 +105,7 @@ class Interval {
      * Hides editable interval and shows overview interval.
      */
     showOverviewInterval() {
-        
+
     }
 
     /**
