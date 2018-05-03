@@ -20,6 +20,11 @@ class Intervals extends ConfigItem {
         // ...
     }
 
+    /**
+     * Finds container in which all the intervals are contained.
+     * @note all intervals should have id in this form: "<devID>_interval"
+     * @private
+     */
     _findContainer() {
         this._$container = $(".interval").filter(function(index, element) {
             return element.id.startsWith(this._domContainerId) &&
