@@ -75,6 +75,14 @@ class Intervals extends ConfigItem {
         for (let intervalClassElem of this._intervalClassElems) {
             intervalClassElem.showEditableInterval();
         }
+        
+        this._$editButtonElem.html("Done");
+        this._$editButtonElem.removeAttr("onclick");
+        this._$editButtonElem.on("click", this.doneEditingAll());
+    }
+
+    doneEditingAll() {
+
     }
 
     static onEditAll(event) {
