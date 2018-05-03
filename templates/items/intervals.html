@@ -14,7 +14,7 @@
   </div> <!-- panel-heading -->
   <div class="panel-body">
     <div class="container-fluid">
-      <div class="row">
+      <div class="row" id="{{ device_model.device_id }}_interval">
         {% for interval in interval_list %}
           <div class="col-md-1">
             <div class="interval" id="{{ device_model.device_id }}_interval_{{ forloop.counter0 }}">
