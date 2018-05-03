@@ -11,4 +11,24 @@ class Intervals extends ConfigItem {
         // Send intervals AJAX
         // ...
     }
+
+    static onEditAll(event) {
+
+    }
+
+    static onIntervalFromFieldChange(event) {
+
+    }
+
+    static onIntervalToFieldChange(event) {
+
+    }
+
+    static onIntervalTempFieldChange(event) {
+
+    }
+
+    static onIntervalDelete(event) {
+
+    }
 }
