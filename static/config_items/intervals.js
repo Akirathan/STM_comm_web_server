@@ -6,6 +6,7 @@ class Intervals extends ConfigItem {
         super(deviceId);
         this._$container = this._findContainer();
         this._intervalClassElems = this._findIntervalElems(this._$container);
+        this._$editButtonElem = undefined;
     }
 
     isChanged() {
@@ -66,7 +67,11 @@ class Intervals extends ConfigItem {
         return configItem;
     }
 
-    editAll() {
+    editAll(event) {
+        if (this._$editButtonElem === undefined) {
+            this._$editButtonElem = $(event.target);
+        }
+
         for (let intervalClassElem of this._intervalClassElems) {
             intervalClassElem.showEditableInterval();
         }
@@ -75,7 +80,7 @@ class Intervals extends ConfigItem {
     static onEditAll(event) {
         // Hide all (overview) intervals
         let intervals = this._getIntervalsFromElement(event.target);
-        interval.editAll();
+        interval.editAll(event);
     }
 
     static onIntervalFromFieldChange(event) {
