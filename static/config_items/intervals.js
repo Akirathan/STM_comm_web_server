@@ -17,6 +17,10 @@ class Intervals extends ConfigItem {
         // ...
     }
 
+    containsElement(element) {
+
+    }
+
     /**
      * Finds container in which all the intervals are contained.
      * @note all intervals should have id in this form: "<devID>_interval"
@@ -43,6 +47,21 @@ class Intervals extends ConfigItem {
             intervalElems.push(new Interval($intervalElem));
         }
         return intervalElems;
+    }
+
+    /**
+     * Finds corresponding IntervalType from event (element)
+     * @param element
+     * @private
+     * @return {Interval}
+     */
+    static _getIntervalFromElement(element) {
+        let deviceId = Device.getDeviceIdFromElement(element);
+        let device = deviceList.getDeviceById(deviceId);
+        let configItem = device.getConfigItemFromElement(element);
+        if (!configItem instanceof Intervals) {
+            // Error: ...
+        }
     }
 
     static onEditAll(event) {
