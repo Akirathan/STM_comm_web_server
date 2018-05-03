@@ -55,17 +55,27 @@ class Intervals extends ConfigItem {
      * @private
      * @return {Interval}
      */
-    static _getIntervalFromElement(element) {
+    static _getIntervalsFromElement(element) {
         let deviceId = Device.getDeviceIdFromElement(element);
         let device = deviceList.getDeviceById(deviceId);
         let configItem = device.getConfigItemFromElement(element);
         if (!configItem instanceof Intervals) {
             // Error: ...
         }
+
+        return configItem;
+    }
+
+    editAll() {
+        for (let intervalClassElem of this._intervalClassElems) {
+            intervalClassElem.showEditableInterval();
+        }
     }
 
     static onEditAll(event) {
         // Hide all (overview) intervals
+        let intervals = this._getIntervalsFromElement(event.target);
+        interval.editAll();
     }
 
     static onIntervalFromFieldChange(event) {
