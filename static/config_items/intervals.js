@@ -68,4 +68,41 @@ class Interval {
     constructor($intervalElement) {
 
     }
+
+    /**
+     * Hides the (overview/normal) interval and show editable.
+     */
+    showEditableInterval() {
+
+    }
+
+    /**
+     * Hides editable interval and shows overview interval.
+     */
+    showOverviewInterval() {
+        
+    }
+
+    /**
+     * Hides this interval (sets display:none)
+     */
+    delete() {
+
+    }
+
+    /**
+     * Updates (overview) interval from time field.
+     * @param timeStr
+     */
+    changeFromTime(timeStr) {
+
+    }
+
+    changeToTime(timeStr) {
+
+    }
+
+    changeTemp(tempStr) {
+
+    }
 }
