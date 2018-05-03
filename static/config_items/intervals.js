@@ -1,9 +1,14 @@
+/**
+ * Represents all intervals for one device ie. list of all intervals
+ */
 class Intervals extends ConfigItem {
     constructor(deviceId) {
         super(deviceId);
-        this._container = null;
+        this._$container = null;
+        this._intervalElems = [];
 
         this._findContainer();
+        this._initializeIntervalElems();
     }
 
     isChanged() {
@@ -16,10 +21,18 @@ class Intervals extends ConfigItem {
     }
 
     _findContainer() {
-        this._container = $(".interval").filter(function(index, element) {
+        this._$container = $(".interval").filter(function(index, element) {
             return element.id.startsWith(this._domContainerId) &&
                 element.id.endsWith("_interval");
         });
+    }
+
+    _initializeIntervalElems() {
+        let children = this._$container.children;
+        for (let child of children) {
+            let $intervalElem = $(child).find(".interval");
+            this._intervalElems.push(new Interval($intervalElem));
+        }
     }
 
     static onEditAll(event) {
@@ -39,6 +52,15 @@ class Intervals extends ConfigItem {
     }
 
     static onIntervalDelete(event) {
+
+    }
+}
+
+/**
+ * Represents both overview and editable interval.
+ */
+class Interval {
+    constructor($intervalElement) {
 
     }
 }
