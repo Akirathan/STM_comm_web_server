@@ -156,7 +156,10 @@ class IntervalsItem(ConfigItem):
         return retval
 
     def render(self) -> str:
-        return render_to_string('items/intervals.html', {'interval_list': self.__get_intervals__()})
+        return render_to_string('items/intervals.html', {
+            'interval_list': self.__get_intervals__(),
+            'device_model': self.device
+        })
 
     def __parse_one_interval__(self, interval_dict: dict) -> Interval:
         return Interval.from_json(interval_dict)
