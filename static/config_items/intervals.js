@@ -4,11 +4,8 @@
 class Intervals extends ConfigItem {
     constructor(deviceId) {
         super(deviceId);
-        this._$container = null;
-        this._intervalElems = [];
-
-        this._findContainer();
-        this._initializeIntervalElems();
+        this._$container = this._findContainer();
+        this._intervalElems = this._findIntervalElems(this._$container);
     }
 
     isChanged() {
@@ -26,18 +23,26 @@ class Intervals extends ConfigItem {
      * @private
      */
     _findContainer() {
-        this._$container = $(".interval").filter(function(index, element) {
+        return $(".interval").filter(function(index, element) {
             return element.id.startsWith(this._domContainerId) &&
                 element.id.endsWith("_interval");
         });
     }
 
-    _initializeIntervalElems() {
-        let children = this._$container.children;
+    /**
+     *
+     * @param $container
+     * @return {Array}
+     * @private
+     */
+    _findIntervalElems($container) {
+        let intervalElems = [];
+        let children = $container.children;
         for (let child of children) {
             let $intervalElem = $(child).find(".interval");
-            this._intervalElems.push(new Interval($intervalElem));
+            intervalElems.push(new Interval($intervalElem));
         }
+        return intervalElems;
     }
 
     static onEditAll(event) {
