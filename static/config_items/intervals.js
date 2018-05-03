@@ -5,7 +5,7 @@ class Intervals extends ConfigItem {
     constructor(deviceId) {
         super(deviceId);
         this._$container = this._findContainer();
-        this._intervalElems = this._findIntervalElems(this._$container);
+        this._intervalClassElems = this._findIntervalElems(this._$container);
     }
 
     isChanged() {
