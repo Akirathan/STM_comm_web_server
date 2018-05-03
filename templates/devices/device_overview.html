@@ -15,13 +15,15 @@
     <td>
       {{ device_model.status }}
       <!-- details button -->
-      <a class="btn btn-primary" id="details_button" role="button" data-toggle="collapse"
+      <a class="btn btn-primary" role="button" data-toggle="collapse"
          href="#{{ device_model.device_id }}_device_details" aria-expanded="false" aria-controls="device_details"
          style="position: relative; left: 70%"
       >
         Details
-        <span id="details_chevron_down" class="glyphicon glyphicon-chevron-down"></span>
-        <span id="details_chevron_up" class="glyphicon glyphicon-chevron-up" style="display: none"></span>
+        <span id="{{ device_model.device_id }}details_chevron_down"
+              class="glyphicon glyphicon-chevron-down"></span>
+        <span id="{{ device_model.device_id }}details_chevron_up"
+              class="glyphicon glyphicon-chevron-up" style="display: none"></span>
       </a>
       <!-- "save into device" and "discard changes" buttons -->
       <div id="{{ device_model.device_id }}_save_to_device_group" class="btn-group"
