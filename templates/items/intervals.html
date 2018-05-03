@@ -1,5 +1,6 @@
 <!--
  Gets "interval_list" as [Interval]
+      "device_model" as Device (models.py)
 -->
 {% load static %}
 
@@ -20,20 +21,21 @@
       <div class="row">
         {% for interval in interval_list %}
           <div class="col-md-1">
-            <div class="interval" id="interval_{{ forloop.counter0 }}">
-              <div id="from_{{ forloop.counter0 }}"
+            <div class="interval" id="{{ device_model.device_id }}_interval_{{ forloop.counter0 }}">
+              <div id="{{ device_model.device_id }}_from_{{ forloop.counter0 }}"
                    class="from">{{ interval.from_time.hours }}:{{ interval.from_time.minutes }}</div>
-              <div id="to_{{ forloop.counter0 }}"
+              <div id="{{ device_model.device_id }}_to_{{ forloop.counter0 }}"
                    class="to">{{ interval.to_time.hours }}:{{ interval.to_time.minutes }}</div>
-              <div id="temp_{{ forloop.counter0 }}"
+              <div id="{{ device_model.device_id }}_temp_{{ forloop.counter0 }}"
                    class="temp">{{ interval.temp }}</div>
             </div> <!-- interval -->
 
             <!-- Editable interval (hidden) -->
-            <div class="editable-interval" id="editable_interval_{{ forloop.counter0 }}" style="display: none">
+            <div class="editable-interval" id="{{ device_model.device_id }}_editable_interval_{{ forloop.counter0 }}"
+                 style="display: none">
               <!-- from textarea -->
               <div style="position: absolute; top: 3%; left: 2%;">
-                <textarea id="editable_from_{{ forloop.counter0 }}" maxlength="5"
+                <textarea id="{{ device_model.device_id }}_editable_interval_from_{{ forloop.counter0 }}" maxlength="5"
                           onchange="intervalChanged(event)" style="resize: none; width: 45px; height: 25px;"
                 >{{ interval.from_time.hours }}:{{ interval.from_time.minutes }}</textarea>
                 <span style="position: relative; bottom: 5px;">
@@ -41,13 +43,13 @@
                 </span>
               </div>
               <!-- to textarea -->
-              <textarea id="editable_to_{{ forloop.counter0 }}" maxlength="5"
+              <textarea id="{{ device_model.device_id }}_editable_interval_to_{{ forloop.counter0 }}" maxlength="5"
                         onchange="intervalChanged(event)"
                         style="resize: none; width: 45px; height: 25px; position: absolute; top: 3%; left: 55%;"
               >{{ interval.to_time.hours }}:{{ interval.to_time.minutes }}</textarea>
               <!-- temp teaxtarea -->
               <div style="position: absolute; top: 30px; left: 35%;">
-                <textarea id="editable_temp_{{ forloop.counter0 }}" maxlength="2"
+                <textarea id="{{ device_model.device_id }}_editable_interval_temp_{{ forloop.counter0 }}" maxlength="2"
                           onchange="intervalChanged(event)"
                           style="resize: none; width: 25px; height: 25px;">{{ interval.temp }}</textarea>
                 <span style="position: relative; bottom: 8px; right: 2px">
