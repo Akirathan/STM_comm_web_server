@@ -36,4 +36,8 @@ class Device {
             }
         }
     }
+
+    static onSaveIntoDevice(event) {
+
+    }
 }
