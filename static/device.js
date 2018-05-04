@@ -12,7 +12,9 @@ class Device {
     }
 
     _attachEventHandlers() {
-
+        let _this = this;
+        this._$saveIntoDeviceButtonElem.on("click", function(){_this.onSaveIntoDevice();});
+        this._$discardChangesButtonElem.on("click", function(){_this.onDiscardChanges();});
     }
 
     _findButtonGroupJQElem(deviceId) {
@@ -47,12 +49,16 @@ class Device {
     /**
      * Saves every config item into device.
      */
-    saveIntoDevice() {
+    onSaveIntoDevice() {
         for (let configItem of this._configItems) {
             if (configItem.isChanged()) {
-                configItem.saveIntoDevice();
+                configItem.onSaveIntoDevice();
             }
         }
+    }
+
+    onDiscardChanges() {
+
     }
 
     static onSaveIntoDevice(event) {
