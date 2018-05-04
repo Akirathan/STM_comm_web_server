@@ -54,7 +54,9 @@
                 </span>
               </div>
               <!-- delete button -->
-              <button class="btn btn-danger" onclick="Intervals.onIntervalDelete(event)" type="button"
+              <button class="btn btn-danger"
+                      id="{{ device_model.device_id }}_editable_interval_deletebuttton_"{{ forloop.counter0 }}
+                      onclick="Intervals.onIntervalDelete(event)" type="button"
                       style="position: absolute; bottom: 3%; left: 30%; padding: 0 3px">
                 delete
               </button>
