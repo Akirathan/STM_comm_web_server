@@ -24,14 +24,11 @@ class Intervals extends ConfigItem {
 
     /**
      * Finds container in which all the intervals are contained.
-     * @note all intervals should have id in this form: "<devID>_interval"
+     * @note all interval containers should have id in this form: "<devID>_interval"
      * @private
      */
     _findContainer() {
-        return $(".interval").filter(function(index, element) {
-            return element.id.startsWith(this._domContainerId) &&
-                element.id.endsWith("_interval");
-        });
+        return $("#" + this._domContainerId + "_interval");
     }
 
     /**
@@ -42,9 +39,10 @@ class Intervals extends ConfigItem {
      */
     _findIntervalElems($container) {
         let intervalElems = [];
-        let children = $container.children;
+        let children = $container.children();
         for (let child of children) {
-            let $intervalElem = $(child).find(".interval");
+            let intervalElem = $(child).find(".interval")[0];
+            let $intervalElem = $(intervalElem);
             intervalElems.push(new Interval($intervalElem));
         }
         return intervalElems;
@@ -82,7 +80,15 @@ class Intervals extends ConfigItem {
     }
 
     doneEditingAll() {
+        for (let intervalClassElem of this._intervalClassElems) {
+            intervalClassElem.showOverviewInterval();
+        }
 
+        this._$editButtonElem.html("Edit");
+        this._$editButtonElem.off("click");
+        this._$editButtonElem.on("click", editAll());
+
+        // if intervals changed, show "Save into device" button.
     }
 
     static onEditAll(event) {
@@ -114,14 +120,14 @@ class Intervals extends ConfigItem {
 class Interval {
     constructor($intervalElement) {
         this._$overviewIntervalElem = $intervalElement;
-        this._$editableIntervalElem = this._findEditableIntervalElem($intervalElement);
+        this._$editableIntervalElem = this._findEditableIntervalElem($intervalElement.get()[0]);
         this._fromTimeElem = this._findFromTimeElem($intervalElement);
         this._toTimeElem = this._findToTimeElem($intervalElement);
         this._tempElem = this._findTempElem($intervalElement);
     }
 
-    _findEditableIntervalElem($intervalElement) {
-        let parentElement = $intervalElement.parentElement;
+    _findEditableIntervalElem(intervalElement) {
+        let parentElement = intervalElement.parentElement;
         for (let child in parentElement.children) {
             if (child.id.contains("editable")) {
                 return $(child);
