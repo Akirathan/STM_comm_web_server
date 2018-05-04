@@ -12,7 +12,10 @@ class Intervals extends ConfigItem {
     }
 
     _attachEventHandlers() {
-        this._$editButtonElem.on("click", this.editAll);
+        let _this = this;
+        this._$editButtonElem.on("click", function() {
+            _this.editAll(event);
+        });
     }
 
     isChanged() {
