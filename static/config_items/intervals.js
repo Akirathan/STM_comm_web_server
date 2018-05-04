@@ -8,7 +8,11 @@ class Intervals extends ConfigItem {
         this._$editButtonElem = this._findEditAllButton();
         this._intervalClassElems = this._findIntervalElems(this._$container);
 
-        this._$editButtonElem.on("click", this.editAll());
+        this._attachEventHandlers();
+    }
+
+    _attachEventHandlers() {
+        this._$editButtonElem.on("click", this.editAll);
     }
 
     isChanged() {
@@ -72,17 +76,13 @@ class Intervals extends ConfigItem {
     }
 
     editAll(event) {
-        if (this._$editButtonElem === undefined) {
-            this._$editButtonElem = $(event.target);
-        }
-
         for (let intervalClassElem of this._intervalClassElems) {
             intervalClassElem.showEditableInterval();
         }
         
         this._$editButtonElem.html("Done");
-        this._$editButtonElem.removeAttr("onclick");
-        this._$editButtonElem.on("click", this.doneEditingAll());
+        this._$editButtonElem.off("click");
+        this._$editButtonElem.on("click", this.doneEditingAll);
     }
 
     doneEditingAll() {
@@ -130,6 +130,13 @@ class Interval {
         this._fromTimeElem = this._findFromTimeElem($intervalElement);
         this._toTimeElem = this._findToTimeElem($intervalElement);
         this._tempElem = this._findTempElem($intervalElement);
+        this._editableFromTimeElem = this._findEditableFromTimeElem(this._$editableIntervalElem);
+        this._editableToTimeElem = this._findEditableToTimeElem(this._$editableIntervalElem);
+        this._editableTempElem = this._findEditableTempElem(this._$editableIntervalElem);
+    }
+
+    _attachEventHandlers() {
+
     }
 
     _findEditableIntervalElem(intervalElement) {
@@ -151,6 +158,24 @@ class Interval {
 
     _findTempElem($intervalElement) {
         return $intervalElement.find(".temp")[0];
+    }
+
+    _findEditableFromTimeElem($editableIntervalElem) {
+        return $editableIntervalElem.find("*").filter(function(index, element) {
+            return element.id.search("from") > -1;
+        })[0];
+    }
+
+    _findEditableToTimeElem($editableIntervalElem) {
+        return $editableIntervalElem.find("*").filter(function(index, element) {
+            return element.id.search("to") > -1;
+        })[0];
+    }
+
+    _findEditableTempElem($editableIntervalElem) {
+        return $editableIntervalElem.find("*").filter(function(index, element) {
+            return element.id.search("temp") > -1;
+        })[0];
     }
 
     /**
