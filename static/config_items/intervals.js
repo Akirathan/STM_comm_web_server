@@ -143,7 +143,6 @@ class Interval {
         $(this._editableFromTimeElem).on("click", this.onChangeFromTime);
         $(this._editableToTimeElem).on("click", this.onChangeToTime);
         $(this._editableTempElem).on("click", this.onChangeTemp);
-        $(this._editableTempElem).on("click", this.onChangeTemp);
         $(this._deleteButton).on("click", this.onDelete);
     }
 
