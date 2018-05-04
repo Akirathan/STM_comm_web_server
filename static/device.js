@@ -1,4 +1,8 @@
 class Device {
+    static get BTN_GROUP_ID() { return "btngroup";}
+    static get SAVE_INTO_DEVICE_BTN_ID() { return "btngroup_saveintodevice";}
+    static get DISCARD_CHANGES_BTN_ID() { return "btngroup_discardchanges";}
+
     constructor(deviceId) {
         this._deviceId = deviceId;
         this._configItems = [];
