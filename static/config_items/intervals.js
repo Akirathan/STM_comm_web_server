@@ -85,16 +85,17 @@ class Intervals extends ConfigItem {
         this._$editButtonElem.on("click", this.doneEditingAll);
     }
 
-    doneEditingAll() {
+    doneEditingAll(event) {
         for (let intervalClassElem of this._intervalClassElems) {
             intervalClassElem.showOverviewInterval();
         }
 
         this._$editButtonElem.html("Edit");
         this._$editButtonElem.off("click");
-        this._$editButtonElem.on("click", editAll());
+        this._$editButtonElem.on("click", this.editAll);
 
         // if intervals changed, show "Save into device" button.
+        // todo: ...
     }
 
     static onEditAll(event) {
