@@ -85,7 +85,8 @@ class Intervals extends ConfigItem {
         
         this._$editButtonElem.html("Done");
         this._$editButtonElem.off("click");
-        this._$editButtonElem.on("click", this.doneEditingAll);
+        let _this = this;
+        this._$editButtonElem.on("click", function() {_this.doneEditingAll(event);});
     }
 
     doneEditingAll(event) {
@@ -95,7 +96,8 @@ class Intervals extends ConfigItem {
 
         this._$editButtonElem.html("Edit");
         this._$editButtonElem.off("click");
-        this._$editButtonElem.on("click", this.editAll);
+        let _this = this;
+        this._$editButtonElem.on("click", function () {_this.editAll(event);});
 
         // if intervals changed, show "Save into device" button.
         // todo: ...
@@ -121,10 +123,11 @@ class Interval {
     }
 
     _attachEventHandlers() {
-        $(this._editableFromTimeElem).on("click", this.onChangeFromTime);
-        $(this._editableToTimeElem).on("click", this.onChangeToTime);
-        $(this._editableTempElem).on("click", this.onChangeTemp);
-        $(this._deleteButton).on("click", this.onDelete);
+        let _this = this;
+        $(this._editableFromTimeElem).on("click", function(){_this.onChangeFromTime(event);});
+        $(this._editableToTimeElem).on("click", function(){_this.onChangeToTime(event);});
+        $(this._editableTempElem).on("click", function(){_this.onChangeTemp(event);});
+        $(this._deleteButton).on("click", function(){_this.onDelete(event);});
     }
 
     _findEditableIntervalElem(intervalElement) {
