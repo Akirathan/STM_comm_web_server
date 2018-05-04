@@ -95,6 +95,37 @@ class Interval {
     }
 
     /**
+     *
+     * @return {string}
+     */
+    toJSON() {
+        function Time(hours, minutes) {
+            this.hours = hours;
+            this.minutes = minutes;
+        }
+
+        function Interval(fromTime, toTime, temp) {
+            this.fromTime = fromTime;
+            this.toTime = toTime;
+            this.temp = temp;
+        }
+
+        let fromTimeHours = this._fromTimeElem.innerHTML.substring(0, 2);
+        let fromTimeMinutes = this._fromTimeElem.innerHTML.substring(3);
+        let fromTime = new Time(fromTimeHours, fromTimeMinutes);
+
+        let toTimeHours = this._toTimeElem.innerHTML.substring(0, 2);
+        let toTimeMinutes = this._toTimeElem.innerHTML.substring(3);
+        let toTime = new Time(toTimeHours, toTimeMinutes);
+
+        let temp = this._tempElem.innerHTML;
+
+        let interval = new Interval(fromTime, toTime, temp);
+
+        return JSON.stringify(interval);
+    }
+
+    /**
      * Hides the (overview/normal) interval and show editable.
      */
     showEditableInterval() {
