@@ -31,6 +31,39 @@ class Device {
         return $("#" + deviceId + "_" + Device.DISCARD_CHANGES_BTN_ID);
     }
 
+    static _getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    static _csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+
+    static _ensureCsrf() {
+        var csrftoken = Device._getCookie('csrftoken');
+
+        $.ajaxSetup({
+            beforeSend: function(xhr, settings) {
+                if (!Device._csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+            }
+        });
+    }
+
     get id() {
         return this._deviceId;
     }
@@ -52,6 +85,8 @@ class Device {
      * Saves every config item into device.
      */
     onSaveIntoDevice() {
+        Device._ensureCsrf();
+
         for (let configItem of this._configItems) {
             if (configItem.isChanged()) {
                 configItem.onSaveIntoDevice();
