@@ -167,28 +167,26 @@ class Interval {
         return $intervalElement.find(".temp")[0];
     }
 
-    _findEditableFromTimeElem($editableIntervalElem) {
+    _findChildContainingId($editableIntervalElem, partOfId) {
         return $editableIntervalElem.find("*").filter(function(index, element) {
-            return element.id.search("from") > -1;
+            return element.id.search(partOfId) > -1;
         })[0];
+    }
+
+    _findEditableFromTimeElem($editableIntervalElem) {
+        return this._findChildContainingId($editableIntervalElem, "from");
     }
 
     _findEditableToTimeElem($editableIntervalElem) {
-        return $editableIntervalElem.find("*").filter(function(index, element) {
-            return element.id.search("to") > -1;
-        })[0];
+        return this._findChildContainingId($editableIntervalElem, "to");
     }
 
     _findEditableTempElem($editableIntervalElem) {
-        return $editableIntervalElem.find("*").filter(function(index, element) {
-            return element.id.search("temp") > -1;
-        })[0];
+        return this._findChildContainingId($editableIntervalElem, "temp");
     }
 
     _findDeleteButtonElem($editableIntervalElem) {
-        return $editableIntervalElem.find("*").filter(function(index, element) {
-            return element.id.search("deletebutton") > -1;
-        })[0];
+        return this._findChildContainingId($editableIntervalElem, "deletebutton");
     }
 
     onChangeFromTime(event) {
