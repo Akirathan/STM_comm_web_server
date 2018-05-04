@@ -128,8 +128,8 @@ class Interval {
 
     _findEditableIntervalElem(intervalElement) {
         let parentElement = intervalElement.parentElement;
-        for (let child in parentElement.children) {
-            if (child.id.contains("editable")) {
+        for (let child of parentElement.children) {
+            if (child.id.search("editable") !== -1) {
                 return $(child);
             }
         }
