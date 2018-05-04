@@ -124,10 +124,10 @@ class Interval {
 
     _attachEventHandlers() {
         let _this = this;
-        $(this._editableFromTimeElem).on("click", function(){_this.onChangeFromTime(event);});
-        $(this._editableToTimeElem).on("click", function(){_this.onChangeToTime(event);});
-        $(this._editableTempElem).on("click", function(){_this.onChangeTemp(event);});
-        $(this._deleteButton).on("click", function(){_this.onDelete(event);});
+        $(this._editableFromTimeElem).on("change", function(){_this.onChangeFromTime(event);});
+        $(this._editableToTimeElem).on("change", function(){_this.onChangeToTime(event);});
+        $(this._editableTempElem).on("change", function(){_this.onChangeTemp(event);});
+        $(this._deleteButton).on("change", function(){_this.onDelete(event);});
     }
 
     _findEditableIntervalElem(intervalElement) {
