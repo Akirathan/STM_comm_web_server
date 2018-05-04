@@ -26,13 +26,15 @@
               class="glyphicon glyphicon-chevron-up" style="display: none"></span>
       </a>
       <!-- "save into device" and "discard changes" buttons -->
-      <div id="{{ device_model.device_id }}_save_to_device_group" class="btn-group"
+      <div id="{{ device_model.device_id }}_btngroup" class="btn-group"
            style="display: none; position: relative; left: 70%;">
         <!-- save into device button -->
-        <button class="btn btn-success" onclick="Device.onSaveIntoDevice(event)" role="button">
+        <button id="{{ device_model.device_id }}_btngroup_saveintodevice"
+                class="btn btn-success" onclick="Device.onSaveIntoDevice(event)" role="button">
           Save into device
         </button>
-        <button class="btn btn-warning" onclick="Device.onSaveIntoDevice(event)" role="button">
+        <button id="{{ device_model.device_id }}_btngroup_discardchanges"
+                class="btn btn-warning" onclick="Device.onSaveIntoDevice(event)" role="button">
           Discard changes
         </button>
       </div> <!-- btn-group -->
