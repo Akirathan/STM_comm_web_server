@@ -133,10 +133,17 @@ class Interval {
         this._editableFromTimeElem = this._findEditableFromTimeElem(this._$editableIntervalElem);
         this._editableToTimeElem = this._findEditableToTimeElem(this._$editableIntervalElem);
         this._editableTempElem = this._findEditableTempElem(this._$editableIntervalElem);
+        this._deleteButton = this._findDeleteButtonElem(this._$editableIntervalElem);
+
+        this._attachEventHandlers();
     }
 
     _attachEventHandlers() {
-
+        $(this._editableFromTimeElem).on("click", this.onChangeFromTime);
+        $(this._editableToTimeElem).on("click", this.onChangeToTime);
+        $(this._editableTempElem).on("click", this.onChangeTemp);
+        $(this._editableTempElem).on("click", this.onChangeTemp);
+        $(this._deleteButton).on("click", this.onDelete);
     }
 
     _findEditableIntervalElem(intervalElement) {
@@ -178,6 +185,31 @@ class Interval {
         })[0];
     }
 
+    _findDeleteButtonElem($editableIntervalElem) {
+        return $editableIntervalElem.find("*").filter(function(index, element) {
+            return element.id.search("deletebutton") > -1;
+        })[0];
+    }
+
+    onChangeFromTime(event) {
+        this._fromTimeElem.html = event.target.value;
+    }
+
+    onChangeToTime(event) {
+        this._toTimeElem.html = event.target.value;
+    }
+
+    onChangeTemp(event) {
+        this._tempElem.html = event.target.value;
+    }
+
+    /**
+     * Hides this interval (sets display:none)
+     */
+    onDelete(event) {
+
+    }
+
     /**
      * Hides the (overview/normal) interval and show editable.
      */
@@ -189,29 +221,6 @@ class Interval {
      * Hides editable interval and shows overview interval.
      */
     showOverviewInterval() {
-
-    }
-
-    /**
-     * Hides this interval (sets display:none)
-     */
-    delete() {
-
-    }
-
-    /**
-     * Updates (overview) interval from time field.
-     * @param timeStr
-     */
-    changeFromTime(timeStr) {
-
-    }
-
-    changeToTime(timeStr) {
-
-    }
-
-    changeTemp(tempStr) {
 
     }
 }
