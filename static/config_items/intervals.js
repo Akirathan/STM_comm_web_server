@@ -18,8 +18,18 @@ class Intervals extends ConfigItem {
         });
     }
 
+    /**
+     * Asks every containing interval if there was any change on it.
+     * @override
+     * @return {boolean}
+     */
     isChanged() {
-        // ...
+        for (let intervalClass of this._intervalClassElems) {
+            if (intervalClass.isChanged()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     saveIntoDevice() {
@@ -78,15 +88,7 @@ class Intervals extends ConfigItem {
         let _this = this;
         this._$editButtonElem.on("click", function () {_this.editAll(event);});
 
-        // if intervals changed, show "Save into device" button.
-        let modificationDetected = false;
-        for (let intervalClassElem of this._intervalClassElems) {
-            if (intervalClassElem.isChanged()) {
-                modificationDetected = true;
-                break;
-            }
-        }
-        if (modificationDetected) {
+        if (this.isChanged()) {
             let device = deviceList.getDeviceById(this._domContainerId);
             device.showSaveIntoDeviceButtonGroup();
         }
@@ -98,6 +100,7 @@ class Intervals extends ConfigItem {
  */
 class Interval {
     constructor($intervalElement) {
+        this._isChanged = false;
         this._$overviewIntervalElem = $intervalElement;
         this._$editableIntervalElem = this._findEditableIntervalElem($intervalElement.get()[0]);
         this._fromTimeElem = this._findFromTimeElem($intervalElement);
@@ -164,14 +167,17 @@ class Interval {
 
     onChangeFromTime(event) {
         this._fromTimeElem.innerHTML = event.target.value;
+        this._isChanged = true;
     }
 
     onChangeToTime(event) {
         this._toTimeElem.innerHTML = event.target.value;
+        this._isChanged = true;
     }
 
     onChangeTemp(event) {
         this._tempElem.innerHTML = event.target.value;
+        this._isChanged = true;
     }
 
     /**
@@ -179,6 +185,10 @@ class Interval {
      */
     onDelete(event) {
 
+    }
+
+    isChanged() {
+        return this._isChanged;
     }
 
     /**
