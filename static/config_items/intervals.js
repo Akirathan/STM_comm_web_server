@@ -5,8 +5,10 @@ class Intervals extends ConfigItem {
     constructor(deviceId) {
         super(deviceId);
         this._$container = this._findContainer();
+        this._$editButtonElem = this._findEditAllButton();
         this._intervalClassElems = this._findIntervalElems(this._$container);
-        this._$editButtonElem = undefined;
+
+        this._$editButtonElem.on("click", this.editAll());
     }
 
     isChanged() {
@@ -29,6 +31,10 @@ class Intervals extends ConfigItem {
      */
     _findContainer() {
         return $("#" + this._domContainerId + "_interval");
+    }
+
+    _findEditAllButton() {
+        return $("#" + this._domContainerId + "_interval_editall_button");
     }
 
     /**
