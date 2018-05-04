@@ -56,7 +56,7 @@ class Intervals extends ConfigItem {
     saveIntoDevice() {
         $.ajax({
             url: Intervals.SAVE_INTO_DEVICE_URL,
-            data: JSON.stringify(intervals),
+            data: this.toJSON(),
             contentType: "application/json",
             method: "POST",
             success: function (data, textStatus, jqXHR) {
