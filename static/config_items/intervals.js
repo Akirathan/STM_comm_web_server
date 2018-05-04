@@ -2,6 +2,8 @@
  * Represents all intervals for one device ie. list of all intervals
  */
 class Intervals extends ConfigItem {
+    static get SAVE_INTO_DEVICE_URL() {return "intervals";}
+
     constructor(deviceId) {
         super(deviceId);
         this._$container = this._findContainer();
@@ -32,9 +34,35 @@ class Intervals extends ConfigItem {
         return false;
     }
 
+    /**
+     * Return JSON representation.
+     * @return {string}
+     */
+    toJSON() {
+        let jsonStr = "[";
+        for (let i = 0; i < this._intervalClassElems.length; i++) {
+            let intervalClass = this._intervalClassElems[i];
+            jsonStr += intervalClass.toJSON();
+            if (i === this._intervalClassElems.length - 1) {
+                jsonStr += "]";
+            }
+            else {
+                jsonStr += ",";
+            }
+        }
+        return jsonStr;
+    }
+
     saveIntoDevice() {
-        // Send intervals AJAX
-        // ...
+        $.ajax({
+            url: Intervals.SAVE_INTO_DEVICE_URL,
+            data: JSON.stringify(intervals),
+            contentType: "application/json",
+            method: "POST",
+            success: function (data, textStatus, jqXHR) {
+                console.log("Successfully saved intervals into server");
+            }
+        });
     }
 
     /**
