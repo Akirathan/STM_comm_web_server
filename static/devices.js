@@ -28,26 +28,10 @@ class Device {
         return this._deviceId;
     }
 
-    static getDeviceIdFromElement(element) {
-
-    }
-
     addConfigItem(configItem) {
         if (configItem instanceof ConfigItem) {
             this._configItems.push(configItem);
         }
-    }
-
-    /**
-     * @param element
-     * @return {ConfigItem}
-     */
-    getConfigItemFromElement(element) {
-       for (let configItem of this._configItems) {
-           if (configItem.containsElement(element)) {
-               return configItem;
-           }
-       }
     }
 
     /**
