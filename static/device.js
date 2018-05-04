@@ -11,6 +11,10 @@ class Device {
         this._$discardChangesButtonElem = this._findDiscardChangesButtonJQElem(deviceId);
     }
 
+    _attachEventHandlers() {
+
+    }
+
     _findButtonGroupJQElem(deviceId) {
         return $("#" + deviceId + "_" + Device.BTN_GROUP_ID);
     }
@@ -31,6 +35,13 @@ class Device {
         if (configItem instanceof ConfigItem) {
             this._configItems.push(configItem);
         }
+    }
+
+    /**
+     * Shows "Save into device" and "Discard changes" buttons.
+     */
+    showSaveIntoDeviceButtonGroup() {
+        this._$btnGroupElem.show();
     }
 
     /**

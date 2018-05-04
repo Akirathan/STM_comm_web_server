@@ -79,7 +79,17 @@ class Intervals extends ConfigItem {
         this._$editButtonElem.on("click", function () {_this.editAll(event);});
 
         // if intervals changed, show "Save into device" button.
-        // todo: ...
+        let modificationDetected = false;
+        for (let intervalClassElem of this._intervalClassElems) {
+            if (intervalClassElem.isChanged()) {
+                modificationDetected = true;
+                break;
+            }
+        }
+        if (modificationDetected) {
+            let device = deviceList.getDeviceById(this._domContainerId);
+            device.showSaveIntoDeviceButtonGroup();
+        }
     }
 }
 
