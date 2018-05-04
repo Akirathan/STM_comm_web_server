@@ -6,6 +6,21 @@ class Device {
     constructor(deviceId) {
         this._deviceId = deviceId;
         this._configItems = [];
+        this._$btnGroupElem = this._findButtonGroupJQElem(deviceId);
+        this._$saveIntoDeviceButtonElem = this._findSaveIntoDeviceButtonJQElem(deviceId);
+        this._$discardChangesButtonElem = this._findDiscardChangesButtonJQElem(deviceId);
+    }
+
+    _findButtonGroupJQElem(deviceId) {
+        return $("#" + deviceId + "_" + Device.BTN_GROUP_ID);
+    }
+
+    _findSaveIntoDeviceButtonJQElem(deviceId) {
+        return $("#" + deviceId + "_" + Device.SAVE_INTO_DEVICE_BTN_ID);
+    }
+
+    _findDiscardChangesButtonJQElem(deviceId) {
+        return $("#" + deviceId + "_" + Device.DISCARD_CHANGES_BTN_ID);
     }
 
     get id() {
