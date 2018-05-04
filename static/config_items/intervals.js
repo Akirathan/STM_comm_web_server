@@ -97,28 +97,6 @@ class Intervals extends ConfigItem {
         // if intervals changed, show "Save into device" button.
         // todo: ...
     }
-
-    static onEditAll(event) {
-        // Hide all (overview) intervals
-        let intervals = this._getIntervalsFromElement(event.target);
-        interval.editAll(event);
-    }
-
-    static onIntervalFromFieldChange(event) {
-
-    }
-
-    static onIntervalToFieldChange(event) {
-
-    }
-
-    static onIntervalTempFieldChange(event) {
-
-    }
-
-    static onIntervalDelete(event) {
-
-    }
 }
 
 /**
