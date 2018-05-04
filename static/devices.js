@@ -14,7 +14,11 @@ class DeviceList {
      * @return {Device}
      */
     getDeviceById(id) {
-
+        for (let device of this._devices) {
+            if (device.id === id) {
+                return device;
+            }
+        }
     }
 }
 
