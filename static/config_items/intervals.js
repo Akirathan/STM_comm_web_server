@@ -174,15 +174,15 @@ class Interval {
     }
 
     onChangeFromTime(event) {
-        this._fromTimeElem.html = event.target.value;
+        this._fromTimeElem.innerHTML = event.target.value;
     }
 
     onChangeToTime(event) {
-        this._toTimeElem.html = event.target.value;
+        this._toTimeElem.innerHTML = event.target.value;
     }
 
     onChangeTemp(event) {
-        this._tempElem.html = event.target.value;
+        this._tempElem.innerHTML = event.target.value;
     }
 
     /**
