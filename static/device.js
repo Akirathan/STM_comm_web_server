@@ -9,6 +9,8 @@ class Device {
         this._$btnGroupElem = this._findButtonGroupJQElem(deviceId);
         this._$saveIntoDeviceButtonElem = this._findSaveIntoDeviceButtonJQElem(deviceId);
         this._$discardChangesButtonElem = this._findDiscardChangesButtonJQElem(deviceId);
+
+        this._attachEventHandlers();
     }
 
     _attachEventHandlers() {
