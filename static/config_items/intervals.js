@@ -193,13 +193,15 @@ class Interval {
      * Hides the (overview/normal) interval and show editable.
      */
     showEditableInterval() {
-
+        this._$overviewIntervalElem.hide();
+        this._$editableIntervalElem.show();
     }
 
     /**
      * Hides editable interval and shows overview interval.
      */
     showOverviewInterval() {
-
+        this._$editableIntervalElem.hide();
+        this._$overviewIntervalElem.show();
     }
 }
