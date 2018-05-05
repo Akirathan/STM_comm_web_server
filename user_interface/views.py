@@ -66,6 +66,5 @@ def save_intervals_to_db(request: HttpRequest) -> HttpResponse:
     # Save intervals into device
     device = get_object_or_404(Device, device_id=device_id)
     device.set_intervals(updated_intervals)
-    device.save()
 
     return HttpResponse()
