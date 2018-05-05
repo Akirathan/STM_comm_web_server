@@ -54,7 +54,7 @@ class Intervals extends ConfigItem {
     }
 
     saveIntoDevice() {
-        let dataStr = `{"device_id":"${this._domContainerId}","intervals":${this.toJSON()}`;
+        let dataStr = `{"device_id":"${this._domContainerId}","intervals":${this.toJSON()}}`;
 
         $.ajax({
             url: Intervals.SAVE_INTO_DEVICE_URL,
