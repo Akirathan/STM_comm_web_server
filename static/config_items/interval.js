@@ -99,11 +99,22 @@ class Interval {
      * @return {string}
      */
     toJSON() {
+        /**
+         * @param {int} hours
+         * @param {int} minutes
+         * @constructor
+         */
         function Time(hours, minutes) {
             this.hours = hours;
             this.minutes = minutes;
         }
 
+        /**
+         * @param {Time} fromTime
+         * @param {Time} toTime
+         * @param {int} temp
+         * @constructor
+         */
         function Interval(fromTime, toTime, temp) {
             this.from = fromTime;
             this.to = toTime;
@@ -112,15 +123,19 @@ class Interval {
 
         let fromTimeHours = this._fromTimeElem.innerHTML.substring(0, 2);
         let fromTimeMinutes = this._fromTimeElem.innerHTML.substring(3);
-        let fromTime = new Time(fromTimeHours, fromTimeMinutes);
+        let fromTimeHoursInt = parseInt(fromTimeHours, 10);
+        let fromTimeMinutesInt = parseInt(fromTimeMinutes, 10);
+        let fromTime = new Time(fromTimeHoursInt, fromTimeMinutesInt);
 
         let toTimeHours = this._toTimeElem.innerHTML.substring(0, 2);
         let toTimeMinutes = this._toTimeElem.innerHTML.substring(3);
-        let toTime = new Time(toTimeHours, toTimeMinutes);
+        let toTimeHoursInt = parseInt(toTimeHours, 10);
+        let toTimeMinutesInt = parseInt(toTimeMinutes, 10);
+        let toTime = new Time(toTimeHoursInt, toTimeMinutesInt);
 
-        let temp = this._tempElem.innerHTML;
+        let tempInt = parseInt(this._tempElem.innerHTML, 10);
 
-        let interval = new Interval(fromTime, toTime, temp);
+        let interval = new Interval(fromTime, toTime, tempInt);
 
         return JSON.stringify(interval);
     }
