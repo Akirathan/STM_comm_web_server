@@ -105,8 +105,8 @@ class Interval {
         }
 
         function Interval(fromTime, toTime, temp) {
-            this.fromTime = fromTime;
-            this.toTime = toTime;
+            this.from = fromTime;
+            this.to = toTime;
             this.temp = temp;
         }
 
