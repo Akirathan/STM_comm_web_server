@@ -55,6 +55,7 @@ class Intervals extends ConfigItem {
 
     saveIntoDevice() {
         let dataStr = `{"device_id":"${this._domContainerId}","intervals":${this.toJSON()}}`;
+        let _this = this;
 
         $.ajax({
             url: Intervals.SAVE_INTO_DEVICE_URL,
@@ -62,9 +63,14 @@ class Intervals extends ConfigItem {
             contentType: "application/json",
             method: "POST",
             success: function (data, textStatus, jqXHR) {
-                console.log("Successfully saved intervals into server");
+                deviceList.getDeviceById(_this._domContainerId).saveIntoDeviceDone();
+            },
+            error: function (data, textStatus, jqXHR) {
+                deviceList.getDeviceById(_this._domContainerId).saveIntoDeviceError();
             }
         });
+
+        deviceList.getDeviceById(this._domContainerId).saveIntoDeviceProgress();
     }
 
     /**

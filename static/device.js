@@ -4,6 +4,7 @@ class Device {
     static get DISCARD_CHANGES_BTN_ID() { return "btngroup_discardchanges";}
     static get SAVED_SUCCESS_TEXT_ID() {return "save_success_text";}
     static get SAVED_ERROR_TEXT_ID() {return "save_error_text";}
+    static get SAVE_INTO_DEVICE_BTN_LOADER_ID() {return "save_button_loader_icon";}
 
     constructor(deviceId) {
         this._deviceId = deviceId;
@@ -11,6 +12,9 @@ class Device {
         this._$btnGroupElem = this._findButtonGroupJQElem(deviceId);
         this._$saveIntoDeviceButtonElem = this._findSaveIntoDeviceButtonJQElem(deviceId);
         this._$discardChangesButtonElem = this._findDiscardChangesButtonJQElem(deviceId);
+        this._$saveButtonLoaderIconElem = this._findSaveButtonLoaderIconJQElem(deviceId);
+        this._$saveSuccessTextElem = this._findSaveSuccessTextJQElem(deviceId);
+        this._$saveErrorTextElem = this._findSaveErrorTextJQElem(deviceId);
 
         this._attachEventHandlers();
     }
@@ -39,6 +43,10 @@ class Device {
 
     _findSaveErrorTextJQElem(deviceId) {
         return $("#" + deviceId + "_" + Device.SAVED_ERROR_TEXT_ID);
+    }
+
+    _findSaveButtonLoaderIconJQElem(deviceId) {
+        return $("#" + deviceId + "_" + Device.SAVE_INTO_DEVICE_BTN_LOADER_ID);
     }
 
     static _getCookie(name) {
@@ -92,16 +100,21 @@ class Device {
     }
 
     saveIntoDeviceDone() {
-        let $successTextElem = this._findSaveSuccessTextJQElem(this._deviceId);
-        $successTextElem.show();
+        this._$saveButtonLoaderIconElem.hide();
+        this._$btnGroupElem.hide();
+
+        this._$saveSuccessTextElem.show();
     }
 
     saveIntoDeviceProgress() {
-
+        this._$saveButtonLoaderIconElem.show();
     }
 
     saveIntoDeviceError() {
+        this._$saveButtonLoaderIconElem.hide();
+        this._$btnGroupElem.hide();
 
+        this._$saveErrorTextElem.show();
     }
 
     /**
