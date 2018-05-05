@@ -89,7 +89,7 @@ class Device {
 
         for (let configItem of this._configItems) {
             if (configItem.isChanged()) {
-                configItem.onSaveIntoDevice();
+                configItem.saveIntoDevice();
             }
         }
     }
