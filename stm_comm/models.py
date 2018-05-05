@@ -134,6 +134,18 @@ class Interval:
             intervals.append(Interval.from_json(json_dict))
         return intervals
 
+    @staticmethod
+    def stringify_intervals(intervals: ['Interval']) -> str:
+        """ Convert given intervals into JSON string. """
+        json_str = ""
+        for i in range(0, len(intervals)):
+            json_str += intervals[i].to_json()
+            if i == len(intervals) - 1:
+                json_str += "]"
+            else:
+                json_str += ","
+        return json_str
+
     def __str__(self):
         return 'from: %s, to: %s, temp: %d' % (self.from_time, self.to_time, self.temp)
 
@@ -181,3 +193,12 @@ class IntervalsItem(ConfigItem):
 
         self.intervals_num += 1
         return
+
+    def reset_intervals(self, intervals: [Interval]):
+        """
+        Resets the value of this item with passed intervals. Note that the passed intervals
+        are already parsed.
+        :param intervals:
+        :return:
+        """
+        self.value = Interval.stringify_intervals(intervals)
