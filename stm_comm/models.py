@@ -27,16 +27,26 @@ class Device(models.Model):
         self.status = 'offline'
         return
 
-    def __get_all_items__(self):
-        temp_items = self.tempitem_set
-        if temp_items.count() > 1:
-            raise Exception('Too much temp items for one device')
-
+    def __get_intervals_item(self) -> ['IntervalsItem']:
         intervals_items = self.intervalsitem_set
         if intervals_items.count() > 1:
             raise Exception('Too much interval items for one device')
+        return intervals_items.first()
 
-        return [temp_items.first(), intervals_items.first()]
+    def __get_temp_item(self) -> ['TempItem']:
+        temp_items = self.tempitem_set
+        if temp_items.count() > 1:
+            raise Exception('Too much temp items for one device')
+        return temp_items.first()
+
+    def __get_all_items__(self):
+        temp_item = self.__get_temp_item()
+        intervals_item = self.__get_intervals_item()
+        return [temp_item, intervals_item]
+
+    def set_intervals(self, intervals: ['Interval']):
+        intervals_item = self.__get_intervals_item()
+        intervals_item.reset_intervals(intervals)
 
     def render_all_items(self) -> str:
         all_items_str = ""
