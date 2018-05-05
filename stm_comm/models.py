@@ -147,7 +147,7 @@ class Interval:
     @staticmethod
     def stringify_intervals(intervals: ['Interval']) -> str:
         """ Convert given intervals into JSON string. """
-        json_str = ""
+        json_str = "["
         for i in range(0, len(intervals)):
             json_str += intervals[i].to_json()
             if i == len(intervals) - 1:
