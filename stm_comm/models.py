@@ -212,3 +212,4 @@ class IntervalsItem(ConfigItem):
         :return:
         """
         self.value = Interval.stringify_intervals(intervals)
+        self.save()
