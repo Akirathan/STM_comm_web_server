@@ -2,8 +2,8 @@
  * Base class for every device item that could be saved into device.
  */
 class ConfigItem {
-    constructor(deviceId) {
-        this._domContainerId = deviceId;
+    constructor(device) {
+        this._device = device;
     }
 
     /**

@@ -54,7 +54,7 @@ class Intervals extends ConfigItem {
     }
 
     saveIntoDevice() {
-        let dataStr = `{"device_id":"${this._domContainerId}","intervals":${this.toJSON()}}`;
+        let dataStr = `{"device_id":"${this._device.id}","intervals":${this.toJSON()}}`;
         let _this = this;
 
         $.ajax({
@@ -63,14 +63,14 @@ class Intervals extends ConfigItem {
             contentType: "application/json",
             method: "POST",
             success: function (data, textStatus, jqXHR) {
-                deviceList.getDeviceById(_this._domContainerId).saveIntoDeviceDone();
+                _this._device.saveIntoDeviceDone();
             },
             error: function (data, textStatus, jqXHR) {
-                deviceList.getDeviceById(_this._domContainerId).saveIntoDeviceError();
+                _this._device.saveIntoDeviceError();
             }
         });
 
-        deviceList.getDeviceById(this._domContainerId).saveIntoDeviceProgress();
+        _this._device.saveIntoDeviceProgress();
     }
 
     /**
@@ -79,11 +79,11 @@ class Intervals extends ConfigItem {
      * @private
      */
     _findContainer() {
-        return $("#" + this._domContainerId + "_interval");
+        return $("#" + this._device.id + "_interval");
     }
 
     _findEditAllButton() {
-        return $("#" + this._domContainerId + "_interval_editall_button");
+        return $("#" + this._device.id + "_interval_editall_button");
     }
 
     /**
@@ -125,8 +125,7 @@ class Intervals extends ConfigItem {
         this._$editButtonElem.on("click", function () {_this.editAll(event);});
 
         if (this.isChanged()) {
-            let device = deviceList.getDeviceById(this._domContainerId);
-            device.showSaveIntoDeviceButtonGroup();
+            this._device.showSaveIntoDeviceButtonGroup();
         }
     }
 }
