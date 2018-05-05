@@ -4,8 +4,8 @@
 class Intervals extends ConfigItem {
     static get SAVE_INTO_DEVICE_URL() {return "intervals";}
 
-    constructor(deviceId) {
-        super(deviceId);
+    constructor(device) {
+        super(device);
         this._$container = this._findContainer();
         this._$editButtonElem = this._findEditAllButton();
         this._intervalClassElems = this._findIntervalElems(this._$container);

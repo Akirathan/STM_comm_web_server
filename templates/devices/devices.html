@@ -37,7 +37,7 @@
   $(document).ready(function() {
       {% for device_model in devices_model_list %}
           let device = new Device("{{ device_model.device_id }}");
-          let intervals = new Intervals("{{ device_model.device_id }}");
+          let intervals = new Intervals(device);
           device.addConfigItem(intervals);
           deviceList.addDevice(device);
       {% endfor %}
