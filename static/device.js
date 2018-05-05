@@ -2,6 +2,8 @@ class Device {
     static get BTN_GROUP_ID() { return "btngroup";}
     static get SAVE_INTO_DEVICE_BTN_ID() { return "btngroup_saveintodevice";}
     static get DISCARD_CHANGES_BTN_ID() { return "btngroup_discardchanges";}
+    static get SAVED_SUCCESS_TEXT_ID() {return "save_success_text";}
+    static get SAVED_ERROR_TEXT_ID() {return "save_error_text";}
 
     constructor(deviceId) {
         this._deviceId = deviceId;
@@ -29,6 +31,14 @@ class Device {
 
     _findDiscardChangesButtonJQElem(deviceId) {
         return $("#" + deviceId + "_" + Device.DISCARD_CHANGES_BTN_ID);
+    }
+
+    _findSaveSuccessTextJQElem(deviceId) {
+        return $("#" + deviceId + "_" + Device.SAVED_SUCCESS_TEXT_ID);
+    }
+
+    _findSaveErrorTextJQElem(deviceId) {
+        return $("#" + deviceId + "_" + Device.SAVED_ERROR_TEXT_ID);
     }
 
     static _getCookie(name) {
@@ -79,6 +89,19 @@ class Device {
      */
     showSaveIntoDeviceButtonGroup() {
         this._$btnGroupElem.show();
+    }
+
+    saveIntoDeviceDone() {
+        let $successTextElem = this._findSaveSuccessTextJQElem(this._deviceId);
+        $successTextElem.show();
+    }
+
+    saveIntoDeviceProgress() {
+
+    }
+
+    saveIntoDeviceError() {
+
     }
 
     /**

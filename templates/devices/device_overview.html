@@ -38,6 +38,12 @@
           Discard changes
         </button>
       </div> <!-- btn-group -->
+
+      <!-- success and error texts -->
+      <div style="position: relative; left: 70%">
+        <span id="{{ device_model.device_id }}_save_success_text" style="display:none; color: green">Successfully saved</span>
+        <span id="{{ device_model.device_id }}_save_error_text" style="display:none; color: red">Save failed</span>
+      </div>
     </td>
   </tr>
 </table>
