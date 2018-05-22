@@ -65,7 +65,8 @@ class Item(models.Model):
     # actual/config
     type = models.CharField(max_length=10)
     value = models.CharField(max_length=60, default=0)
-    time = models.DateTimeField(default=timezone.now)
+    # simplified timestamp (simplified on device side)
+    time_stamp = models.IntegerField
 
     def render(self) -> str:
         raise NotImplementedError()
