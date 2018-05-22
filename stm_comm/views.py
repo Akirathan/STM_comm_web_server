@@ -1,55 +1,63 @@
-from django.shortcuts import render, get_object_or_404
+from datetime import datetime
+from django.shortcuts import get_object_or_404
 from django.http import HttpResponse, HttpRequest
-from django.utils import timezone
+from django.views.decorators.csrf import csrf_exempt
 from .connection_manager import ConnectionManager
-from .models import Device, Item
+from .models import Device
+
+REF_DATE = datetime(year=2000, month=1, day=1)
 
 
-def actual(request: HttpRequest, actual_item_name: str) -> HttpResponse:
+def parse_update_temp_req(request: HttpRequest) -> (int, float):
     """
-    Device periodically POSTs values via this URL.
-    :param request: must be POST type and include "value" key
-    :param actual_item_name: name of the item that device wants to update
-    :return:
+    Parses "POST temperature request" from device.
+    :param request:
+    :return: (timestamp, temperature)
     """
-    if len(request.POST.dict()) == 0:
-        # Error: request is not POST type
+    body_str = request.body.decode()
+    lines = body_str.splitlines()
+    timestamp = int(lines[0])
+    temp = float(lines[1])
+    return timestamp, temp
+
+
+@csrf_exempt
+def update_temp(request: HttpRequest) -> HttpResponse:
+    """
+    Device periodically POSTs temperature via this URL.
+    :param request: must be POST type
+    """
+    if request.method != 'POST':
         return HttpResponse(status=400)
 
-    device_id = ConnectionManager.get_device_id(request.get_host(), request.get_port())
+    device_id = ConnectionManager.get_device_id(request.META['REMOTE_ADDR'])
     if device_id is None:
         # Error: device not connected
         return HttpResponse(status=400)
 
-    # Get device and corresponding item from the database
     device = get_object_or_404(Device, device_id=device_id)
-    item = get_object_or_404(device.item_set, name=actual_item_name)
 
-    if item.type != 'actual':
-        # Error: wrong item type
-        return HttpResponse(status=400)
-
-    # Parse the value from POST request
-    try:
-        value = request.POST['value']
-    except KeyError:
-        # Error: wrong format of POST request
-        return HttpResponse(status=400)
-
-    # Insert the value in the database.
-    item.value = value
-    item.time = timezone.now()
-    item.save()
+    (timestamp, temp) = parse_update_temp_req(request)
+    device.set_temperature(timestamp, temp)
 
     return HttpResponse()
 
 
-def connect(request: HttpRequest, device_id: str) -> HttpResponse:
+@csrf_exempt
+def connect(request: HttpRequest) -> HttpResponse:
     """ First message from STM device """
+    if request.method != 'POST':
+        return HttpResponse(status=400)
+
     # Check if the device is in the device database
+    device_id = request.body.decode()
     device = get_object_or_404(Device, device_id=device_id)
     device.set_online()
 
-    ConnectionManager.add_device(device_id, request.get_host(), request.get_port())
-    return HttpResponse()
+    ConnectionManager.add_device(device_id, request.META['REMOTE_ADDR'])
+
+    time_delta = datetime.now() - REF_DATE
+    time_delta_seconds = int(time_delta.total_seconds())
+
+    return HttpResponse(time_delta_seconds)
 

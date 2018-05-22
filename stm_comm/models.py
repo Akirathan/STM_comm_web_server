@@ -48,6 +48,12 @@ class Device(models.Model):
         intervals_item = self.__get_intervals_item()
         intervals_item.reset_intervals(intervals)
 
+    def set_temperature(self, timestamp: int, temp: float):
+        temp_item = self.__get_temp_item()
+        temp_item.value = temp
+        temp_item.time_stamp = timestamp
+        temp_item.save()
+
     def render_all_items(self) -> str:
         all_items_str = ""
         all_items = self.__get_all_items__()
