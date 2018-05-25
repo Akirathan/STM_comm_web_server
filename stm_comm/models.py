@@ -44,6 +44,10 @@ class Device(models.Model):
         intervals_item = self.__get_intervals_item()
         return [temp_item, intervals_item]
 
+    def get_intervals(self) -> ['Interval']:
+        intervals_item = self.__get_intervals_item()
+        return intervals_item.get_intervals()
+
     def set_intervals(self, intervals: ['Interval']):
         intervals_item = self.__get_intervals_item()
         intervals_item.reset_intervals(intervals)
@@ -97,7 +101,10 @@ class TempItem(ActualItem):
     name = 'temp'
 
     def render(self) -> str:
-        return render_to_string('items/temp_item.html', {'temperature': self.value})
+        return render_to_string('items/temp_item.html', {
+            'temperature': self.value,
+            'device_model': self.device
+        })
 
 
 class Time:
@@ -173,12 +180,12 @@ class IntervalsItem(ConfigItem):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.intervals_num = len(self.__get_intervals__())
+        self.intervals_num = len(self.get_intervals())
         return
 
     def __str__(self):
         retval = '['
-        for interval in self.__get_intervals__():
+        for interval in self.get_intervals():
             retval += interval.__str__()
             retval += ','
         retval += ']'
@@ -186,14 +193,14 @@ class IntervalsItem(ConfigItem):
 
     def render(self) -> str:
         return render_to_string('items/intervals.html', {
-            'interval_list': self.__get_intervals__(),
+            'interval_list': self.get_intervals(),
             'device_model': self.device
         })
 
     def __parse_one_interval__(self, interval_dict: dict) -> Interval:
         return Interval.from_json(interval_dict)
 
-    def __get_intervals__(self) -> [Interval]:
+    def get_intervals(self) -> [Interval]:
         """
         Parses all the intervals that are in self.value in JSON format
         """

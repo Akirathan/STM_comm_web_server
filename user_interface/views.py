@@ -1,9 +1,9 @@
-from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponse, HttpRequest, HttpResponseRedirect
 from django.contrib.auth import login, authenticate, logout
+from django.http import HttpResponse, HttpRequest
+from django.shortcuts import render
 from django.views import View
-from stm_comm.models import Device, Interval
-import json
+
+from stm_comm.models import Device
 
 
 def index(request: HttpRequest) -> HttpResponse:
@@ -47,24 +47,3 @@ class DevicesView(View):
         devices = get_user_devices(request)
         return render(request, 'devices/devices.html', {'devices_model_list': devices})
 
-
-def save_intervals_to_db(request: HttpRequest) -> HttpResponse:
-    """
-    Request body is supposed to contain JSON data format. In this JSON body there
-    should be "device_id" and "intervals" specified.
-    :param request:
-    :return:
-    """
-    if request.method != 'POST':
-        return HttpResponse(404)
-    # Parse passed data
-    body_str = request.body.decode('utf-8')
-    json_dict = json.loads(body_str)
-    device_id = json_dict['device_id']
-    intervals_json_dict = json_dict['intervals']
-    updated_intervals = Interval.parse_intervals(json.dumps(intervals_json_dict))
-    # Save intervals into device
-    device = get_object_or_404(Device, device_id=device_id)
-    device.set_intervals(updated_intervals)
-
-    return HttpResponse()
