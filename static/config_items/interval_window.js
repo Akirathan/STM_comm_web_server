@@ -1,7 +1,7 @@
 /**
  * Represents both overview and editable interval.
  */
-class Interval {
+class IntervalWindow {
     constructor($intervalElement) {
         this._isChanged = false;
         this._$overviewIntervalElem = $intervalElement;

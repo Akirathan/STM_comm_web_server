@@ -1,23 +1,37 @@
 /**
  * Represents all intervals for one device ie. list of all intervals
  */
-class Intervals extends ConfigItem {
-    static get SAVE_INTO_DEVICE_URL() {return "intervals";}
+class IntervalsWindow extends ConfigItem {
+    static get NOTIFICATION_ID() {return "interval_changed_flag"}
+    static get REFRESH_BTN_ID() {return "interval_refresh_button"}
 
     constructor(device) {
         super(device);
+
+        this._tmpValueFromServer = undefined;
+
+        // Find DOM elements
         this._$container = this._findContainer();
         this._$editButtonElem = this._findEditAllButton();
         this._intervalClassElems = this._findIntervalElems(this._$container);
+        this._$notificationElem = this._findNotificationJQElem(device.id);
+        this._$refreshBtnElem = this._findRefreshBtnJQElem(device.id);
 
         this._attachEventHandlers();
     }
 
     _attachEventHandlers() {
         let _this = this;
-        this._$editButtonElem.on("click", function() {
-            _this.editAll(event);
-        });
+        this._$editButtonElem.on("click", function() {_this.editAll(event)});
+        this._$refreshBtnElem.on("click", function() {_this.onRefresh()});
+    }
+
+    _findNotificationJQElem(deviceId) {
+        return $("#" + deviceId + "_" + IntervalsWindow.NOTIFICATION_ID);
+    }
+
+    _findRefreshBtnJQElem(deviceId) {
+        return $("#" + deviceId + "_" + IntervalsWindow.REFRESH_BTN_ID);
     }
 
     /**
@@ -53,26 +67,6 @@ class Intervals extends ConfigItem {
         return jsonStr;
     }
 
-    saveIntoDevice() {
-        let dataStr = `{"device_id":"${this._device.id}","intervals":${this.toJSON()}}`;
-        let _this = this;
-
-        $.ajax({
-            url: Intervals.SAVE_INTO_DEVICE_URL,
-            data: dataStr,
-            contentType: "application/json",
-            method: "POST",
-            success: function (data, textStatus, jqXHR) {
-                _this._device.saveIntoDeviceDone();
-            },
-            error: function (data, textStatus, jqXHR) {
-                _this._device.saveIntoDeviceError();
-            }
-        });
-
-        _this._device.saveIntoDeviceProgress();
-    }
-
     /**
      * Finds container in which all the intervals are contained.
      * @note all interval containers should have id in this form: "<devID>_interval"
@@ -98,7 +92,7 @@ class Intervals extends ConfigItem {
         for (let child of children) {
             let intervalElem = $(child).find(".interval")[0];
             let $intervalElem = $(intervalElem);
-            intervalElems.push(new Interval($intervalElem));
+            intervalElems.push(new IntervalWindow($intervalElem));
         }
         return intervalElems;
     }
@@ -112,6 +106,10 @@ class Intervals extends ConfigItem {
         this._$editButtonElem.off("click");
         let _this = this;
         this._$editButtonElem.on("click", function() {_this.doneEditingAll(event);});
+    }
+
+    onRefresh() {
+
     }
 
     doneEditingAll(event) {
