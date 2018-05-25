@@ -1,12 +1,22 @@
 <!--
  Gets 'temperature' as string
+      'device_model' as Device (models.py)
 -->
 
 <div class="panel panel-default">
   <div class="panel-heading">
     Temperature
-  </div> <!-- panel-heading -->
+    <!-- Changed (asterisk) sign with tooltip (implicitly hidden) -->
+    <span data-toggle="tooltip" title="Device changed value"
+          id="{{ device_model.device_id }}_temp_changed_flag"
+          style="display: none; color: red; position: relative; bottom: 3px; font-size: 1.8em">*</span>
+    <!-- Refresh button (implicitly disabled) -->
+    <button class="btn btn-primary"
+            id="{{ device_model.device_id }}_temp_refresh_button" type="button" disabled="true"
+            style="position: relative; left: 40px;">Refresh</button>
+  </div>
   <div class="panel-body">
-    {{ temperature }}
+    <!-- temperature value -->
+    <span id="{{ device_model.device_id }}_temp">{{ temperature }}</span>
   </div> <!-- panel-body -->
 </div>

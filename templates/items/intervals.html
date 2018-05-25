@@ -6,6 +6,14 @@
 <div class="panel panel-default">
   <div class="panel-heading">
     Intervals
+    <!-- Changed (asterisk) sign with tooltip (implicitly hidden) -->
+    <span data-toggle="tooltip" title="Device changed value"
+          id="{{ device_model.device_id }}_interval_changed_flag"
+          style="display: none; color: red; position: relative; bottom: 3px; font-size: 1.8em">*</span>
+    <!-- Refresh button (implicitly disabled) -->
+    <button class="btn btn-primary"
+            id="{{ device_model.device_id }}_interval_refresh_button" type="button" disabled="true"
+            style="position: relative; left: 40px;">Refresh</button>
     <!-- Edit Intervals button -->
     <button class="btn btn-primary" id="{{ device_model.device_id }}_interval_editall_button"
             type="button" style="position: relative; left: 40px;">
