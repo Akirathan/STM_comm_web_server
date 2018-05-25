@@ -27,17 +27,18 @@
 
 {% include "javascripts.html" %}
 <script src="{% static 'config_items/config_item.js' %}"></script>
-<script src="{% static 'config_items/interval.js' %}"></script>
-<script src="{% static 'config_items/intervals.js' %}"></script>
-<script src="{% static 'device.js' %}"></script>
+<script src="{% static 'config_items/interval_window.js' %}"></script>
+<script src="{% static 'config_items/intervals_window.js' %}"></script>
+<script src="{% static 'device_window.js' %}"></script>
 <script src="{% static 'device_list.js' %}"></script>
+<script src="{% static 'ajax_poller.js' %}"></script>
 
 <script>
   let deviceList = new DeviceList();
   $(document).ready(function() {
       {% for device_model in devices_model_list %}
-          let device = new Device("{{ device_model.device_id }}");
-          let intervals = new Intervals(device);
+          let device = new DeviceWindow("{{ device_model.device_id }}");
+          let intervals = new IntervalsWindow(device);
           device.addConfigItem(intervals);
           deviceList.addDevice(device);
       {% endfor %}

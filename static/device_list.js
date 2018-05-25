@@ -4,14 +4,14 @@ class DeviceList {
     }
 
     addDevice(device) {
-        if (device instanceof Device) {
+        if (device instanceof DeviceWindow) {
             this._devices.push(device);
         }
     }
 
     /**
      * @param id
-     * @return {Device}
+     * @return {DeviceWindow}
      */
     getDeviceById(id) {
         for (let device of this._devices) {

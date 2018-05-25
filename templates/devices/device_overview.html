@@ -13,7 +13,8 @@
   <tr>
     <td> {{ device_model.device_id }} </td>
     <td>
-      {{ device_model.status }}
+      <!-- state value (online/offline) -->
+      <span id="{{ device_model.device_id }}_state">{{ device_model.status }}</span>
       <!-- details button -->
       <a class="btn btn-primary" role="button" data-toggle="collapse"
          href="#{{ device_model.device_id }}_device_details" aria-expanded="false" aria-controls="device_details"
@@ -30,7 +31,7 @@
            style="display: none; position: relative; left: 70%;">
         <!-- save into device button -->
         <button id="{{ device_model.device_id }}_btngroup_saveintodevice"
-                class="btn btn-success" onclick="Device.onSaveIntoDevice(event)" role="button">
+                class="btn btn-success" onclick="DeviceWindow.onSaveIntoDevice(event)" role="button">
           Save into device
           <span id="{{ device_model.device_id }}_save_button_loader_icon"
                 class="glyphicon glyphicon-refresh glyphicon-refresh-animate"
@@ -38,7 +39,7 @@
           </span>
         </button>
         <button id="{{ device_model.device_id }}_btngroup_discardchanges"
-                class="btn btn-warning" onclick="Device.onSaveIntoDevice(event)" role="button">
+                class="btn btn-warning" onclick="DeviceWindow.onSaveIntoDevice(event)" role="button">
           Discard changes
         </button>
       </div> <!-- btn-group -->
