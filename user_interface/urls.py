@@ -1,6 +1,7 @@
 from django.urls import path
 from . import views
 from user_interface.intervals_view import IntervalsView
+from user_interface.temps_view import TempsView
 
 app_name = 'user_interface'
 urlpatterns = [
@@ -9,5 +10,6 @@ urlpatterns = [
     path('accounts/logout', views.user_logout, name='user_logout'),
     path('accounts/details', views.user_logout, name='user_details'),
     path('devices', views.DevicesView.as_view(), name='devices'),
-    path('intervals', IntervalsView.as_view(), name='intervals')
+    path('intervals', IntervalsView.as_view(), name='intervals'),
+    path('temps', TempsView.as_view(), name='temps'),
 ]
