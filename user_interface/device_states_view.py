@@ -16,4 +16,4 @@ class DeviceStatesView(View):
         for device in devices:
             item = {'device_id': device.device_id, 'state': device.status}
             items.append(item)
-        return json.dumps(items)
+        return HttpResponse(json.dumps(items))
