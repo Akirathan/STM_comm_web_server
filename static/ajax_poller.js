@@ -79,7 +79,7 @@ class AjaxPoller {
         let data_json = JSON.parse(data);
         data_json.forEach(function(item) {
             let device = deviceList.getDeviceById(item["device_id"]);
-            if (device.getTemperature() !== item["temp"]) {
+            if (device.getTemperature() != item["temp"]) {
                 device.notifyTemperature(item["temp"]);
             }
         })
