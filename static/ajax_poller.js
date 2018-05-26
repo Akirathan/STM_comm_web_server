@@ -83,7 +83,15 @@ class AjaxPoller {
     }
 
     static _processIntervals(data) {
-
+        let data_json = JSON.parse(data);
+        data_json.forEach(function(item) {
+            let device = deviceList.getDeviceById(item["device_id"]);
+            let currentIntervals = device.getIntervals();
+            let parsedIntervals = item["intervals"];
+            if (!Interval.compareIntervalArrays(currentIntervals, parsedIntervals)) {
+                device.notifyIntervals(parsedIntervals);
+            }
+        })
     }
 }
 
