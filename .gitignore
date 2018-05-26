@@ -3,3 +3,7 @@ notes.txt
 .idea/*
 venv/
 *.pyc
+
+create_req.py
+req_connect.txt
+req_temp_update.txt
