@@ -33,31 +33,6 @@ class IntervalsWindow extends ConfigItem {
     }
 
     /**
-     * Notifies this IntervalsWindow of new intervals value fetched from backend.
-     * Enables refresh button and shows notification.
-     * @param fetchedIntervals {[Interval]}
-     */
-    notify(fetchedIntervals) {
-        this._tmpValueFromServer = fetchedIntervals;
-        this._$notificationElem.show();
-        this._$refreshBtnElem.attr("disabled", "false");
-    }
-
-    _attachEventHandlers() {
-        let _this = this;
-        this._$editButtonElem.on("click", function() {_this.editAll(event)});
-        this._$refreshBtnElem.on("click", function() {_this.onRefresh()});
-    }
-
-    _findNotificationJQElem(deviceId) {
-        return $("#" + deviceId + "_" + IntervalsWindow.NOTIFICATION_ID);
-    }
-
-    _findRefreshBtnJQElem(deviceId) {
-        return $("#" + deviceId + "_" + IntervalsWindow.REFRESH_BTN_ID);
-    }
-
-    /**
      * Asks every containing interval if there was any change on it.
      * @override
      * @return {boolean}
@@ -91,6 +66,65 @@ class IntervalsWindow extends ConfigItem {
     }
 
     /**
+     * Notifies this IntervalsWindow of new intervals value fetched from backend.
+     * Enables refresh button and shows notification.
+     * @param fetchedIntervals {[Interval]}
+     */
+    notify(fetchedIntervals) {
+        this._tmpValueFromServer = fetchedIntervals;
+        this._$notificationElem.show();
+        this._$refreshBtnElem.attr("disabled", "false");
+    }
+
+    editAll(event) {
+        for (let intervalClassElem of this._intervalClassElems) {
+            intervalClassElem.showEditableInterval();
+        }
+
+        this._$editButtonElem.html("Done");
+        this._$editButtonElem.off("click");
+        let _this = this;
+        this._$editButtonElem.on("click", function() {_this.doneEditingAll(event);});
+    }
+
+    /**
+     * TODO: do not refresh whole page
+     */
+    onRefresh() {
+        location.reload(true);
+    }
+
+    doneEditingAll(event) {
+        for (let intervalClassElem of this._intervalClassElems) {
+            intervalClassElem.showOverviewInterval();
+        }
+
+        this._$editButtonElem.html("Edit");
+        this._$editButtonElem.off("click");
+        let _this = this;
+        this._$editButtonElem.on("click", function () {_this.editAll(event);});
+
+        if (this.isChanged()) {
+            this._device.showSaveIntoDeviceButtonGroup();
+        }
+    }
+
+    _attachEventHandlers() {
+        let _this = this;
+        this._$editButtonElem.on("click", function() {_this.editAll(event)});
+        this._$refreshBtnElem.on("click", function() {_this.onRefresh()});
+    }
+
+    _findNotificationJQElem(deviceId) {
+        return $("#" + deviceId + "_" + IntervalsWindow.NOTIFICATION_ID);
+    }
+
+    _findRefreshBtnJQElem(deviceId) {
+        return $("#" + deviceId + "_" + IntervalsWindow.REFRESH_BTN_ID);
+    }
+
+
+    /**
      * Finds container in which all the intervals are contained.
      * @note all interval containers should have id in this form: "<devID>_interval"
      * @private
@@ -118,38 +152,5 @@ class IntervalsWindow extends ConfigItem {
             intervalElems.push(new IntervalWindow($intervalElem));
         }
         return intervalElems;
-    }
-
-    editAll(event) {
-        for (let intervalClassElem of this._intervalClassElems) {
-            intervalClassElem.showEditableInterval();
-        }
-        
-        this._$editButtonElem.html("Done");
-        this._$editButtonElem.off("click");
-        let _this = this;
-        this._$editButtonElem.on("click", function() {_this.doneEditingAll(event);});
-    }
-
-    /**
-     * TODO: do not refresh whole page
-     */
-    onRefresh() {
-        location.reload(true);
-    }
-
-    doneEditingAll(event) {
-        for (let intervalClassElem of this._intervalClassElems) {
-            intervalClassElem.showOverviewInterval();
-        }
-
-        this._$editButtonElem.html("Edit");
-        this._$editButtonElem.off("click");
-        let _this = this;
-        this._$editButtonElem.on("click", function () {_this.editAll(event);});
-
-        if (this.isChanged()) {
-            this._device.showSaveIntoDeviceButtonGroup();
-        }
     }
 }

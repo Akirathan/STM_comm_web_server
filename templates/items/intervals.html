@@ -25,6 +25,7 @@
       <div class="row" id="{{ device_model.device_id }}_interval">
         {% for interval in interval_list %}
           <div class="col-md-1">
+            <!-- Overview interval -->
             <div class="interval" id="{{ device_model.device_id }}_interval_{{ forloop.counter0 }}">
               <div id="{{ device_model.device_id }}_from_{{ forloop.counter0 }}"
                    class="from">{{ interval.from_time.hours }}:{{ interval.from_time.minutes }}</div>

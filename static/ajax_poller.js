@@ -9,6 +9,9 @@ class AjaxPoller {
         setTimeout(AjaxPoller._pollDevicesStates, 1500);
     }
 
+    /**
+     * Stores given intervals for future upload to the server.
+     */
     static setIntervalsForUpload(intervals) {
         intervalsForUpload = intervals;
     }

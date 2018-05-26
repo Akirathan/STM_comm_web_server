@@ -4,6 +4,7 @@
 class IntervalWindow {
     constructor($intervalElement) {
         this._isChanged = false;
+
         this._$overviewIntervalElem = $intervalElement;
         this._$editableIntervalElem = this._findEditableIntervalElem($intervalElement.get()[0]);
         this._fromTimeElem = this._findFromTimeElem($intervalElement);

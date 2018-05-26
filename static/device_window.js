@@ -13,6 +13,11 @@ class DeviceWindow {
     // online/offline status of the device
     static get STATE_VALUE_ID() {return "state";}
 
+
+    static onSaveIntoDevice(event) {
+
+    }
+
     constructor(deviceId) {
         this._deviceId = deviceId;
         this._configItems = [];
@@ -30,90 +35,6 @@ class DeviceWindow {
         this._$stateValueElem = this._findStateJQElem(deviceId);
 
         this._attachEventHandlers();
-    }
-
-    _attachEventHandlers() {
-        let _this = this;
-        this._$saveIntoDeviceButtonElem.on("click", function(){_this.onSaveIntoDevice();});
-        this._$discardChangesButtonElem.on("click", function(){_this.onDiscardChanges();});
-        this._$temperatureRefreshBtnElem.on("click", function(){_this.onTemperatureRefresh()})
-    }
-
-    _findButtonGroupJQElem(deviceId) {
-        return $("#" + deviceId + "_" + DeviceWindow.BTN_GROUP_ID);
-    }
-
-    _findSaveIntoDeviceButtonJQElem(deviceId) {
-        return $("#" + deviceId + "_" + DeviceWindow.SAVE_INTO_DEVICE_BTN_ID);
-    }
-
-    _findDiscardChangesButtonJQElem(deviceId) {
-        return $("#" + deviceId + "_" + DeviceWindow.DISCARD_CHANGES_BTN_ID);
-    }
-
-    _findSaveSuccessTextJQElem(deviceId) {
-        return $("#" + deviceId + "_" + DeviceWindow.SAVED_SUCCESS_TEXT_ID);
-    }
-
-    _findSaveErrorTextJQElem(deviceId) {
-        return $("#" + deviceId + "_" + DeviceWindow.SAVED_ERROR_TEXT_ID);
-    }
-
-    _findSaveButtonLoaderIconJQElem(deviceId) {
-        return $("#" + deviceId + "_" + DeviceWindow.SAVE_INTO_DEVICE_BTN_LOADER_ID);
-    }
-
-    _findTemperatureJQElem(deviceId) {
-        return $("#" + deviceId + "_" + DeviceWindow.TEMPERATURE_VALUE_ID);
-    }
-
-    /**
-     * Finds temperature asterisk (notification) element.
-     */
-    _findTemperatureNotificationJQElem(deviceId) {
-        return $("#" + deviceId + "_" + DeviceWindow.TEMPERATURE_NOTIFY_ID);
-    }
-
-    _findTemperatureRefreshBtnJQElem(deviceId) {
-        return $("#" + deviceId + "_" + DeviceWindow.TEMPERATURE_REFRESH_BTN_ID);
-    }
-
-    _findStateJQElem(deviceId) {
-        return $("#" + deviceId + "_" + DeviceWindow.STATE_VALUE_ID);
-    }
-
-
-    static _getCookie(name) {
-        var cookieValue = null;
-        if (document.cookie && document.cookie !== '') {
-            var cookies = document.cookie.split(';');
-            for (var i = 0; i < cookies.length; i++) {
-                var cookie = jQuery.trim(cookies[i]);
-                // Does this cookie string begin with the name we want?
-                if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                    break;
-                }
-            }
-        }
-        return cookieValue;
-    }
-
-    static _csrfSafeMethod(method) {
-        // these HTTP methods do not require CSRF protection
-        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-    }
-
-    static _ensureCsrf() {
-        var csrftoken = DeviceWindow._getCookie('csrftoken');
-
-        $.ajaxSetup({
-            beforeSend: function(xhr, settings) {
-                if (!DeviceWindow._csrfSafeMethod(settings.type) && !this.crossDomain) {
-                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
-                }
-            }
-        });
     }
 
     get id() {
@@ -231,7 +152,86 @@ class DeviceWindow {
         this._$temperatureValueElem.html(this._newTempValue);
     }
 
-    static onSaveIntoDevice(event) {
+    static _getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
 
+    static _csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+
+    static _ensureCsrf() {
+        var csrftoken = DeviceWindow._getCookie('csrftoken');
+
+        $.ajaxSetup({
+            beforeSend: function(xhr, settings) {
+                if (!DeviceWindow._csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+            }
+        });
+    }
+
+    _attachEventHandlers() {
+        let _this = this;
+        this._$saveIntoDeviceButtonElem.on("click", function(){_this.onSaveIntoDevice();});
+        this._$discardChangesButtonElem.on("click", function(){_this.onDiscardChanges();});
+        this._$temperatureRefreshBtnElem.on("click", function(){_this.onTemperatureRefresh()})
+    }
+
+    _findButtonGroupJQElem(deviceId) {
+        return $("#" + deviceId + "_" + DeviceWindow.BTN_GROUP_ID);
+    }
+
+    _findSaveIntoDeviceButtonJQElem(deviceId) {
+        return $("#" + deviceId + "_" + DeviceWindow.SAVE_INTO_DEVICE_BTN_ID);
+    }
+
+    _findDiscardChangesButtonJQElem(deviceId) {
+        return $("#" + deviceId + "_" + DeviceWindow.DISCARD_CHANGES_BTN_ID);
+    }
+
+    _findSaveSuccessTextJQElem(deviceId) {
+        return $("#" + deviceId + "_" + DeviceWindow.SAVED_SUCCESS_TEXT_ID);
+    }
+
+    _findSaveErrorTextJQElem(deviceId) {
+        return $("#" + deviceId + "_" + DeviceWindow.SAVED_ERROR_TEXT_ID);
+    }
+
+    _findSaveButtonLoaderIconJQElem(deviceId) {
+        return $("#" + deviceId + "_" + DeviceWindow.SAVE_INTO_DEVICE_BTN_LOADER_ID);
+    }
+
+    _findTemperatureJQElem(deviceId) {
+        return $("#" + deviceId + "_" + DeviceWindow.TEMPERATURE_VALUE_ID);
+    }
+
+    /**
+     * Finds temperature asterisk (notification) element.
+     */
+    _findTemperatureNotificationJQElem(deviceId) {
+        return $("#" + deviceId + "_" + DeviceWindow.TEMPERATURE_NOTIFY_ID);
+    }
+
+    _findTemperatureRefreshBtnJQElem(deviceId) {
+        return $("#" + deviceId + "_" + DeviceWindow.TEMPERATURE_REFRESH_BTN_ID);
+    }
+
+    _findStateJQElem(deviceId) {
+        return $("#" + deviceId + "_" + DeviceWindow.STATE_VALUE_ID);
     }
 }
