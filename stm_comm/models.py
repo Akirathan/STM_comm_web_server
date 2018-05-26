@@ -48,6 +48,10 @@ class Device(models.Model):
         intervals_item = self.__get_intervals_item()
         return intervals_item.get_intervals()
 
+    def get_temp(self) -> float:
+        temp_item = self.__get_temp_item()
+        return float(temp_item.value)
+
     def set_intervals(self, intervals: ['Interval']):
         intervals_item = self.__get_intervals_item()
         intervals_item.reset_intervals(intervals)
