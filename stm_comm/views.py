@@ -50,6 +50,7 @@ def connect(request: HttpRequest) -> HttpResponse:
         return HttpResponse(status=400)
 
     # Check if the device is in the device database
+    # TODO: decode from DES
     device_id = request.body.decode()
     device = get_object_or_404(Device, device_id=device_id)
     device.set_online()
