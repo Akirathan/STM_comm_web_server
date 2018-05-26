@@ -20,6 +20,18 @@ class IntervalsWindow extends ConfigItem {
         this._attachEventHandlers();
     }
 
+    /**
+     * Returns values of all containing intervals
+     * @return {[Interval]}
+     */
+    getIntervalValues() {
+        let array = [];
+        for (let intervalWindowElem of this._intervalClassElems) {
+            array.push(intervalWindowElem.getValue());
+        }
+        return array;
+    }
+
     _attachEventHandlers() {
         let _this = this;
         this._$editButtonElem.on("click", function() {_this.editAll(event)});

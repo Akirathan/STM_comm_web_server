@@ -17,6 +17,28 @@ class IntervalWindow {
         this._attachEventHandlers();
     }
 
+    /**
+     * Return value of this IntervalWindow.
+     * @return {Interval}
+     */
+    getValue() {
+        let fromTimeHours = this._fromTimeElem.innerHTML.substring(0, 2);
+        let fromTimeMinutes = this._fromTimeElem.innerHTML.substring(3);
+        let fromTimeHoursInt = parseInt(fromTimeHours, 10);
+        let fromTimeMinutesInt = parseInt(fromTimeMinutes, 10);
+        let fromTime = new Time(fromTimeHoursInt, fromTimeMinutesInt);
+
+        let toTimeHours = this._toTimeElem.innerHTML.substring(0, 2);
+        let toTimeMinutes = this._toTimeElem.innerHTML.substring(3);
+        let toTimeHoursInt = parseInt(toTimeHours, 10);
+        let toTimeMinutesInt = parseInt(toTimeMinutes, 10);
+        let toTime = new Time(toTimeHoursInt, toTimeMinutesInt);
+
+        let tempInt = parseInt(this._tempElem.innerHTML, 10);
+
+        return new Interval(fromTime, toTime, tempInt);
+    }
+
     _attachEventHandlers() {
         let _this = this;
         $(this._editableFromTimeElem).on("change", function(){_this.onChangeFromTime(event);});

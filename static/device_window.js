@@ -132,6 +132,18 @@ class DeviceWindow {
     }
 
     /**
+     * @return {[Interval]}
+     */
+    getIntervals() {
+        for (let configItem of this._configItems) {
+            if (configItem instanceof IntervalsWindow) {
+                return configItem.getIntervalValues();
+            }
+        }
+        return [];
+    }
+
+    /**
      * Notifies this Device of new temperature value fetched from backend.
      * Shows notification and enables refresh button.
      * @param temp {float}
