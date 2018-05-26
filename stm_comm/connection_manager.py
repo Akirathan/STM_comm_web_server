@@ -13,7 +13,7 @@ class ConnectionManager:
 
     @staticmethod
     def get_device_id(remote_addr: str) -> str:
-        for (device_id_item, remote_addr_item) in ConnectionManager.connected_device.items():
+        for (device_id_item, remote_addr_item) in ConnectionManager.connected_devices.items():
             if remote_addr_item == remote_addr:
                 return device_id_item
 
