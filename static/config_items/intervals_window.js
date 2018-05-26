@@ -32,6 +32,17 @@ class IntervalsWindow extends ConfigItem {
         return array;
     }
 
+    /**
+     * Notifies this IntervalsWindow of new intervals value fetched from backend.
+     * Enables refresh button and shows notification.
+     * @param fetchedIntervals {[Interval]}
+     */
+    notify(fetchedIntervals) {
+        this._tmpValueFromServer = fetchedIntervals;
+        this._$notificationElem.show();
+        this._$refreshBtnElem.attr("disabled", "false");
+    }
+
     _attachEventHandlers() {
         let _this = this;
         this._$editButtonElem.on("click", function() {_this.editAll(event)});
@@ -120,8 +131,11 @@ class IntervalsWindow extends ConfigItem {
         this._$editButtonElem.on("click", function() {_this.doneEditingAll(event);});
     }
 
+    /**
+     * TODO: do not refresh whole page
+     */
     onRefresh() {
-
+        location.reload(true);
     }
 
     doneEditingAll(event) {

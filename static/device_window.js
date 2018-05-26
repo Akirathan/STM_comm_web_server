@@ -155,6 +155,18 @@ class DeviceWindow {
     }
 
     /**
+     * Notifies this Device of new intervals values fetched from backend.
+     * @param intervals {[Interval]}
+     */
+    notifyIntervals(intervals) {
+        for (let configItem of this._configItems) {
+            if (configItem instanceof IntervalsWindow) {
+                configItem.notify(intervals);
+            }
+        }
+    }
+
+    /**
      * Changes state of this device immediately.
      * @param {string} state online or offline
      */
