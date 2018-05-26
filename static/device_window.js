@@ -71,7 +71,7 @@ class DeviceWindow {
      */
     notifyTemperature(temp) {
         this._$temperatureNotificationElem.show();
-        this._$temperatureRefreshBtnElem.attr("disabled", "false");
+        this._$temperatureRefreshBtnElem.removeAttr("disabled");
         this._newTempValue = temp;
     }
 
