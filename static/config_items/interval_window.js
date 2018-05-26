@@ -99,28 +99,6 @@ class IntervalWindow {
      * @return {string}
      */
     toJSON() {
-        /**
-         * @param {int} hours
-         * @param {int} minutes
-         * @constructor
-         */
-        function Time(hours, minutes) {
-            this.hours = hours;
-            this.minutes = minutes;
-        }
-
-        /**
-         * @param {Time} fromTime
-         * @param {Time} toTime
-         * @param {int} temp
-         * @constructor
-         */
-        function Interval(fromTime, toTime, temp) {
-            this.from = fromTime;
-            this.to = toTime;
-            this.temp = temp;
-        }
-
         let fromTimeHours = this._fromTimeElem.innerHTML.substring(0, 2);
         let fromTimeMinutes = this._fromTimeElem.innerHTML.substring(3);
         let fromTimeHoursInt = parseInt(fromTimeHours, 10);
@@ -154,5 +132,63 @@ class IntervalWindow {
     showOverviewInterval() {
         this._$editableIntervalElem.hide();
         this._$overviewIntervalElem.show();
+    }
+}
+
+/**
+ * Time and Interval classes are used just for serialization into AJAX request and
+ * deserialization from response.
+ */
+class Time {
+    static compareTimes(timeA, timeB) {
+        return timeA.hours === timeB.hours && timeA.minutes === timeB.minutes;
+    }
+
+    /**
+     * @param hours {int}
+     * @param minutes {int}
+     */
+    constructor(hours, minutes) {
+        this.hours = hours;
+        this.minutes = minutes;
+    }
+}
+
+class Interval {
+    /**
+     * Compares given arrays of intervals.
+     * @param intervalArrayA
+     * @param intervalArrayB
+     * @return {boolean}
+     */
+    static compareIntervalArrays(intervalArrayA, intervalArrayB) {
+        if (intervalArrayA.length !== intervalArrayB.length) {
+            return false;
+        }
+
+        for (let i = 0; i < intervalArrayA.length; i++) {
+            if (!this._compareIntervals(intervalArrayA[i], intervalArrayB[i])) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    static _compareIntervals(intervalA, intervalB) {
+        return Time.compareTimes(intervalA.from, intervalB.from) &&
+            Time.compareTimes(intervalA.to, intervalB.to) &&
+            intervalA.temp === intervalB.temp;
+    }
+
+    /**
+     * @param fromTime {Time}
+     * @param toTime {Time}
+     * @param temp {int}
+     */
+    constructor(fromTime, toTime, temp) {
+        this.from = fromTime;
+        this.to = toTime;
+        this.temp = temp;
     }
 }
