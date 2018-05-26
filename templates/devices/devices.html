@@ -42,6 +42,8 @@
           device.addConfigItem(intervals);
           deviceList.addDevice(device);
       {% endfor %}
+
+      AjaxPoller.startPoll();
   })
 </script>
 </body>
