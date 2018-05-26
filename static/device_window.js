@@ -31,7 +31,7 @@ class DeviceWindow {
         this._$saveErrorTextElem = this._findSaveErrorTextJQElem(deviceId);
         this._$temperatureValueElem = this._findTemperatureJQElem(deviceId);
         this._$temperatureNotificationElem = this._findTemperatureNotificationJQElem(deviceId);
-        this._$temperatureRefreshBtnElem = this._findTemperatureRefreshBtnJQElem(devideId);
+        this._$temperatureRefreshBtnElem = this._findTemperatureRefreshBtnJQElem(deviceId);
         this._$stateValueElem = this._findStateJQElem(deviceId);
 
         this._attachEventHandlers();
