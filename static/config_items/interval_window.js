@@ -40,6 +40,57 @@ class IntervalWindow {
         return new Interval(fromTime, toTime, tempInt);
     }
 
+    onChangeFromTime(event) {
+        this._fromTimeElem.innerHTML = event.target.value;
+        this._isChanged = true;
+    }
+
+    onChangeToTime(event) {
+        this._toTimeElem.innerHTML = event.target.value;
+        this._isChanged = true;
+    }
+
+    onChangeTemp(event) {
+        this._tempElem.innerHTML = event.target.value;
+        this._isChanged = true;
+    }
+
+    /**
+     * Hides this interval (sets display:none)
+     */
+    onDelete(event) {
+
+    }
+
+    isChanged() {
+        return this._isChanged;
+    }
+
+    /**
+     * Converts value of this IntervalWindow into JSON string.
+     * @return {string}
+     */
+    toJSON() {
+        let interval = this.getValue();
+        return JSON.stringify(interval);
+    }
+
+    /**
+     * Hides the (overview/normal) interval and show editable.
+     */
+    showEditableInterval() {
+        this._$overviewIntervalElem.hide();
+        this._$editableIntervalElem.show();
+    }
+
+    /**
+     * Hides editable interval and shows overview interval.
+     */
+    showOverviewInterval() {
+        this._$editableIntervalElem.hide();
+        this._$overviewIntervalElem.show();
+    }
+
     _attachEventHandlers() {
         let _this = this;
         $(this._editableFromTimeElem).on("change", function(){_this.onChangeFromTime(event);});
@@ -91,56 +142,6 @@ class IntervalWindow {
         return this._findChildContainingId($editableIntervalElem, "deletebutton");
     }
 
-    onChangeFromTime(event) {
-        this._fromTimeElem.innerHTML = event.target.value;
-        this._isChanged = true;
-    }
-
-    onChangeToTime(event) {
-        this._toTimeElem.innerHTML = event.target.value;
-        this._isChanged = true;
-    }
-
-    onChangeTemp(event) {
-        this._tempElem.innerHTML = event.target.value;
-        this._isChanged = true;
-    }
-
-    /**
-     * Hides this interval (sets display:none)
-     */
-    onDelete(event) {
-
-    }
-
-    isChanged() {
-        return this._isChanged;
-    }
-
-    /**
-     * Converts value of this IntervalWindow into JSON string.
-     * @return {string}
-     */
-    toJSON() {
-        let interval = this.getValue();
-        return JSON.stringify(interval);
-    }
-
-    /**
-     * Hides the (overview/normal) interval and show editable.
-     */
-    showEditableInterval() {
-        this._$overviewIntervalElem.hide();
-        this._$editableIntervalElem.show();
-    }
-
-    /**
-     * Hides editable interval and shows overview interval.
-     */
-    showOverviewInterval() {
-        this._$editableIntervalElem.hide();
-        this._$overviewIntervalElem.show();
-    }
 }
 
 /**
