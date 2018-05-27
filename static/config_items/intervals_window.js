@@ -47,6 +47,15 @@ class IntervalsWindow extends ConfigItem {
     }
 
     /**
+     * Adds and renders new interval inside this._$container (row)
+     * @param intervalWindow {IntervalWindow}
+     */
+    appendIntervalToWindow(intervalWindow) {
+        this._intervalClassElems.push(intervalWindow);
+        this._$container.append(intervalWindow.getDOMContainer());
+    }
+
+    /**
      * Return JSON representation.
      * @return {string}
      */
