@@ -83,16 +83,13 @@ class IntervalsWindow extends ConfigItem {
      */
     notify(fetchedIntervals) {
         this._tmpValueFromServer = fetchedIntervals;
-        this._$notificationElem.show();
-        this._$refreshBtnElem.attr("disabled", "false");
+        this._showChangedNotification();
+        this._enableRefreshButton();
     }
 
     editAll(event) {
-        for (let intervalClassElem of this._intervalClassElems) {
-            intervalClassElem.showEditableInterval();
-        }
-
-        this._$editButtonElem.html("Done");
+        this._switchAllIntervalsToEditable();
+        this._switchEditButtonToDoneButton();
         this._$editButtonElem.off("click");
         let _this = this;
         this._$editButtonElem.on("click", function() {_this.doneEditingAll(event);});
@@ -110,17 +107,15 @@ class IntervalsWindow extends ConfigItem {
     }
 
     doneEditingAll(event) {
-        for (let intervalClassElem of this._intervalClassElems) {
-            intervalClassElem.showOverviewInterval();
-        }
+        this._switchAllIntervalsToOverview();
 
-        this._$editButtonElem.html("Edit");
+        this._switchDoneButtonToEditButton();
         this._$editButtonElem.off("click");
         let _this = this;
         this._$editButtonElem.on("click", function () {_this.editAll(event);});
 
         if (this.isChanged()) {
-            this._$saveIntoDeviceBtnElem.show();
+            this._showSaveIntoDeviceButton();
         }
     }
 
@@ -172,5 +167,50 @@ class IntervalsWindow extends ConfigItem {
             intervalElems.push(new IntervalWindow($intervalElem));
         }
         return intervalElems;
+    }
+
+    _switchEditButtonToDoneButton() {
+        this._$editButtonElem.html("Done");
+    }
+
+    _switchDoneButtonToEditButton() {
+        this._$editButtonElem.html("Edit");
+    }
+
+    _switchAllIntervalsToOverview() {
+        for (let intervalClassElem of this._intervalClassElems) {
+            intervalClassElem.showOverviewInterval();
+        }
+    }
+
+    _switchAllIntervalsToEditable() {
+        for (let intervalClassElem of this._intervalClassElems) {
+            intervalClassElem.showEditableInterval();
+        }
+
+    }
+
+    _showChangedNotification() {
+        this._$notificationElem.show();
+    }
+
+    _hideChangedNotification() {
+        this._$notificationElem.hide();
+    }
+
+    _enableRefreshButton() {
+        this._$refreshBtnElem.attr("disabled", "false");
+    }
+
+    _disableRefreshButton() {
+
+    }
+
+    _showSaveIntoDeviceButton() {
+        this._$saveIntoDeviceBtnElem.show();
+    }
+
+    _hideSaveIntoDeviceButton() {
+        this._$saveIntoDeviceBtnElem.hide();
     }
 }
