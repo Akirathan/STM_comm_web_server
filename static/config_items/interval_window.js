@@ -5,6 +5,7 @@ class IntervalWindow {
     constructor($intervalElement) {
         this._isChanged = false;
 
+        this._containerElem = $intervalElement.parent().get()[0];
         this._$overviewIntervalElem = $intervalElement;
         this._$editableIntervalElem = this._findEditableIntervalElem($intervalElement.get()[0]);
         this._fromTimeElem = this._findFromTimeElem($intervalElement);
@@ -16,6 +17,15 @@ class IntervalWindow {
         this._deleteButton = this._findDeleteButtonElem(this._$editableIntervalElem);
 
         this._attachEventHandlers();
+    }
+
+    /**
+     * Returns whole DOM container in which this IntervalWindow is contained.
+     * Used for appending new IntervalWindows to IntervalsWindow.
+     * @return {Element}
+     */
+    getDOMContainer() {
+        return this._containerElem;
     }
 
     /**
