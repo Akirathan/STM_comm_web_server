@@ -101,6 +101,7 @@ class IntervalsWindow extends ConfigItem {
     onRefresh() {
         this._hideSaveIntoDeviceButton();
         this._hideChangedNotification();
+        this._disableRefreshButton();
 
         // Reset all containing intervals
         this._removeAllIntervals();
@@ -208,11 +209,11 @@ class IntervalsWindow extends ConfigItem {
     }
 
     _enableRefreshButton() {
-        this._$refreshBtnElem.attr("disabled", "false");
+        this._$refreshBtnElem.removeAttr("disabled");
     }
 
     _disableRefreshButton() {
-
+        this._$refreshBtnElem.attr("disabled", "true");
     }
 
     _showSaveIntoDeviceButton() {
