@@ -99,7 +99,12 @@ class IntervalsWindow extends ConfigItem {
      * TODO: do not refresh whole page
      */
     onRefresh() {
-        location.reload(true);
+        this._hideSaveIntoDeviceButton();
+        this._hideChangedNotification();
+
+        // Reset all containing intervals
+        this._removeAllIntervals();
+        this._setNewIntervals(this._tmpValueFromServer);
     }
 
     onSaveIntoDevice() {
@@ -216,5 +221,32 @@ class IntervalsWindow extends ConfigItem {
 
     _hideSaveIntoDeviceButton() {
         this._$saveIntoDeviceBtnElem.hide();
+    }
+
+    /**
+     * Removes all intervals (_intervalClassElems) that are contained in this
+     * IntervalsWindow from DOM.
+     * @private
+     */
+    _removeAllIntervals() {
+        let container = this._$container.get()[0];
+        for (let intervalWindow of this._intervalClassElems) {
+            container.removeChild(intervalWindow.getDOMContainer());
+        }
+
+        this._intervalClassElems = [];
+    }
+
+    /**
+     * Sets new intervals to the DOM.
+     * @param intervals {[Interval]}
+     * @private
+     */
+    _setNewIntervals(intervals) {
+        let deviceId = this._device.id;
+        for (let i = 0; i < intervals.length; i++) {
+            let intervalWindow = IntervalTemplate.renderNewIntervalWindow(deviceId, i, intervals[i]);
+            this.appendIntervalToWindow(intervalWindow);
+        }
     }
 }
