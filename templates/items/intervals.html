@@ -14,9 +14,13 @@
     <button class="btn btn-primary"
             id="{{ device_model.device_id }}_interval_refresh_button" type="button" disabled="true"
             style="position: relative; left: 40px;">Refresh</button>
+    <!-- Save into device button (implicitly hidden) -->
+    <button class="btn btn-success"
+            id="{{ device_model.device_id }}_interval_save_into_device_button" type="button"
+            style="display: none; position: relative; left: 40px;">Save into device</button>
     <!-- Edit Intervals button -->
-    <button class="btn btn-primary" id="{{ device_model.device_id }}_interval_editall_button"
-            type="button" style="position: relative; left: 40px;">
+    <button class="btn btn-warning" id="{{ device_model.device_id }}_interval_editall_button"
+            type="button" style="position: relative; left: 43px;">
       Edit
     </button>
   </div> <!-- panel-heading -->

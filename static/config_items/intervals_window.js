@@ -4,6 +4,7 @@
 class IntervalsWindow extends ConfigItem {
     static get NOTIFICATION_ID() {return "interval_changed_flag"}
     static get REFRESH_BTN_ID() {return "interval_refresh_button"}
+    static get SAVE_INTO_DEVICE_BTN_ID() {return "interval_save_into_device_button"}
 
     constructor(device) {
         super(device);
@@ -16,6 +17,7 @@ class IntervalsWindow extends ConfigItem {
         this._intervalClassElems = this._findIntervalElems(this._$container);
         this._$notificationElem = this._findNotificationJQElem(device.id);
         this._$refreshBtnElem = this._findRefreshBtnJQElem(device.id);
+        this._$saveIntoDeviceBtnElem = this._findSaveIntoDeviceBtnJQElem(device.id);
 
         this._attachEventHandlers();
     }
@@ -103,6 +105,10 @@ class IntervalsWindow extends ConfigItem {
         location.reload(true);
     }
 
+    onSaveIntoDevice() {
+
+    }
+
     doneEditingAll(event) {
         for (let intervalClassElem of this._intervalClassElems) {
             intervalClassElem.showOverviewInterval();
@@ -114,7 +120,7 @@ class IntervalsWindow extends ConfigItem {
         this._$editButtonElem.on("click", function () {_this.editAll(event);});
 
         if (this.isChanged()) {
-            this._device.showSaveIntoDeviceButtonGroup();
+            this._$saveIntoDeviceBtnElem.show();
         }
     }
 
@@ -122,6 +128,7 @@ class IntervalsWindow extends ConfigItem {
         let _this = this;
         this._$editButtonElem.on("click", function() {_this.editAll(event)});
         this._$refreshBtnElem.on("click", function() {_this.onRefresh()});
+        this._$saveIntoDeviceBtnElem.on("click", function() {_this.onSaveIntoDevice()});
     }
 
     _findNotificationJQElem(deviceId) {
@@ -130,6 +137,10 @@ class IntervalsWindow extends ConfigItem {
 
     _findRefreshBtnJQElem(deviceId) {
         return $("#" + deviceId + "_" + IntervalsWindow.REFRESH_BTN_ID);
+    }
+
+    _findSaveIntoDeviceBtnJQElem(deviceId) {
+        return $("#" + deviceId + "_" + IntervalsWindow.SAVE_INTO_DEVICE_BTN_ID);
     }
 
 
