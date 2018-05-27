@@ -26,29 +26,6 @@
         <span id="{{ device_model.device_id }}details_chevron_up"
               class="glyphicon glyphicon-chevron-up" style="display: none"></span>
       </a>
-      <!-- "save into device" and "discard changes" buttons -->
-      <div id="{{ device_model.device_id }}_btngroup" class="btn-group"
-           style="display: none; position: relative; left: 70%;">
-        <!-- save into device button -->
-        <button id="{{ device_model.device_id }}_btngroup_saveintodevice"
-                class="btn btn-success" onclick="DeviceWindow.onSaveIntoDevice(event)" role="button">
-          Save into device
-          <span id="{{ device_model.device_id }}_save_button_loader_icon"
-                class="glyphicon glyphicon-refresh glyphicon-refresh-animate"
-                style="display: none">
-          </span>
-        </button>
-        <button id="{{ device_model.device_id }}_btngroup_discardchanges"
-                class="btn btn-warning" onclick="DeviceWindow.onSaveIntoDevice(event)" role="button">
-          Discard changes
-        </button>
-      </div> <!-- btn-group -->
-
-      <!-- success and error texts -->
-      <div style="position: relative; left: 70%">
-        <span id="{{ device_model.device_id }}_save_success_text" style="display:none; color: green">Successfully saved</span>
-        <span id="{{ device_model.device_id }}_save_error_text" style="display:none; color: red">Save failed</span>
-      </div>
     </td>
   </tr>
 </table>

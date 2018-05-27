@@ -1,10 +1,4 @@
 class DeviceWindow {
-    static get BTN_GROUP_ID() { return "btngroup";}
-    static get SAVE_INTO_DEVICE_BTN_ID() { return "btngroup_saveintodevice";}
-    static get DISCARD_CHANGES_BTN_ID() { return "btngroup_discardchanges";}
-    static get SAVED_SUCCESS_TEXT_ID() {return "save_success_text";}
-    static get SAVED_ERROR_TEXT_ID() {return "save_error_text";}
-    static get SAVE_INTO_DEVICE_BTN_LOADER_ID() {return "save_button_loader_icon";}
     // temperature of this device
     static get TEMPERATURE_VALUE_ID() {return "temp";}
     // Asterisk with tooltip nearby temperature (notification).
@@ -13,22 +7,11 @@ class DeviceWindow {
     // online/offline status of the device
     static get STATE_VALUE_ID() {return "state";}
 
-
-    static onSaveIntoDevice(event) {
-
-    }
-
     constructor(deviceId) {
         this._deviceId = deviceId;
         this._configItems = [];
         // Temperature value fetched by AjaxPoller
         this._newTempValue = 0.0;
-        this._$btnGroupElem = this._findButtonGroupJQElem(deviceId);
-        this._$saveIntoDeviceButtonElem = this._findSaveIntoDeviceButtonJQElem(deviceId);
-        this._$discardChangesButtonElem = this._findDiscardChangesButtonJQElem(deviceId);
-        this._$saveButtonLoaderIconElem = this._findSaveButtonLoaderIconJQElem(deviceId);
-        this._$saveSuccessTextElem = this._findSaveSuccessTextJQElem(deviceId);
-        this._$saveErrorTextElem = this._findSaveErrorTextJQElem(deviceId);
         this._$temperatureValueElem = this._findTemperatureJQElem(deviceId);
         this._$temperatureNotificationElem = this._findTemperatureNotificationJQElem(deviceId);
         this._$temperatureRefreshBtnElem = this._findTemperatureRefreshBtnJQElem(deviceId);
@@ -104,48 +87,6 @@ class DeviceWindow {
         }
     }
 
-    /**
-     * Shows "Save into device" and "Discard changes" buttons.
-     */
-    showSaveIntoDeviceButtonGroup() {
-        this._$btnGroupElem.show();
-    }
-
-    saveIntoDeviceDone() {
-        this._$saveButtonLoaderIconElem.hide();
-        this._$btnGroupElem.hide();
-
-        this._$saveSuccessTextElem.show();
-    }
-
-    saveIntoDeviceProgress() {
-        this._$saveButtonLoaderIconElem.show();
-    }
-
-    saveIntoDeviceError() {
-        this._$saveButtonLoaderIconElem.hide();
-        this._$btnGroupElem.hide();
-
-        this._$saveErrorTextElem.show();
-    }
-
-    /**
-     * Saves every config item into device.
-     */
-    onSaveIntoDevice() {
-        DeviceWindow._ensureCsrf();
-
-        for (let configItem of this._configItems) {
-            if (configItem.isChanged()) {
-                configItem.saveIntoDevice();
-            }
-        }
-    }
-
-    onDiscardChanges() {
-
-    }
-
     onTemperatureRefresh() {
         this._$temperatureNotificationElem.hide();
         this._$temperatureRefreshBtnElem.attr("disabled", "true");
@@ -187,33 +128,7 @@ class DeviceWindow {
 
     _attachEventHandlers() {
         let _this = this;
-        this._$saveIntoDeviceButtonElem.on("click", function(){_this.onSaveIntoDevice();});
-        this._$discardChangesButtonElem.on("click", function(){_this.onDiscardChanges();});
         this._$temperatureRefreshBtnElem.on("click", function(){_this.onTemperatureRefresh()})
-    }
-
-    _findButtonGroupJQElem(deviceId) {
-        return $("#" + deviceId + "_" + DeviceWindow.BTN_GROUP_ID);
-    }
-
-    _findSaveIntoDeviceButtonJQElem(deviceId) {
-        return $("#" + deviceId + "_" + DeviceWindow.SAVE_INTO_DEVICE_BTN_ID);
-    }
-
-    _findDiscardChangesButtonJQElem(deviceId) {
-        return $("#" + deviceId + "_" + DeviceWindow.DISCARD_CHANGES_BTN_ID);
-    }
-
-    _findSaveSuccessTextJQElem(deviceId) {
-        return $("#" + deviceId + "_" + DeviceWindow.SAVED_SUCCESS_TEXT_ID);
-    }
-
-    _findSaveErrorTextJQElem(deviceId) {
-        return $("#" + deviceId + "_" + DeviceWindow.SAVED_ERROR_TEXT_ID);
-    }
-
-    _findSaveButtonLoaderIconJQElem(deviceId) {
-        return $("#" + deviceId + "_" + DeviceWindow.SAVE_INTO_DEVICE_BTN_LOADER_ID);
     }
 
     _findTemperatureJQElem(deviceId) {
