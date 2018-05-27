@@ -103,7 +103,11 @@ class IntervalsWindow extends ConfigItem {
     }
 
     onSaveIntoDevice() {
-
+        AjaxPoller.setIntervalsForUpload(this._tmpValueFromServer);
+        
+        this._hideChangedNotification();
+        this._switchAllIntervalsToOverview();
+        this._disableRefreshButton();
     }
 
     doneEditingAll(event) {
