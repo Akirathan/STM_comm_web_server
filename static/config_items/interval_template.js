@@ -10,6 +10,8 @@ class IntervalTemplate {
             intervalClass = new Interval(new Time(0, 0), new Time(0, 0), 0);
         }
 
+        this._convertTimesToString(intervalClass);
+
         let htmlString = `
 <div class="col-md-1">
     <!-- Overview interval -->
@@ -56,8 +58,36 @@ class IntervalTemplate {
   </div> <!-- col-md-1 -->
       `;
 
-        let htmlNodes = $.parseHTML(htmlString);
+        let htmlNodes = $.parseHTML($.trim(htmlString));
         let colElement = htmlNodes[0];
-        let intervalWindow = new IntervalWindow(colElement.children[0])
+        return new IntervalWindow($(colElement.children[0]));
+    }
+
+    /**
+     * Converts int time to string time in given intervalClass.
+     * This is done for correct rendering.
+     * @param intervalClass {Interval}
+     * @private
+     */
+    static _convertTimesToString(intervalClass) {
+        intervalClass.from.hours = this._convertTimeToString(intervalClass.from.hours);
+        intervalClass.from.minutes = this._convertTimeToString(intervalClass.from.minutes);
+        intervalClass.to.hours = this._convertTimeToString(intervalClass.to.hours);
+        intervalClass.to.minutes = this._convertTimeToString(intervalClass.to.minutes);
+    }
+
+    /**
+     *
+     * @param time {int}
+     * @private
+     * @return {string}
+     */
+    static _convertTimeToString(time) {
+        if (time < 10) {
+            return "0" + time;
+        }
+        else {
+            return time + "";
+        }
     }
 }
