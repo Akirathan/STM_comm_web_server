@@ -5,8 +5,6 @@ from django.views.decorators.csrf import csrf_exempt
 from .connection_manager import ConnectionManager
 from .models import Device
 
-REF_DATE = datetime(year=2000, month=1, day=1)
-
 
 def parse_update_temp_req(request: HttpRequest) -> (int, float):
     """
@@ -57,8 +55,5 @@ def connect(request: HttpRequest) -> HttpResponse:
 
     ConnectionManager.add_device(device_id, request.META['REMOTE_ADDR'])
 
-    time_delta = datetime.now() - REF_DATE
-    time_delta_seconds = int(time_delta.total_seconds())
-
-    return HttpResponse(time_delta_seconds)
+    return HttpResponse(int(datetime.now().timestamp()))
 

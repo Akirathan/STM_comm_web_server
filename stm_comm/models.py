@@ -1,7 +1,6 @@
 from django.db import models
 from django.conf import settings
 from django.template.loader import render_to_string
-from django.utils import timezone
 import json
 
 # Primary key (serial number or other ID) of Device is expected to be set
@@ -79,7 +78,7 @@ class Item(models.Model):
     # actual/config
     type = models.CharField(max_length=10)
     value = models.CharField(max_length=60, default=0)
-    # simplified timestamp (simplified on device side)
+    # UNIX timestamp format (number of second from 1.1.1970)
     time_stamp = models.IntegerField
 
     def render(self) -> str:
