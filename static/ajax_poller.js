@@ -8,6 +8,7 @@ class AjaxPoller {
     static get TEMPERATURES_URL() {return "/temps";}
 
     static startPoll() {
+        CsrfProtection.ensureCsrf();
         setTimeout(AjaxPoller._pollDevicesStates, 1500);
     }
 
@@ -106,7 +107,7 @@ class AjaxPoller {
             if (!Interval.compareIntervalArrays(currentIntervals, parsedIntervals) &&
                 device.getIntervalsDoneEditingTimestamp() < serverTimestamp)
             {
-                device.notifyIntervalsWithTimestamp(parsedIntervals, timestamp);
+                device.notifyIntervalsWithTimestamp(parsedIntervals, serverTimestamp);
             }
         })
     }
