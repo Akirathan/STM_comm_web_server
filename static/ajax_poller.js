@@ -58,6 +58,9 @@ class AjaxPoller {
                 }),
                 success: function(data) {
                     intervalsForUpload = undefined;
+                    // notify device that intervals were successfully POSTed
+                    let device = deviceList.getDeviceById(intervalsForUploadDevId);
+                    device.intervalsUploaded();
                     AjaxPoller.startPoll();
                 }
             })

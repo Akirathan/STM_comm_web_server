@@ -96,6 +96,18 @@ class DeviceWindow {
     }
 
     /**
+     * Called from AjaxPoller when intervals are successfully POSTed into server.
+     * Dispatches the call to IntervalsWindow
+     */
+    intervalsUploaded() {
+        for (let configItem of this._configItems) {
+            if (configItem instanceof IntervalsWindow) {
+                configItem.savedIntoDevice();
+            }
+        }
+    }
+
+    /**
      * Changes state of this device immediately.
      * @param {string} state online or offline
      */

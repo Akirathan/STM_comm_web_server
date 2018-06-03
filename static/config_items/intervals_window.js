@@ -152,6 +152,15 @@ class IntervalsWindow extends ConfigItem {
         this._disableRefreshButton();
     }
 
+    /**
+     * This method is called as a notification dispatched from AjaxPoller that
+     * intervals were successfully POSTed into server.
+     */
+    savedIntoDevice() {
+        this._hideSaveIntoDeviceButton();
+        this._refreshTimeStamp(this._doneEditingTimestamp);
+    }
+
     doneEditingAll(event) {
         this._intervalValuesBeforeEditing = this.getIntervalValues();
         this._doneEditingTimestamp = this._getCurrentTimestamp();
