@@ -83,7 +83,7 @@ class Item(models.Model):
     type = models.CharField(max_length=10)
     value = models.CharField(max_length=60, default=0)
     # UNIX timestamp format (number of second from 1.1.1970)
-    time_stamp = models.IntegerField
+    time_stamp = models.IntegerField(default=0)
 
     def set_timestamp(self, timestamp: int):
         self.time_stamp = timestamp
