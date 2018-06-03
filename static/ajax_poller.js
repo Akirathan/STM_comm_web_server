@@ -1,4 +1,6 @@
 let intervalsForUpload = undefined;
+let intervalsForUploadTimestamp = 0;
+let intervalsForUploadDevId = "";
 
 class AjaxPoller {
     static get INTERVALS_URL() {return "/intervals";}
@@ -11,9 +13,13 @@ class AjaxPoller {
 
     /**
      * Stores given intervals for future upload to the server.
+     * @param intervalsTimestamp {int}
+     * @param deviceId {string}
      */
-    static setIntervalsForUpload(intervals) {
+    static setIntervalsForUpload(intervals, intervalsTimestamp, deviceId) {
         intervalsForUpload = intervals;
+        intervalsForUploadTimestamp = intervalsTimestamp;
+        intervalsForUploadDevId = deviceId;
     }
 
     static _pollDevicesStates() {
@@ -44,7 +50,11 @@ class AjaxPoller {
                 url: AjaxPoller.INTERVALS_URL,
                 method: "POST",
                 contentType: "application/json",
-                data: JSON.stringify(intervalsForUpload),
+                data: JSON.stringify({
+                    "device_id": intervalsForUploadDevId,
+                    "timestamp": intervalsForUploadTimestamp,
+                    "intervals": intervalsForUpload
+                }),
                 success: function(data) {
                     AjaxPoller.startPoll();
                 }
