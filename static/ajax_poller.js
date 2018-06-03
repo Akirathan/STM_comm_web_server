@@ -56,6 +56,7 @@ class AjaxPoller {
                     "intervals": intervalsForUpload
                 }),
                 success: function(data) {
+                    intervalsForUpload = undefined;
                     AjaxPoller.startPoll();
                 }
             })
