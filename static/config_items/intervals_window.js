@@ -10,6 +10,9 @@ class IntervalsWindow extends ConfigItem {
         super(device);
 
         this._tmpValueFromServer = undefined;
+        // Used as storage for a snapshot of interval values before editing
+        // button was trigerred.
+        this._intervalValuesBeforeEditing = undefined;
 
         // Find DOM elements
         this._$container = this._findContainer();
@@ -32,6 +35,18 @@ class IntervalsWindow extends ConfigItem {
             array.push(intervalWindowElem.getValue());
         }
         return array;
+    }
+
+    /**
+     * Returns values of all containing intervals from time before edit button
+     * was trigerred.
+     * @retrun {[Interval]}
+     */
+    getIntervalValuesBeforeEditing() {
+        if (this._intervalValuesBeforeEditing === undefined) {
+            return this.getIntervalValues();
+        }
+        return this._intervalValuesBeforeEditing;
     }
 
     /**
@@ -88,6 +103,8 @@ class IntervalsWindow extends ConfigItem {
     }
 
     editAll(event) {
+        this._intervalValuesBeforeEditing = this.getIntervalValues();
+
         this._switchAllIntervalsToEditable();
         this._switchEditButtonToDoneButton();
         this._$editButtonElem.off("click");
@@ -117,6 +134,8 @@ class IntervalsWindow extends ConfigItem {
     }
 
     doneEditingAll(event) {
+        this._intervalValuesBeforeEditing = this.getIntervalValues();
+
         this._switchAllIntervalsToOverview();
 
         this._switchDoneButtonToEditButton();
