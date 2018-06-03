@@ -38,7 +38,7 @@ class IntervalsView(View):
         """
         json_str = '['
         for i in range(len(items)):
-            json_str += '{"device_id":"%s","intervals":%s},"timestamp":%d' % \
+            json_str += '{"device_id":"%s","intervals":%s,"timestamp":%d}' % \
                 (items[i]['device_id'],
                  Interval.stringify_intervals(items[i]['intervals']),
                  items[i]['timestamp'])
