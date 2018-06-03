@@ -5,6 +5,7 @@ class IntervalsWindow extends ConfigItem {
     static get NOTIFICATION_ID() {return "interval_changed_flag"}
     static get REFRESH_BTN_ID() {return "interval_refresh_button"}
     static get SAVE_INTO_DEVICE_BTN_ID() {return "interval_save_into_device_button"}
+    static get TIMESTAMP_ID() {return "interval_timestamp"}
 
     constructor(device) {
         super(device);
@@ -21,6 +22,7 @@ class IntervalsWindow extends ConfigItem {
         this._$notificationElem = this._findNotificationJQElem(device.id);
         this._$refreshBtnElem = this._findRefreshBtnJQElem(device.id);
         this._$saveIntoDeviceBtnElem = this._findSaveIntoDeviceBtnJQElem(device.id);
+        this._$timestampElem = this._findTimestampJQElem(device.id);
 
         this._attachEventHandlers();
     }
@@ -165,6 +167,10 @@ class IntervalsWindow extends ConfigItem {
 
     _findSaveIntoDeviceBtnJQElem(deviceId) {
         return $("#" + deviceId + "_" + IntervalsWindow.SAVE_INTO_DEVICE_BTN_ID);
+    }
+
+    _findTimestampJQElem(deviceId) {
+        return $("#" + deviceId + "_" + IntervalsWindow.TIMESTAMP_ID);
     }
 
 
