@@ -36,6 +36,19 @@ class DeviceWindow {
     }
 
     /**
+     * Returns timestamp from the time when user finished editing intervals ie.
+     * pressed Done button.
+     * @return {int}
+     */
+    getIntervalsDoneEditingTimestamp() {
+        for (let configItem of this._configItems) {
+            if (configItem instanceof IntervalsWindow) {
+                return configItem.getDoneEditingTimestamp();
+            }
+        }
+    }
+
+    /**
      * @return {[Interval]}
      */
     getIntervals() {

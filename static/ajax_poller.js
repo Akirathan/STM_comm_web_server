@@ -91,8 +91,10 @@ class AjaxPoller {
             let device = deviceList.getDeviceById(item["device_id"]);
             let currentIntervals = device.getIntervalsBeforeEditing();
             let parsedIntervals = item["intervals"];
-            let timestamp = item["timestamp"];
-            if (!Interval.compareIntervalArrays(currentIntervals, parsedIntervals)) {
+            let serverTimestamp = item["timestamp"];
+            if (!Interval.compareIntervalArrays(currentIntervals, parsedIntervals) &&
+                device.getIntervalsDoneEditingTimestamp() < serverTimestamp)
+            {
                 device.notifyIntervalsWithTimestamp(parsedIntervals, timestamp);
             }
         })

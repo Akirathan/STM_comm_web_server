@@ -14,6 +14,7 @@ class IntervalsWindow extends ConfigItem {
         // Used as storage for a snapshot of interval values before editing
         // button was trigerred.
         this._intervalValuesBeforeEditing = undefined;
+        this._doneEditingTimestamp = 0;
 
         // Find DOM elements
         this._$container = this._findContainer();
@@ -25,6 +26,15 @@ class IntervalsWindow extends ConfigItem {
         this._$timestampElem = this._findTimestampJQElem(device.id);
 
         this._attachEventHandlers();
+    }
+
+    /**
+     * Gets timestamp from the time, when user finished editing intervals ie. pressed
+     * Done button after he was finished with intervals editing.
+     * @return {int}
+     */
+    getDoneEditingTimestamp() {
+        return this._doneEditingTimestamp;
     }
 
     /**
@@ -141,6 +151,7 @@ class IntervalsWindow extends ConfigItem {
 
     doneEditingAll(event) {
         this._intervalValuesBeforeEditing = this.getIntervalValues();
+        this._doneEditingTimestamp = this._getCurrentTimestamp();
 
         this._switchAllIntervalsToOverview();
 
@@ -265,6 +276,14 @@ class IntervalsWindow extends ConfigItem {
         }
 
         this._intervalClassElems = [];
+    }
+
+    /**
+     * @return {int}
+     * @private
+     */
+    _getCurrentTimestamp() {
+        return Date.now() / 1000;
     }
 
     /**
