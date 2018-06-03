@@ -50,22 +50,22 @@ class IntervalsView(View):
 
     def post(self, request: HttpRequest) -> HttpResponse:
         """
-        Processes the POST request from frontend AJAX poller that has the same body
-        JSON format as above.
+        Processes the POST request from frontend AJAX poller. This POST request contains
+        intervals for just one device (note that this is the difference between this method
+        and IntervalsView.get method).
         :param request:
         :return:
         """
         # Parse passed data
         body_str = request.body.decode()
-        json_dicts = json.loads(body_str)
-        for json_dict in json_dicts:
-            device_id = json_dict['device_id']
-            timestamp = json_dict['timestamp']
-            intervals_json_dict = json_dict['intervals']
-            updated_intervals = Interval.parse_intervals(json.dumps(intervals_json_dict))
-            # Save intervals into device
-            device = get_object_or_404(Device, device_id=device_id)
-            device.set_intervals(updated_intervals, timestamp)
+        json_dict = json.loads(body_str)
+        device_id = json_dict['device_id']
+        timestamp = json_dict['timestamp']
+        intervals_json_dict = json_dict['intervals']
+        updated_intervals = Interval.parse_intervals(json.dumps(intervals_json_dict))
+        # Save intervals into device
+        device = get_object_or_404(Device, device_id=device_id)
+        device.set_intervals(updated_intervals, timestamp)
 
         return HttpResponse()
 
