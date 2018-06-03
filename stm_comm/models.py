@@ -54,8 +54,9 @@ class Device(models.Model):
         temp_item = self.__get_temp_item()
         return float(temp_item.value)
 
-    def set_intervals(self, intervals: ['Interval']):
+    def set_intervals(self, intervals: ['Interval'], timestamp: int):
         intervals_item = self.__get_intervals_item()
+        intervals_item.set_timestamp(timestamp)
         intervals_item.reset_intervals(intervals)
 
     def set_temperature(self, timestamp: int, temp: float):
@@ -83,6 +84,10 @@ class Item(models.Model):
     value = models.CharField(max_length=60, default=0)
     # UNIX timestamp format (number of second from 1.1.1970)
     time_stamp = models.IntegerField
+
+    def set_timestamp(self, timestamp: int):
+        self.time_stamp = timestamp
+        self.save()
 
     def render(self) -> str:
         raise NotImplementedError()
