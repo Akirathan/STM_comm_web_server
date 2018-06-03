@@ -15,6 +15,7 @@ class IntervalsWindow extends ConfigItem {
         // button was trigerred.
         this._intervalValuesBeforeEditing = undefined;
         this._doneEditingTimestamp = 0;
+        this._timestampFromServer = 0;
 
         // Find DOM elements
         this._$container = this._findContainer();
@@ -112,8 +113,8 @@ class IntervalsWindow extends ConfigItem {
      */
     notifyWithTimestamp(fetchedIntervals, timestamp) {
         this._tmpValueFromServer = fetchedIntervals;
+        this._timestampFromServer = timestamp;
 
-        this._refreshTimeStamp(timestamp);
         this._showChangedNotification();
         this._enableRefreshButton();
     }
@@ -135,6 +136,7 @@ class IntervalsWindow extends ConfigItem {
         this._hideSaveIntoDeviceButton();
         this._hideChangedNotification();
         this._disableRefreshButton();
+        this._refreshTimeStamp(this._timestampFromServer);
 
         // Reset all containing intervals
         this._removeAllIntervals();
