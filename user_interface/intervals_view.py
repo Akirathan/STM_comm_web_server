@@ -60,11 +60,12 @@ class IntervalsView(View):
         json_dicts = json.loads(body_str)
         for json_dict in json_dicts:
             device_id = json_dict['device_id']
+            timestamp = json_dict['timestamp']
             intervals_json_dict = json_dict['intervals']
             updated_intervals = Interval.parse_intervals(json.dumps(intervals_json_dict))
             # Save intervals into device
             device = get_object_or_404(Device, device_id=device_id)
-            device.set_intervals(updated_intervals)
+            device.set_intervals(updated_intervals, timestamp)
 
         return HttpResponse()
 
