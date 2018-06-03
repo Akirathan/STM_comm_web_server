@@ -72,11 +72,12 @@ class DeviceWindow {
     /**
      * Notifies this Device of new intervals values fetched from backend.
      * @param intervals {[Interval]}
+     * @param timestamp {int}
      */
-    notifyIntervals(intervals) {
+    notifyIntervalsWithTimestamp(intervals, timestamp) {
         for (let configItem of this._configItems) {
             if (configItem instanceof IntervalsWindow) {
-                configItem.notify(intervals);
+                configItem.notifyWithTimestamp(intervals, timestamp);
             }
         }
     }

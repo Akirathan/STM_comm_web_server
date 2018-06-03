@@ -93,13 +93,17 @@ class IntervalsWindow extends ConfigItem {
         return jsonStr;
     }
 
+
     /**
-     * Notifies this IntervalsWindow of new intervals value fetched from backend.
+     * Notifies this IntervalsWindow of new intervals value (with timestamp) fetched from backend.
      * Enables refresh button and shows notification.
      * @param fetchedIntervals {[Interval]}
+     * @param timestamp {int}
      */
-    notify(fetchedIntervals) {
+    notifyWithTimestamp(fetchedIntervals, timestamp) {
         this._tmpValueFromServer = fetchedIntervals;
+
+        this._refreshTimeStamp(timestamp);
         this._showChangedNotification();
         this._enableRefreshButton();
     }
@@ -261,6 +265,15 @@ class IntervalsWindow extends ConfigItem {
         }
 
         this._intervalClassElems = [];
+    }
+
+    /**
+     * Refreshes timestamp inside this window.
+     * @param timestamp {int} timestamp in seconds
+     */
+    _refreshTimeStamp(timestamp) {
+        let date = new Date(timestamp * 1000);
+        this._$timestampElem.html(date.toString());
     }
 
     /**

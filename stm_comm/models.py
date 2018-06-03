@@ -47,6 +47,9 @@ class Device(models.Model):
         intervals_item = self.__get_intervals_item()
         return intervals_item.get_intervals()
 
+    def get_intervals_timestamp(self) -> int:
+        return self.__get_intervals_item().time_stamp
+
     def get_temp(self) -> float:
         temp_item = self.__get_temp_item()
         return float(temp_item.value)

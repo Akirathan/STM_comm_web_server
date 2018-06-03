@@ -25,6 +25,7 @@ class IntervalsView(View):
         for device in devices:
             item['device_id'] = device.device_id
             item['intervals'] = device.get_intervals()
+            item['timestamp'] = device.get_intervals_timestamp()
             items.append(item)
         return HttpResponse(self.__items_to_json__(items))
 
@@ -37,14 +38,15 @@ class IntervalsView(View):
         """
         json_str = '['
         for i in range(len(items)):
-            json_str += '{"device_id":"%s","intervals":%s}' % \
-                (items[i]['device_id'], Interval.stringify_intervals(items[i]['intervals']))
+            json_str += '{"device_id":"%s","intervals":%s},"timestamp":%d' % \
+                (items[i]['device_id'],
+                 Interval.stringify_intervals(items[i]['intervals']),
+                 items[i]['timestamp'])
             if i != len(items) - 1:
                 json_str += ','
             else:
                 json_str += ']'
         return json_str
-
 
     def post(self, request: HttpRequest) -> HttpResponse:
         """
