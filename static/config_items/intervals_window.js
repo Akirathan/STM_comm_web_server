@@ -141,10 +141,9 @@ class IntervalsWindow extends ConfigItem {
         this._$editButtonElem.on("click", function() {_this.doneEditingAll(event);});
     }
 
-    /**
-     * TODO: do not refresh whole page
-     */
     onRefresh() {
+        this._intervalValuesBeforeEditing = this._tmpValueFromServer;
+
         this._hideSaveIntoDeviceButton();
         this._hideChangedNotification();
         this._disableRefreshButton();
