@@ -160,7 +160,7 @@ class IntervalWindow {
  */
 class Time {
     static compareTimes(timeA, timeB) {
-        return timeA.hours === timeB.hours && timeA.minutes === timeB.minutes;
+        return timeA.hours == timeB.hours && timeA.minutes == timeB.minutes;
     }
 
     /**
@@ -197,7 +197,7 @@ class Interval {
     static _compareIntervals(intervalA, intervalB) {
         return Time.compareTimes(intervalA.from, intervalB.from) &&
             Time.compareTimes(intervalA.to, intervalB.to) &&
-            intervalA.temp === intervalB.temp;
+            intervalA.temp == intervalB.temp;
     }
 
     /**

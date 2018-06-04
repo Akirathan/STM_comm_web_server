@@ -24,6 +24,17 @@ class DeviceWindow {
         return this._deviceId;
     }
 
+    /**
+     * @return {IntervalsWindow}
+     */
+    get intervalsWindow() {
+        for (let configItem of this._configItems) {
+            if (configItem instanceof IntervalsWindow) {
+                return configItem;
+            }
+        }
+    }
+
     getTemperature() {
         return this._$temperatureValueElem.html()
     }
@@ -33,6 +44,19 @@ class DeviceWindow {
      */
     getState() {
         return this._$stateValueElem.html();
+    }
+
+    /**
+     * Returns timestamp from the time when user finished editing intervals ie.
+     * pressed Done button.
+     * @return {int}
+     */
+    getIntervalsDoneEditingTimestamp() {
+        for (let configItem of this._configItems) {
+            if (configItem instanceof IntervalsWindow) {
+                return configItem.getDoneEditingTimestamp();
+            }
+        }
     }
 
     /**
@@ -72,11 +96,24 @@ class DeviceWindow {
     /**
      * Notifies this Device of new intervals values fetched from backend.
      * @param intervals {[Interval]}
+     * @param timestamp {int}
      */
-    notifyIntervals(intervals) {
+    notifyIntervalsWithTimestamp(intervals, timestamp) {
         for (let configItem of this._configItems) {
             if (configItem instanceof IntervalsWindow) {
-                configItem.notify(intervals);
+                configItem.notifyWithTimestamp(intervals, timestamp);
+            }
+        }
+    }
+
+    /**
+     * Called from AjaxPoller when intervals are successfully POSTed into server.
+     * Dispatches the call to IntervalsWindow
+     */
+    intervalsUploaded() {
+        for (let configItem of this._configItems) {
+            if (configItem instanceof IntervalsWindow) {
+                configItem.savedIntoDevice();
             }
         }
     }
@@ -104,38 +141,6 @@ class DeviceWindow {
         this._$temperatureValueElem.html(this._newTempValue);
     }
 
-    static _getCookie(name) {
-        var cookieValue = null;
-        if (document.cookie && document.cookie !== '') {
-            var cookies = document.cookie.split(';');
-            for (var i = 0; i < cookies.length; i++) {
-                var cookie = jQuery.trim(cookies[i]);
-                // Does this cookie string begin with the name we want?
-                if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                    break;
-                }
-            }
-        }
-        return cookieValue;
-    }
-
-    static _csrfSafeMethod(method) {
-        // these HTTP methods do not require CSRF protection
-        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-    }
-
-    static _ensureCsrf() {
-        var csrftoken = DeviceWindow._getCookie('csrftoken');
-
-        $.ajaxSetup({
-            beforeSend: function(xhr, settings) {
-                if (!DeviceWindow._csrfSafeMethod(settings.type) && !this.crossDomain) {
-                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
-                }
-            }
-        });
-    }
 
     _attachEventHandlers() {
         let _this = this;

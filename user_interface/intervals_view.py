@@ -25,6 +25,7 @@ class IntervalsView(View):
         for device in devices:
             item['device_id'] = device.device_id
             item['intervals'] = device.get_intervals()
+            item['timestamp'] = device.get_intervals_timestamp()
             items.append(item)
         return HttpResponse(self.__items_to_json__(items))
 
@@ -37,32 +38,34 @@ class IntervalsView(View):
         """
         json_str = '['
         for i in range(len(items)):
-            json_str += '{"device_id":"%s","intervals":%s}' % \
-                (items[i]['device_id'], Interval.stringify_intervals(items[i]['intervals']))
+            json_str += '{"device_id":"%s","intervals":%s,"timestamp":%d}' % \
+                (items[i]['device_id'],
+                 Interval.stringify_intervals(items[i]['intervals']),
+                 items[i]['timestamp'])
             if i != len(items) - 1:
                 json_str += ','
             else:
                 json_str += ']'
         return json_str
 
-
     def post(self, request: HttpRequest) -> HttpResponse:
         """
-        Processes the POST request from frontend AJAX poller that has the same body
-        JSON format as above.
+        Processes the POST request from frontend AJAX poller. This POST request contains
+        intervals for just one device (note that this is the difference between this method
+        and IntervalsView.get method).
         :param request:
         :return:
         """
         # Parse passed data
         body_str = request.body.decode()
-        json_dicts = json.loads(body_str)
-        for json_dict in json_dicts:
-            device_id = json_dict['device_id']
-            intervals_json_dict = json_dict['intervals']
-            updated_intervals = Interval.parse_intervals(json.dumps(intervals_json_dict))
-            # Save intervals into device
-            device = get_object_or_404(Device, device_id=device_id)
-            device.set_intervals(updated_intervals)
+        json_dict = json.loads(body_str)
+        device_id = json_dict['device_id']
+        timestamp = json_dict['timestamp']
+        intervals_json_dict = json_dict['intervals']
+        updated_intervals = Interval.parse_intervals(json.dumps(intervals_json_dict))
+        # Save intervals into device
+        device = get_object_or_404(Device, device_id=device_id)
+        device.set_intervals(updated_intervals, timestamp)
 
         return HttpResponse()
 

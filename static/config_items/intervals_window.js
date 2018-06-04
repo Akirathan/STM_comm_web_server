@@ -5,6 +5,7 @@ class IntervalsWindow extends ConfigItem {
     static get NOTIFICATION_ID() {return "interval_changed_flag"}
     static get REFRESH_BTN_ID() {return "interval_refresh_button"}
     static get SAVE_INTO_DEVICE_BTN_ID() {return "interval_save_into_device_button"}
+    static get TIMESTAMP_ID() {return "interval_timestamp"}
 
     constructor(device) {
         super(device);
@@ -13,6 +14,8 @@ class IntervalsWindow extends ConfigItem {
         // Used as storage for a snapshot of interval values before editing
         // button was trigerred.
         this._intervalValuesBeforeEditing = undefined;
+        this._doneEditingTimestamp = 0;
+        this._timestampFromServer = 0;
 
         // Find DOM elements
         this._$container = this._findContainer();
@@ -21,8 +24,18 @@ class IntervalsWindow extends ConfigItem {
         this._$notificationElem = this._findNotificationJQElem(device.id);
         this._$refreshBtnElem = this._findRefreshBtnJQElem(device.id);
         this._$saveIntoDeviceBtnElem = this._findSaveIntoDeviceBtnJQElem(device.id);
+        this._$timestampElem = this._findTimestampJQElem(device.id);
 
         this._attachEventHandlers();
+    }
+
+    /**
+     * Gets timestamp from the time, when user finished editing intervals ie. pressed
+     * Done button after he was finished with intervals editing.
+     * @return {int}
+     */
+    getDoneEditingTimestamp() {
+        return this._doneEditingTimestamp;
     }
 
     /**
@@ -92,12 +105,28 @@ class IntervalsWindow extends ConfigItem {
     }
 
     /**
-     * Notifies this IntervalsWindow of new intervals value fetched from backend.
+     * Initialize timestamp so there is at least some timestamp to show.
+     * Note that after the construction of this IntervalsWindow there is
+     * no timestamp at all.
+     * @param timestampFromServer {int}
+     */
+    initTimestamp(timestampFromServer) {
+        if (this._timestampFromServer === 0 && this._doneEditingTimestamp === 0) {
+            this._timestampFromServer = timestampFromServer;
+            this._refreshTimeStamp(timestampFromServer);
+        }
+    }
+
+    /**
+     * Notifies this IntervalsWindow of new intervals value (with timestamp) fetched from backend.
      * Enables refresh button and shows notification.
      * @param fetchedIntervals {[Interval]}
+     * @param timestamp {int}
      */
-    notify(fetchedIntervals) {
+    notifyWithTimestamp(fetchedIntervals, timestamp) {
         this._tmpValueFromServer = fetchedIntervals;
+        this._timestampFromServer = timestamp;
+
         this._showChangedNotification();
         this._enableRefreshButton();
     }
@@ -112,13 +141,13 @@ class IntervalsWindow extends ConfigItem {
         this._$editButtonElem.on("click", function() {_this.doneEditingAll(event);});
     }
 
-    /**
-     * TODO: do not refresh whole page
-     */
     onRefresh() {
+        this._intervalValuesBeforeEditing = this._tmpValueFromServer;
+
         this._hideSaveIntoDeviceButton();
         this._hideChangedNotification();
         this._disableRefreshButton();
+        this._refreshTimeStamp(this._timestampFromServer);
 
         // Reset all containing intervals
         this._removeAllIntervals();
@@ -126,15 +155,26 @@ class IntervalsWindow extends ConfigItem {
     }
 
     onSaveIntoDevice() {
-        AjaxPoller.setIntervalsForUpload(this._tmpValueFromServer);
+        AjaxPoller.setIntervalsForUpload(this.getIntervalValues(), this._doneEditingTimestamp,
+            this._device.id);
         
         this._hideChangedNotification();
         this._switchAllIntervalsToOverview();
         this._disableRefreshButton();
     }
 
+    /**
+     * This method is called as a notification dispatched from AjaxPoller that
+     * intervals were successfully POSTed into server.
+     */
+    savedIntoDevice() {
+        this._hideSaveIntoDeviceButton();
+        this._refreshTimeStamp(this._doneEditingTimestamp);
+    }
+
     doneEditingAll(event) {
         this._intervalValuesBeforeEditing = this.getIntervalValues();
+        this._doneEditingTimestamp = this._getCurrentTimestamp();
 
         this._switchAllIntervalsToOverview();
 
@@ -165,6 +205,10 @@ class IntervalsWindow extends ConfigItem {
 
     _findSaveIntoDeviceBtnJQElem(deviceId) {
         return $("#" + deviceId + "_" + IntervalsWindow.SAVE_INTO_DEVICE_BTN_ID);
+    }
+
+    _findTimestampJQElem(deviceId) {
+        return $("#" + deviceId + "_" + IntervalsWindow.TIMESTAMP_ID);
     }
 
 
@@ -255,6 +299,23 @@ class IntervalsWindow extends ConfigItem {
         }
 
         this._intervalClassElems = [];
+    }
+
+    /**
+     * @return {int}
+     * @private
+     */
+    _getCurrentTimestamp() {
+        return Date.now() / 1000;
+    }
+
+    /**
+     * Refreshes timestamp inside this window.
+     * @param timestamp {int} timestamp in seconds
+     */
+    _refreshTimeStamp(timestamp) {
+        let date = new Date(timestamp * 1000);
+        this._$timestampElem.html(date.toString());
     }
 
     /**

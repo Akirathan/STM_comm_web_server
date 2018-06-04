@@ -23,7 +23,14 @@
             type="button" style="position: relative; left: 43px;">
       Edit
     </button>
+
+    <!-- Timestamp -->
+    <br>
+    <span id="{{ device_model.device_id }}_interval_timestamp"
+          data-toggle="tooltip" title="Last time of intervals editing (on device or on server)"
+          style="color: gray"></span>
   </div> <!-- panel-heading -->
+
   <div class="panel-body">
     <div class="container-fluid">
       <div class="row" id="{{ device_model.device_id }}_interval">
