@@ -1,6 +1,7 @@
 let intervalsForUpload = undefined;
 let intervalsForUploadTimestamp = 0;
 let intervalsForUploadDevId = "";
+let firstPoll = true;
 
 class AjaxPoller {
     static get INTERVALS_URL() {return "/intervals";}
@@ -61,6 +62,7 @@ class AjaxPoller {
                     // notify device that intervals were successfully POSTed
                     let device = deviceList.getDeviceById(intervalsForUploadDevId);
                     device.intervalsUploaded();
+                    firstPoll = false;
                     AjaxPoller.startPoll();
                 }
             })
@@ -71,6 +73,7 @@ class AjaxPoller {
                 method: "GET",
                 success: function(data) {
                     AjaxPoller._processIntervals(data);
+                    firstPoll = false;
                     AjaxPoller.startPoll();
                 }
             })
@@ -107,6 +110,11 @@ class AjaxPoller {
             let currentIntervals = device.getIntervalsBeforeEditing();
             let parsedIntervals = item["intervals"];
             let serverTimestamp = item["timestamp"];
+
+            if (firstPoll) {
+                device.intervalsWindow.initTimestamp(serverTimestamp);
+            }
+
             if (!Interval.compareIntervalArrays(currentIntervals, parsedIntervals) &&
                 device.getIntervalsDoneEditingTimestamp() < serverTimestamp)
             {

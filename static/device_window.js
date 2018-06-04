@@ -24,6 +24,17 @@ class DeviceWindow {
         return this._deviceId;
     }
 
+    /**
+     * @return {IntervalsWindow}
+     */
+    get intervalsWindow() {
+        for (let configItem of this._configItems) {
+            if (configItem instanceof IntervalsWindow) {
+                return configItem;
+            }
+        }
+    }
+
     getTemperature() {
         return this._$temperatureValueElem.html()
     }

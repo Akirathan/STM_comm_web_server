@@ -104,6 +104,18 @@ class IntervalsWindow extends ConfigItem {
         return jsonStr;
     }
 
+    /**
+     * Initialize timestamp so there is at least some timestamp to show.
+     * Note that after the construction of this IntervalsWindow there is
+     * no timestamp at all.
+     * @param timestampFromServer {int}
+     */
+    initTimestamp(timestampFromServer) {
+        if (this._timestampFromServer === 0 && this._doneEditingTimestamp === 0) {
+            this._timestampFromServer = timestampFromServer;
+            this._refreshTimeStamp(timestampFromServer);
+        }
+    }
 
     /**
      * Notifies this IntervalsWindow of new intervals value (with timestamp) fetched from backend.
