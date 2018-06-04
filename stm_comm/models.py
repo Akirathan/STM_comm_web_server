@@ -20,10 +20,12 @@ class Device(models.Model):
 
     def set_online(self) -> None:
         self.status = 'online'
+        self.save()
         return
 
     def set_offline(self) -> None:
         self.status = 'offline'
+        self.save()
         return
 
     def __get_intervals_item(self) -> ['IntervalsItem']:
