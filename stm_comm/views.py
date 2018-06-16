@@ -28,12 +28,9 @@ def update_temp(request: HttpRequest) -> HttpResponse:
     if request.method != 'POST':
         return HttpResponse(status=400)
 
-    device_id = ConnectionManager.get_device_id_from_request(request)
-    if device_id is None:
-        # Error: device not connected
-        return HttpResponse(status=400)
-
-    device = get_object_or_404(Device, device_id=device_id)
+    device = ConnectionManager.get_device_from_request(request)
+    if device is None:
+        return HttpResponse(status=404)
 
     (timestamp, temp) = parse_update_temp_req(request)
     device.set_temperature(timestamp, temp)
