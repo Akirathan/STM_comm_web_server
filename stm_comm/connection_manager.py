@@ -1,4 +1,5 @@
 from django.http import HttpRequest
+from .models import Device
 
 
 class ConnectionManager:
@@ -14,8 +15,9 @@ class ConnectionManager:
         return
 
     @staticmethod
-    def get_device_id_from_request(request: HttpRequest) -> str:
-        return ConnectionManager.__get_device_id__(request.META['REMOTE_ADDR'])
+    def get_device_from_request(request: HttpRequest) -> 'Device':
+        device_id = ConnectionManager.__get_device_id__(request.META['REMOTE_ADDR'])
+        return Device.objects.get(device_id=device_id)
 
     @staticmethod
     def __get_device_id__(remote_addr: str) -> str:
