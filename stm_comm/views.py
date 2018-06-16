@@ -28,7 +28,7 @@ def update_temp(request: HttpRequest) -> HttpResponse:
     if request.method != 'POST':
         return HttpResponse(status=400)
 
-    device_id = ConnectionManager.get_device_id(request.META['REMOTE_ADDR'])
+    device_id = ConnectionManager.get_device_id_from_request(request)
     if device_id is None:
         # Error: device not connected
         return HttpResponse(status=400)
