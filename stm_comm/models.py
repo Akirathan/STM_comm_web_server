@@ -170,6 +170,24 @@ class Interval:
         return bytes(byte_array)
 
     @staticmethod
+    def deserialize_intervals(bts: bytes) -> ['Interval']:
+        if (len(bts) % 12) != 0:
+            return None
+
+        intervals = []
+        i = 0
+        while i != len(bts):
+            from_seconds = struct.unpack('I', bts[i:i+4])[0]
+            to_seconds = struct.unpack('I', bts[i+4:i+8])[0]
+            temp = struct.unpack('I', bts[i+8:i+12])[0]
+
+            from_time = Time(hours=from_seconds / (60 * 60), minutes=from_seconds / 60)
+            to_time = Time(hours=to_seconds / (60 * 60), minutes=to_seconds / 60)
+            intervals.append(Interval(from_time, to_time, temp))
+            i += 12
+        return intervals
+
+    @staticmethod
     def from_json(json_dict: dict) -> 'Interval':
         from_time = Time(json_dict['from']['hours'], json_dict['from']['minutes'])
         to_time = Time(json_dict['to']['hours'], json_dict['to']['minutes'])
