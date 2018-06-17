@@ -2,6 +2,7 @@ from django.db import models
 from django.conf import settings
 from django.template.loader import render_to_string
 import json
+import struct
 
 # Primary key (serial number or other ID) of Device is expected to be set
 # before the device attempts to connect for the first time.
@@ -129,6 +130,10 @@ class Time:
     def to_json(self) -> str:
         return '{"hours":%d,"minutes":%d}' % (self.__hours_num, self.__minutes_num)
 
+    def serialize(self) -> bytes:
+        time_in_seconds = self.__hours_num * 60 * 60 + self.__minutes_num * 60
+        return struct.pack('I', time_in_seconds)
+
     def __str__(self):
         return '%s:%s' % (self.hours, self.minutes)
 
@@ -156,6 +161,13 @@ class Interval:
 
     def to_json(self) -> str:
         return '{"from":%s,"to":%s,"temp":%d}' % (self.from_time.to_json(), self.to_time.to_json(), self.temp)
+
+    def serialize(self) -> bytes:
+        byte_array = bytearray()
+        byte_array += self.from_time.serialize()
+        byte_array += self.to_time.serialize()
+        byte_array += struct.pack('I', self.temp)
+        return bytes(byte_array)
 
     @staticmethod
     def from_json(json_dict: dict) -> 'Interval':
