@@ -1,3 +1,6 @@
+from django.http import HttpRequest
+from .models import Device
+
 
 class ConnectionManager:
     # Map device_id <-> remote_address (client's IP address)
@@ -12,8 +15,12 @@ class ConnectionManager:
         return
 
     @staticmethod
-    def get_device_id(remote_addr: str) -> str:
+    def get_device_from_request(request: HttpRequest) -> 'Device':
+        device_id = ConnectionManager.__get_device_id__(request.META['REMOTE_ADDR'])
+        return Device.objects.get(device_id=device_id)
+
+    @staticmethod
+    def __get_device_id__(remote_addr: str) -> str:
         for (device_id_item, remote_addr_item) in ConnectionManager.connected_devices.items():
             if remote_addr_item == remote_addr:
                 return device_id_item
-
