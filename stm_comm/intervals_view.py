@@ -25,7 +25,7 @@ def get_or_post_intervals(request: HttpRequest) -> HttpResponse:
     if request.method == 'GET':
         return get_intervals(device)
     if request.method == 'POST':
-        return post_intervals(device, request.body.decode())
+        return post_intervals(device, request.body)
 
 
 def get_intervals(device: Device) -> HttpResponse:
@@ -37,16 +37,19 @@ def get_intervals(device: Device) -> HttpResponse:
     intervals = device.get_intervals()
     for interval in intervals:
         byte_array += interval.serialize()
-    return HttpResponse(byte_array)
+    return HttpResponse(bytes(byte_array), content_type='application/octet-stream')
 
 
-def post_intervals(device: Device, body_str: str) -> HttpResponse:
+def post_intervals(device: Device, body: bytes) -> HttpResponse:
     """
     Processes intervals sent from STM. Note that STM has to sent intervals along
     with timestamp.
     """
-    timestamp = int(body_str.splitlines()[0])
-    intervals = Interval.deserialize_intervals(bytes(body_str.splitlines()[1]))
+
+    timestamp_str, intervals_serialized = body.split(b'\n')
+
+    timestamp = int(timestamp_str)
+    intervals = Interval.deserialize_intervals(intervals_serialized)
     if intervals is None:
         return HttpResponse(404)
 
