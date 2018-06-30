@@ -228,6 +228,10 @@ class Interval:
 
 
 class IntervalsItem(ConfigItem):
+    """
+    This class is a model representation of intervals setting. All the intervals
+    setting is kept in self.value in JSON format.
+    """
     device = models.ForeignKey('Device', default=None, on_delete=models.CASCADE)
     name = 'intervals'
 
