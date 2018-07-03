@@ -23,6 +23,17 @@ Context variables:
       {% endif %}
           <a href="{% url 'user_interface:devices' %}"> Devices </a>
         </li>
+
+      <!-- Register new device -->
+    {% if user.is_authenticated %}
+      {% if active_navbar_item == "register_new_device" %}
+        <li class="active">
+      {% else %}
+        <li>
+      {% endif %}
+          <a href="{% url 'user_interface:register_new_device' %}"> Register new device </a>
+        </li>
+    {% endif %}
     </ul>
 
     <!-- User login -->
