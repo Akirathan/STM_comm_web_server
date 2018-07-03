@@ -41,6 +41,15 @@ def get_user_devices(request: HttpRequest) -> [Device]:
     return user.device_set.all()
 
 
+def register_new_device(request: HttpRequest) -> HttpResponse:
+    return render(request, 'register_new_device.html')
+
+
+def generate_key(request: HttpRequest) -> HttpResponse:
+    # TODO: DES key generation
+    return render(request, 'generate_key.html', {'key': 'ABCDEF12'})
+
+
 class DevicesView(View):
 
     def get(self, request: HttpRequest) -> HttpResponse:

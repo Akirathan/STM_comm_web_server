@@ -1,0 +1,24 @@
+<!--
+  Note that this page is rendered only when some user is logged on.
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags by Bootstrap -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  {% include "stylesheets.html" %}
+</head>
+
+<body>
+{% include "navbar.html" with active_navbar_item="register_new_device" %}
+
+<a class="btn btn-primary" href="{% url 'user_interface:generate_key' %}" role="button"
+   style="position: relative; left: 45%; top: 40px">Generate new key</a>
+
+{% include "javascripts.html" %}
+</body>
+</html>
