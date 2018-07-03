@@ -131,7 +131,12 @@ class Time:
         return '{"hours":%d,"minutes":%d}' % (self.__hours_num, self.__minutes_num)
 
     def serialize(self) -> bytes:
-        time_in_seconds = self.__hours_num * 60 * 60 + self.__minutes_num * 60
+        """
+        Serializes this time to unsigned 4B integer. Serialization is total number of minutes.
+        Note that seconds are not used anywhere in serialization/deserialization.
+        :return:
+        """
+        time_in_seconds = self.__hours_num * 60 + self.__minutes_num
         return struct.pack('I', time_in_seconds)
 
     def __str__(self):
@@ -177,14 +182,14 @@ class Interval:
         intervals = []
         i = 0
         while i != len(bts):
-            from_seconds = struct.unpack('I', bts[i:i+4])[0]
-            to_seconds = struct.unpack('I', bts[i+4:i+8])[0]
+            from_total_minutes = struct.unpack('I', bts[i:i+4])[0]
+            to_total_minutes = struct.unpack('I', bts[i+4:i+8])[0]
             temp = struct.unpack('I', bts[i+8:i+12])[0]
 
-            from_hours = int(from_seconds / 3600)
-            from_minutes = int((from_seconds - from_hours * 3600) / 60)
-            to_hours = int(to_seconds / 3600)
-            to_minutes = int((to_seconds - to_hours * 3600) / 60)
+            from_hours = int(from_total_minutes / 60)
+            from_minutes = int(from_total_minutes % 60)
+            to_hours = int(to_total_minutes / 60)
+            to_minutes = int(to_total_minutes % 60)
 
             from_time = Time(from_hours, from_minutes)
             to_time = Time(to_hours, to_minutes)
@@ -223,6 +228,10 @@ class Interval:
 
 
 class IntervalsItem(ConfigItem):
+    """
+    This class is a model representation of intervals setting. All the intervals
+    setting is kept in self.value in JSON format.
+    """
     device = models.ForeignKey('Device', default=None, on_delete=models.CASCADE)
     name = 'intervals'
 
