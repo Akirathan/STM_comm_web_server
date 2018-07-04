@@ -16,8 +16,9 @@ class Device(models.Model):
     # online/offline
     status = models.CharField(max_length=7)
     fw_version = models.CharField(max_length=10)
+    KEY_LEN = 8
     # private DES key
-    key = models.CharField(max_length=8)
+    key = models.CharField(max_length=KEY_LEN)
 
     def set_online(self) -> None:
         self.status = 'online'
@@ -28,6 +29,14 @@ class Device(models.Model):
         self.status = 'offline'
         self.save()
         return
+
+    def get_key(self) -> str:
+        return self.key
+
+    def set_key(self, key: str) -> None:
+        if len(key) != Device.KEY_LEN:
+            raise ValueError('wrong length of key')
+        self.key = key
 
     def __get_intervals_item(self) -> ['IntervalsItem']:
         intervals_items = self.intervalsitem_set
