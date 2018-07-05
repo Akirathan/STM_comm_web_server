@@ -40,12 +40,22 @@ def update_temp(request: HttpRequest) -> HttpResponse:
 
 @csrf_exempt
 def connect(request: HttpRequest) -> HttpResponse:
-    """ First message from STM device """
+    """
+    Processes first message from STM device that is currently offline.
+    All pending keys from KeyManager that were recently generated are tried for
+    decryption of request's body, until the decrypted body is equal to some
+    device's ID. Also all keys from offline Devices (that are already paired)
+    are tried.
+    Note that the possibility that two different keys will decrypt the message's
+    body into two different IDs is very small.
+    """
     if request.method != 'POST':
-        return HttpResponse(status=400)
+        return HttpResponse(status=404)
 
-    # Check if the device is in the device database
-    device = _assign_key_from_connect_request(request)
+    device = _try_decrypt_connect_req(request)
+    if device is None:
+        return HttpResponse(status=404)
+
     device.set_online()
 
     ConnectionManager.add_device(device.device_id, request.META['REMOTE_ADDR'])
@@ -61,13 +71,14 @@ def _is_device_id(s: str) -> bool:
     return False
 
 
-def _assign_key_from_connect_request(request: HttpRequest) -> Device:
+def _try_decrypt_connect_req(request: HttpRequest) -> Device:
     """
-    Tries to decrypt connect message with every pending DesKey. Once the decrypted
-    body is equal to any existing device's ID, the key used for decryption is assigned
-    to that device.
+    Tries to decrypt connect message with every pending DesKey and every key
+    in offline devices. Once the decrypted body is equal to any existing
+    device's ID, the key used for decryption is assigned to that device.
     :return Device to which a key was assigned or None.
     """
+    # Try all pending keys from KeyManager first.
     for key in KeyManager.get_all_pending_keys():
         decrypted_body = decrypt_req_body(request, key)
         decrypted_body_str = str(decrypted_body, 'ascii')
@@ -76,4 +87,13 @@ def _assign_key_from_connect_request(request: HttpRequest) -> Device:
             KeyManager.remove_from_pending_keys(key)
             device.set_key(key)
             return device
+
+    # Try keys from all offline devices
+    for offline_device in Device.get_offline_devices():
+        decrypted_body = decrypt_req_body(request, offline_device.get_key())
+        decrypted_body_str = str(decrypted_body, 'ascii')
+        if decrypted_body_str == offline_device.device_id:
+            return offline_device
+
     return None
+
