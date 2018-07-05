@@ -3,6 +3,7 @@ from django.conf import settings
 from django.template.loader import render_to_string
 import json
 import struct
+from .des_key import DesKey
 
 # Primary key (serial number or other ID) of Device is expected to be set
 # before the device attempts to connect for the first time.
@@ -16,9 +17,8 @@ class Device(models.Model):
     # online/offline
     status = models.CharField(max_length=7)
     fw_version = models.CharField(max_length=10)
-    KEY_LEN = 8
     # private DES key
-    key = models.CharField(max_length=KEY_LEN)
+    key = models.CharField(max_length=16)
 
     def set_online(self) -> None:
         self.status = 'online'
@@ -30,13 +30,11 @@ class Device(models.Model):
         self.save()
         return
 
-    def get_key(self) -> str:
-        return self.key
+    def get_key(self) -> DesKey:
+        return DesKey(self.key)
 
-    def set_key(self, key: str) -> None:
-        if len(key) != Device.KEY_LEN:
-            raise ValueError('wrong length of key')
-        self.key = key
+    def set_key(self, key: DesKey) -> None:
+        self.key = key.hex_str
 
     def __get_intervals_item(self) -> ['IntervalsItem']:
         intervals_items = self.intervalsitem_set
