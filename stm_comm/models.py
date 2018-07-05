@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models.query import QuerySet
 from django.conf import settings
 from django.template.loader import render_to_string
 import json
@@ -19,6 +20,10 @@ class Device(models.Model):
     fw_version = models.CharField(max_length=10)
     # private DES key
     key = models.CharField(max_length=16)
+
+    @staticmethod
+    def get_offline_devices() -> ['Device']:
+        return list(Device.objects.filter(status__exact='offline'))
 
     def set_online(self) -> None:
         self.status = 'online'
