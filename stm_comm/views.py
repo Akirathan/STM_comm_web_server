@@ -1,18 +1,17 @@
 from datetime import datetime
-from django.shortcuts import get_object_or_404
 from django.http import HttpResponse, HttpRequest
 from django.views.decorators.csrf import csrf_exempt
 from .connection_manager import ConnectionManager
 from .models import Device
+from .key_manager import KeyManager
+from .des_encryption import decrypt_req_body, encrypt_response_body
 
 
-def parse_update_temp_req(request: HttpRequest) -> (int, float):
+def parse_update_temp_req(body_str: str) -> (int, float):
     """
     Parses "POST temperature request" from device.
-    :param request:
     :return: (timestamp, temperature)
     """
-    body_str = request.body.decode()
     lines = body_str.splitlines()
     timestamp = int(lines[0])
     temp = float(lines[1])
@@ -32,7 +31,7 @@ def update_temp(request: HttpRequest) -> HttpResponse:
     if device is None:
         return HttpResponse(status=404)
 
-    (timestamp, temp) = parse_update_temp_req(request)
+    (timestamp, temp) = parse_update_temp_req(decrypt_req_body(request, device.get_key()))
     device.set_temperature(timestamp, temp)
 
     return HttpResponse()
@@ -45,12 +44,34 @@ def connect(request: HttpRequest) -> HttpResponse:
         return HttpResponse(status=400)
 
     # Check if the device is in the device database
-    # TODO: decode from DES
-    device_id = request.body.decode()
-    device = get_object_or_404(Device, device_id=device_id)
+    device = _assign_key_from_connect_request(request)
     device.set_online()
 
-    ConnectionManager.add_device(device_id, request.META['REMOTE_ADDR'])
+    ConnectionManager.add_device(device.device_id, request.META['REMOTE_ADDR'])
 
-    return HttpResponse(int(datetime.now().timestamp()))
+    response_body = int(datetime.now().timestamp())
+    return HttpResponse(encrypt_response_body(response_body))
 
+
+def _is_device_id(s: str) -> bool:
+    for device in Device.objects.all():
+        if device.device_id == s:
+            return True
+    return False
+
+
+def _assign_key_from_connect_request(request: HttpRequest) -> Device:
+    """
+    Tries to decrypt connect message with every pending DesKey. Once the decrypted
+    body is equal to any existing device's ID, the key used for decryption is assigned
+    to that device.
+    :return Device to which a key was assigned or None.
+    """
+    for key in KeyManager.get_all_pending_keys():
+        decrypted_body = decrypt_req_body(request, key)
+        if _is_device_id(decrypted_body):
+            device = Device.objects.get(device_id=decrypted_body)
+            KeyManager.remove_from_pending_keys(key)
+            device.set_key(key)
+            return device
+    return None
