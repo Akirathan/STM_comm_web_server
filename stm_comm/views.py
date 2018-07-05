@@ -69,8 +69,9 @@ def _assign_key_from_connect_request(request: HttpRequest) -> Device:
     """
     for key in KeyManager.get_all_pending_keys():
         decrypted_body = decrypt_req_body(request, key)
-        if _is_device_id(decrypted_body):
-            device = Device.objects.get(device_id=decrypted_body)
+        decrypted_body_str = str(decrypted_body, 'ascii')
+        if _is_device_id(decrypted_body_str):
+            device = Device.objects.get(device_id=decrypted_body_str)
             KeyManager.remove_from_pending_keys(key)
             device.set_key(key)
             return device

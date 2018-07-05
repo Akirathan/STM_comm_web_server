@@ -3,7 +3,7 @@ import pyDes
 from.des_key import DesKey
 
 
-def decrypt_req_body(request: HttpRequest, key: DesKey) -> str:
+def decrypt_req_body(request: HttpRequest, key: DesKey) -> bytes:
     des_obj = pyDes.des(key.bytes, mode=pyDes.ECB, pad='\0', padmode=pyDes.PAD_NORMAL)
     return des_obj.decrypt(request.body)
 
