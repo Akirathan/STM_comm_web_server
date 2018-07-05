@@ -35,6 +35,7 @@ class Device(models.Model):
 
     def set_key(self, key: DesKey) -> None:
         self.key = key.hex_str
+        self.save()
 
     def __get_intervals_item(self) -> ['IntervalsItem']:
         intervals_items = self.intervalsitem_set
