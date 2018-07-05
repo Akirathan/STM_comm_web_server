@@ -23,11 +23,18 @@ class KeyManager:
         key = bytearray()
         for i in range(8):
             key.append(randrange(0, 256))
+        key_hex = key.hex()
 
-        if not KeyManager._is_key_used(str(key)):
-            return str(key)
+        if not KeyManager._is_key_used(key_hex):
+            KeyManager._add_to_pending_keys(key_hex)
+            return key_hex
         else:
             return KeyManager.generate_key()
+
+    @staticmethod
+    def get_all_pending_keys() -> [str]:
+        KeyManager._remove_expired_keys()
+        return KeyManager._pending_keys.keys()
 
     @staticmethod
     def get_from_pending_keys(key: str) -> str:
