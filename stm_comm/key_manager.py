@@ -24,7 +24,7 @@ class KeyManager:
         for i in range(8):
             key.append(randrange(0, 256))
 
-        if not KeyManager.__is_key_used__(str(key)):
+        if not KeyManager._is_key_used(str(key)):
             return str(key)
         else:
             return KeyManager.generate_key()
@@ -40,27 +40,27 @@ class KeyManager:
         """
 
     @staticmethod
-    def __is_key_used__(key: str) -> bool:
+    def _is_key_used(key: str) -> bool:
         for device in Device.objects.all():
             if device.get_key() == key:
                 return True
         return False
 
     @staticmethod
-    def __add_to_pending_keys__(key: str) -> None:
+    def _add_to_pending_keys(key: str) -> None:
         if key in KeyManager._pending_keys:
             raise ValueError('Key is not supposed to be in _pending_keys yet')
 
-        KeyManager._pending_keys[key] = KeyManager.__get_current_timestamp__() + \
+        KeyManager._pending_keys[key] = KeyManager._get_current_timestamp() + \
                                         KeyManager.KEY_TIMEOUT_SECONDS
 
     @staticmethod
-    def __remove_expired_keys__() -> None:
-        curr_timestamp = KeyManager.__get_current_timestamp__()
+    def _remove_expired_keys() -> None:
+        curr_timestamp = KeyManager._get_current_timestamp()
         for (key, timeout_seconds) in KeyManager._pending_keys.items():
             if timeout_seconds <= curr_timestamp:
                 del KeyManager._pending_keys[key]
 
     @staticmethod
-    def __get_current_timestamp__() -> int:
+    def _get_current_timestamp() -> int:
         return int(datetime.now().timestamp())
