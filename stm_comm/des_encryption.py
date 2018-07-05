@@ -8,8 +8,7 @@ def decrypt_req_body(request: HttpRequest, key: DesKey) -> bytes:
     return des_obj.decrypt(request.body)
 
 
-def encrypt_response_body(key: DesKey, body) -> bytes:
+def encrypt_response_body(key: DesKey, body: str) -> bytes:
     des_obj = pyDes.des(key.bytes, mode=pyDes.ECB, pad='\0', padmode=pyDes.PAD_NORMAL)
-    if type(body) != bytes:
-        body = bytes(body)
+    body = bytes(body, 'ascii')
     return des_obj.encrypt(body)

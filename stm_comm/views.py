@@ -31,7 +31,8 @@ def update_temp(request: HttpRequest) -> HttpResponse:
     if device is None:
         return HttpResponse(status=404)
 
-    (timestamp, temp) = parse_update_temp_req(decrypt_req_body(request, device.get_key()))
+    decrypted_body = decrypt_req_body(request, device.get_key())
+    (timestamp, temp) = parse_update_temp_req(str(decrypted_body, 'ascii'))
     device.set_temperature(timestamp, temp)
 
     return HttpResponse()
@@ -49,8 +50,8 @@ def connect(request: HttpRequest) -> HttpResponse:
 
     ConnectionManager.add_device(device.device_id, request.META['REMOTE_ADDR'])
 
-    response_body = int(datetime.now().timestamp())
-    return HttpResponse(encrypt_response_body(response_body))
+    response_body = str(int(datetime.now().timestamp()))
+    return HttpResponse(encrypt_response_body(device.get_key(), response_body))
 
 
 def _is_device_id(s: str) -> bool:

@@ -2,6 +2,7 @@ from django.http import HttpResponse, HttpRequest
 from django.views.decorators.csrf import csrf_exempt
 from .connection_manager import ConnectionManager
 from .models import Device, Interval
+from .des_encryption import encrypt_response_body, decrypt_req_body
 
 
 @csrf_exempt
@@ -13,7 +14,8 @@ def get_intervals_timestamp(request: HttpRequest) -> HttpResponse:
     if device is None:
         return HttpResponse(404)
 
-    return HttpResponse(device.get_intervals_timestamp())
+    response_body = str(device.get_intervals_timestamp())
+    return HttpResponse(encrypt_response_body(device.get_key(), response_body))
 
 
 @csrf_exempt
