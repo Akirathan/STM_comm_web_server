@@ -45,6 +45,9 @@ class KeyManager:
         Device.
         :return:
         """
+        pending_key = KeyManager._pending_keys[key]
+        del KeyManager._pending_keys[key]
+        return pending_key
 
     @staticmethod
     def _is_key_used(key: str) -> bool:
@@ -64,9 +67,13 @@ class KeyManager:
     @staticmethod
     def _remove_expired_keys() -> None:
         curr_timestamp = KeyManager._get_current_timestamp()
+        keys_to_delete = []
         for (key, timeout_seconds) in KeyManager._pending_keys.items():
             if timeout_seconds <= curr_timestamp:
-                del KeyManager._pending_keys[key]
+                keys_to_delete.append(KeyManager._pending_keys[key])
+        
+        for key_to_delete in keys_to_delete:
+            del KeyManager._pending_keys[key_to_delete]
 
     @staticmethod
     def _get_current_timestamp() -> int:
