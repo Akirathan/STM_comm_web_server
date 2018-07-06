@@ -27,7 +27,8 @@ def get_or_post_intervals(request: HttpRequest) -> HttpResponse:
     if request.method == 'GET':
         return get_intervals(device)
     if request.method == 'POST':
-        return post_intervals(device, request.body)
+        decrypted_body = decrypt_req_body(request, device.get_key())
+        return post_intervals(device, decrypted_body)
 
 
 def get_intervals(device: Device) -> HttpResponse:
@@ -42,18 +43,37 @@ def get_intervals(device: Device) -> HttpResponse:
     return HttpResponse(bytes(byte_array), content_type='application/octet-stream')
 
 
-def post_intervals(device: Device, body: bytes) -> HttpResponse:
+def post_intervals(device: Device, decrypted_body: bytes) -> HttpResponse:
     """
     Processes intervals sent from STM. Note that STM has to sent intervals along
     with timestamp.
     """
-
-    timestamp_str, intervals_serialized = body.split(b'\n')
+    timestamp_str, intervals_decrypted = decrypted_body.split(b'\n')
+    intervals_fixed_padding = _fill_removed_zeros(intervals_decrypted)
 
     timestamp = int(timestamp_str)
-    intervals = Interval.deserialize_intervals(intervals_serialized)
+    intervals = Interval.deserialize_intervals(intervals_fixed_padding)
     if intervals is None:
         return HttpResponse(404)
 
     device.set_intervals(intervals, timestamp)
     return HttpResponse()
+
+
+def _fill_removed_zeros(decrypted_body: bytes) -> bytes:
+    """
+    Note that this function is necessary because pyDes does remove all trailing
+    zero bytes and that is incorrect for intervals messages.
+    :param decrypted_body: Body with removed trailing zeroes
+    :return:
+    """
+    if decrypted_body[len(decrypted_body) - 1] == 0:
+        raise ValueError('Not all trailing zeroes removed')
+
+    filled_body = bytearray(decrypted_body)
+    i = len(decrypted_body)
+    while (i % 12) != 0:
+        filled_body.append(0)
+        i += 1
+    return bytes(filled_body)
+
