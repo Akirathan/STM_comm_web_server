@@ -40,7 +40,8 @@ def get_intervals(device: Device) -> HttpResponse:
     intervals = device.get_intervals()
     for interval in intervals:
         byte_array += interval.serialize()
-    return HttpResponse(bytes(byte_array), content_type='application/octet-stream')
+    encrypted_body = encrypt_response_body(device.get_key(), bytes(byte_array))
+    return HttpResponse(encrypted_body, content_type='application/octet-stream')
 
 
 def post_intervals(device: Device, decrypted_body: bytes) -> HttpResponse:
