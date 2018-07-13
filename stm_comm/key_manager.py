@@ -53,6 +53,9 @@ class KeyManager:
         for device in Device.objects.all():
             if device.get_key() == key:
                 return True
+        for pending_key in KeyManager._pending_keys.keys():
+            if pending_key == key:
+                return True
         return False
 
     @staticmethod
