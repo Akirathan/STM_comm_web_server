@@ -4,6 +4,7 @@ from django.shortcuts import render
 from django.views import View
 
 from stm_comm.models import Device
+from stm_comm.key_manager import KeyManager
 
 
 def index(request: HttpRequest) -> HttpResponse:
@@ -46,8 +47,8 @@ def register_new_device(request: HttpRequest) -> HttpResponse:
 
 
 def generate_key(request: HttpRequest) -> HttpResponse:
-    # TODO: DES key generation
-    return render(request, 'generate_key.html', {'key': 'ABCDEF12'})
+    des_key = KeyManager.generate_key()
+    return render(request, 'generate_key.html', {'key': des_key.hex_str})
 
 
 class DevicesView(View):
