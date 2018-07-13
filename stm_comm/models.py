@@ -36,10 +36,16 @@ class Device(models.Model):
         return
 
     def get_key(self) -> DesKey:
+        if self.key == '':
+            return None
         return DesKey(self.key)
 
     def set_key(self, key: DesKey) -> None:
         self.key = key.hex_str
+        self.save()
+
+    def remove_key(self) -> None:
+        self.key = ''
         self.save()
 
     def __get_intervals_item(self) -> ['IntervalsItem']:

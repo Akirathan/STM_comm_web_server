@@ -90,6 +90,8 @@ def _try_decrypt_connect_req(request: HttpRequest) -> Device:
 
     # Try keys from all offline devices
     for offline_device in Device.get_offline_devices():
+        if offline_device.get_key() is None:
+            continue
         decrypted_body = decrypt_req_body(request, offline_device.get_key())
         decrypted_body_str = str(decrypted_body, 'ascii')
         if decrypted_body_str == offline_device.device_id:
