@@ -24,7 +24,7 @@ class KeyManager:
         key_bytes = bytearray()
         for i in range(8):
             key_bytes.append(randrange(0, 256))
-        key = DesKey(key_bytes)
+        key = DesKey(bytes(key_bytes))
 
         if not KeyManager._is_key_used(key):
             KeyManager._add_to_pending_keys(key)
