@@ -1,5 +1,6 @@
 from django.http import HttpResponse, HttpRequest
 from django.views.decorators.csrf import csrf_exempt
+import struct
 from .connection_manager import ConnectionManager
 from .models import Device, Interval
 from .des_encryption import encrypt_response_body, decrypt_req_body
@@ -49,10 +50,10 @@ def post_intervals(device: Device, decrypted_body: bytes) -> HttpResponse:
     Processes intervals sent from STM. Note that STM has to sent intervals along
     with timestamp.
     """
-    timestamp_str, intervals_decrypted = decrypted_body.split(b'\n')
+    timestamp = struct.unpack('I', decrypted_body[:4])[0]
+    intervals_decrypted = decrypted_body[4:]
+    
     intervals_fixed_padding = _fill_removed_zeros(intervals_decrypted)
-
-    timestamp = int(timestamp_str)
     intervals = Interval.deserialize_intervals(intervals_fixed_padding)
     if intervals is None:
         return HttpResponse(404)
