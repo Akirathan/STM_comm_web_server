@@ -47,7 +47,15 @@ def register_new_device(request: HttpRequest) -> HttpResponse:
 
 
 def generate_key(request: HttpRequest) -> HttpResponse:
+    device = Device.objects.get(device_id=request.POST['device_id'])
+    if device is None:
+        render(request, 'generate_key_error.html')
+
     des_key = KeyManager.generate_key()
+
+    user = request.user
+    device.user = user
+
     return render(request, 'generate_key.html', {'key': des_key.hex_str})
 
 
