@@ -1,5 +1,6 @@
 from django.db import models
 from django.db.models.query import QuerySet
+from django.contrib.auth.models import User
 from django.conf import settings
 from django.template.loader import render_to_string
 import json
@@ -52,6 +53,10 @@ class Device(models.Model):
 
     def remove_user(self) -> None:
         self.user = None
+        self.save()
+
+    def set_user(self, user: User) -> None:
+        self.user = user
         self.save()
 
     def __get_intervals_item(self) -> ['IntervalsItem']:
