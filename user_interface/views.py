@@ -47,14 +47,22 @@ def register_new_device(request: HttpRequest) -> HttpResponse:
 
 
 def generate_key(request: HttpRequest) -> HttpResponse:
-    device = Device.objects.get(device_id=request.POST['device_id'])
+    """
+    Generates new DES key for a device (from device_id text input).
+    The user from request parameter is assigned into the device.
+    :param request:
+    :return:
+    """
+    query_set = Device.objects.filter(device_id=request.POST['device_id'])
+    device = query_set.first()
     if device is None:
-        render(request, 'generate_key_error.html')
+        return render(request, 'generate_key_error.html')
 
     des_key = KeyManager.generate_key()
 
-    user = request.user
-    device.user = user
+    # Remove "old" key
+    device.remove_key()
+    device.set_user(request.user)
 
     return render(request, 'generate_key.html', {'key': des_key.hex_str})
 
