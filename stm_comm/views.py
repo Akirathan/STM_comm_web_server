@@ -52,6 +52,8 @@ def connect(request: HttpRequest) -> HttpResponse:
     if request.method != 'POST':
         return HttpResponse(status=404)
 
+    ConnectionManager.check_timeouts()
+
     device = _try_decrypt_connect_req(request)
     if device is None:
         return HttpResponse(status=404)
