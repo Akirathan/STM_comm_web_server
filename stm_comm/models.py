@@ -14,12 +14,14 @@ from .des_key import DesKey
 class Device(models.Model):
     # Serial number (or other ID) of device
     device_id = models.CharField(primary_key=True, max_length=20)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,
+                             null=True,
+                             on_delete=models.SET_NULL)
     # online/offline
     status = models.CharField(max_length=7)
     fw_version = models.CharField(max_length=10)
     # private DES key
-    key = models.CharField(max_length=16)
+    key = models.CharField(max_length=16, null=True)
 
     @staticmethod
     def get_offline_devices() -> ['Device']:
@@ -36,7 +38,7 @@ class Device(models.Model):
         return
 
     def get_key(self) -> DesKey:
-        if self.key == '':
+        if self.key == '' or self.key is None:
             return None
         return DesKey(self.key)
 
@@ -46,6 +48,10 @@ class Device(models.Model):
 
     def remove_key(self) -> None:
         self.key = ''
+        self.save()
+
+    def remove_user(self) -> None:
+        self.user = None
         self.save()
 
     def __get_intervals_item(self) -> ['IntervalsItem']:
