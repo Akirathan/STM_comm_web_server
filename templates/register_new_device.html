@@ -16,8 +16,15 @@
 <body>
 {% include "navbar.html" with active_navbar_item="register_new_device" %}
 
-<a class="btn btn-primary" href="{% url 'user_interface:generate_key' %}" role="button"
-   style="position: relative; left: 45%; top: 40px">Generate new key</a>
+<form action="{% url 'user_interface:generate_key' %}" method="post"
+      style="position: absolute; top: 20%; left:40%">
+{% csrf_token %}
+  <div>
+    <label for="dev_id">Device ID:</label>
+    <input id="dev_id" type="text" name="device_id">
+  </div>
+  <input class="btn btn-primary" type="submit" value="Generate new key">
+</form>
 
 {% include "javascripts.html" %}
 </body>
