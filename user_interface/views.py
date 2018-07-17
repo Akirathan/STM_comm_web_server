@@ -4,6 +4,7 @@ from django.shortcuts import render
 from django.views import View
 
 from stm_comm.models import Device
+from stm_comm.key_manager import KeyManager
 
 
 def index(request: HttpRequest) -> HttpResponse:
@@ -39,6 +40,31 @@ def get_user_devices(request: HttpRequest) -> [Device]:
         return []
 
     return user.device_set.all()
+
+
+def register_new_device(request: HttpRequest) -> HttpResponse:
+    return render(request, 'register_new_device.html')
+
+
+def generate_key(request: HttpRequest) -> HttpResponse:
+    """
+    Generates new DES key for a device (from device_id text input).
+    The user from request parameter is assigned into the device.
+    :param request:
+    :return:
+    """
+    query_set = Device.objects.filter(device_id=request.POST['device_id'])
+    device = query_set.first()
+    if device is None:
+        return render(request, 'generate_key_error.html')
+
+    des_key = KeyManager.generate_key()
+
+    # Remove "old" key
+    device.remove_key()
+    device.set_user(request.user)
+
+    return render(request, 'generate_key.html', {'key': des_key.hex_str})
 
 
 class DevicesView(View):

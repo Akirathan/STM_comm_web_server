@@ -1,0 +1,32 @@
+<!--
+Context variables:
+  key ... string representing DES key in hex format
+
+This page only shows generated key and gives some explanation to user.
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags by Bootstrap -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  {% include "stylesheets.html" %}
+</head>
+
+<body>
+{% include "navbar.html" with active_navbar_item="register_new_device" %}
+
+<div style="position: absolute; top: 80px; left: 45%; font-size: large">{{ key }}</div>
+
+<!-- Explanation -->
+<div style="position: absolute; top: 120px; left: 30%">
+  You have <strong>5 minutes</strong> for setting this key to your device.
+  To check if the device connected successfully, refresh "devices" page.
+</div>
+
+{% include "javascripts.html" %}
+</body>
+</html>

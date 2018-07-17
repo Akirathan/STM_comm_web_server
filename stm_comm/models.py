@@ -1,8 +1,11 @@
 from django.db import models
+from django.db.models.query import QuerySet
+from django.contrib.auth.models import User
 from django.conf import settings
 from django.template.loader import render_to_string
 import json
 import struct
+from .des_key import DesKey
 
 # Primary key (serial number or other ID) of Device is expected to be set
 # before the device attempts to connect for the first time.
@@ -12,12 +15,18 @@ import struct
 class Device(models.Model):
     # Serial number (or other ID) of device
     device_id = models.CharField(primary_key=True, max_length=20)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,
+                             null=True,
+                             on_delete=models.SET_NULL)
     # online/offline
     status = models.CharField(max_length=7)
     fw_version = models.CharField(max_length=10)
     # private DES key
-    key = models.CharField(max_length=8)
+    key = models.CharField(max_length=16, null=True)
+
+    @staticmethod
+    def get_offline_devices() -> ['Device']:
+        return list(Device.objects.filter(status__exact='offline'))
 
     def set_online(self) -> None:
         self.status = 'online'
@@ -28,6 +37,27 @@ class Device(models.Model):
         self.status = 'offline'
         self.save()
         return
+
+    def get_key(self) -> DesKey:
+        if self.key == '' or self.key is None:
+            return None
+        return DesKey(self.key)
+
+    def set_key(self, key: DesKey) -> None:
+        self.key = key.hex_str
+        self.save()
+
+    def remove_key(self) -> None:
+        self.key = ''
+        self.save()
+
+    def remove_user(self) -> None:
+        self.user = None
+        self.save()
+
+    def set_user(self, user: User) -> None:
+        self.user = user
+        self.save()
 
     def __get_intervals_item(self) -> ['IntervalsItem']:
         intervals_items = self.intervalsitem_set
