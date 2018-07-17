@@ -1,3 +1,6 @@
+/**
+ * This class represents part of the DOM representing one device.
+ */
 class DeviceWindow {
     // temperature of this device
     static get TEMPERATURE_VALUE_ID() {return "temp";}
@@ -7,6 +10,10 @@ class DeviceWindow {
     // online/offline status of the device
     static get STATE_VALUE_ID() {return "state";}
 
+    /**
+     * Searches for DOM elements representing this DeviceWindow
+     * @param deviceId
+     */
     constructor(deviceId) {
         this._deviceId = deviceId;
         this._configItems = [];
@@ -25,6 +32,7 @@ class DeviceWindow {
     }
 
     /**
+     * Returns the intervals (IntervalsWindow) that is associated with this device.
      * @return {IntervalsWindow}
      */
     get intervalsWindow() {
@@ -72,6 +80,8 @@ class DeviceWindow {
     }
 
     /**
+     * Returns values of all containing intervals from time before edit button
+     * was trigerred.
      * @return {[Interval]}
      */
     getIntervalsBeforeEditing() {
@@ -129,12 +139,20 @@ class DeviceWindow {
         }
     }
 
+    /**
+     * Associates given config item with this device.
+     * Note that currently only intervals (ie. IntervalWindows) are supported.
+     * @param configItem ... config item to be associated with this device
+     */
     addConfigItem(configItem) {
         if (configItem instanceof ConfigItem) {
             this._configItems.push(configItem);
         }
     }
 
+    /**
+     * Handler called when refresh button near temperature was clicked.
+     */
     onTemperatureRefresh() {
         this._$temperatureNotificationElem.hide();
         this._$temperatureRefreshBtnElem.attr("disabled", "true");

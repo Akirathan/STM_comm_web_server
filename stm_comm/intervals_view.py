@@ -8,6 +8,11 @@ from .des_encryption import encrypt_response_body, decrypt_req_body
 
 @csrf_exempt
 def get_intervals_timestamp(request: HttpRequest) -> HttpResponse:
+    """
+    Processes "GET intervals/timestamp" message from STM.
+    :return: timestamp in string format
+    """
+
     if request.method != 'GET':
         return HttpResponse(404)
 

@@ -1,5 +1,6 @@
 
 class DesKey:
+    """ Wrapper for DES key """
     KEY_LEN = 8
 
     def __init__(self, value):

@@ -1,3 +1,6 @@
+/**
+ * This class represents a list of all devices for one user.
+ */
 class DeviceList {
     constructor() {
         this._devices = [];
@@ -10,7 +13,8 @@ class DeviceList {
     }
 
     /**
-     * @param id
+     * Gets device by ID.
+     * @param id ... ID of a device
      * @return {DeviceWindow}
      */
     getDeviceById(id) {

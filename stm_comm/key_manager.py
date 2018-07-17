@@ -6,6 +6,12 @@ from stm_comm.des_key import DesKey
 
 
 class KeyManager:
+    """
+    This class creates new DES keys on user's demand and keep them "alive" for
+    specific amount of time. It would be insufficient to keep all the generated
+    keys alive forever.
+    """
+
     KEY_TIMEOUT_SECONDS = 4*60
 
     """
@@ -21,6 +27,7 @@ class KeyManager:
         Generates random key and checks whether it is not used.
         Lifetime of returned key is limited
         """
+
         key_bytes = bytearray()
         for i in range(8):
             key_bytes.append(randrange(0, 256))
@@ -34,6 +41,9 @@ class KeyManager:
 
     @staticmethod
     def get_all_pending_keys() -> [DesKey]:
+        """
+        Returns all the keys that were generated recently.
+        """
         KeyManager._remove_expired_keys()
         return KeyManager._pending_keys.keys()
 

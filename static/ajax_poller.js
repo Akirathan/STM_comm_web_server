@@ -3,6 +3,12 @@ let intervalsForUploadTimestamp = 0;
 let intervalsForUploadDevId = "";
 let firstPoll = true;
 
+/**
+ * This class polls the backend for various important information - for example
+ * all devices' states and all devices' temperatures. These informations are
+ * send from backend in JSON format.
+ * Note that the AjaxPoller needs to be started with startPoll method.
+ */
 class AjaxPoller {
     static get INTERVALS_URL() {return "/intervals";}
     static get DEVICES_STATES_URL() {return "/devstates";}
@@ -62,6 +68,7 @@ class AjaxPoller {
                     // notify device that intervals were successfully POSTed
                     let device = deviceList.getDeviceById(intervalsForUploadDevId);
                     device.intervalsUploaded();
+
                     firstPoll = false;
                     AjaxPoller.startPoll();
                 }
@@ -82,6 +89,7 @@ class AjaxPoller {
 
     /**
      * Processes device states retrieved from server.
+     * @private
      */
     static _processDevicesStates(data) {
         let data_json = JSON.parse(data);
@@ -93,6 +101,10 @@ class AjaxPoller {
         })
     }
 
+    /**
+     * Processes temperatures from all user's devices retrieved from server.
+     * @private
+     */
     static _processTemperatures(data) {
         let data_json = JSON.parse(data);
         data_json.forEach(function(item) {
@@ -103,6 +115,10 @@ class AjaxPoller {
         })
     }
 
+    /**
+     * Processes intervals data from all user's devices retrieved from server.
+     * @private
+     */
     static _processIntervals(data) {
         let data_json = JSON.parse(data);
         data_json.forEach(function(item) {

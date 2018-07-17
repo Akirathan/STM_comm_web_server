@@ -16,6 +16,13 @@ class ConnectionManager:
 
     @staticmethod
     def add_device(device_id: str, remote_addr: str):
+        """
+        Adds given device to the list of connected devices. This device will be
+        considered online as long as it will periodically send some messages.
+        :param device_id: ID of the device
+        :param remote_addr: IP address of the device
+        :return:
+        """
         ConnectionManager._check_and_remove_offline_devices()
 
         if device_id in ConnectionManager._connected_devices:
