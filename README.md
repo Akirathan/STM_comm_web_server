@@ -34,8 +34,29 @@ Note that the communication with the device is encrypted with DES encryption.
 `templates` directory contains all HTML template pages.
 
 Finally, `venv` directory contains Python's virtual environment with Django installed.
+Note that by default `venv` is not tracked by Git.
 
 ### Database
 There is an SQLite database in root directory that is used as an intermediate between
 `stm_comm` and `user_interface` components.
+The sqlite database is tracked by Git, there is one device and one user in this database.
+Feel free to explore the database either via `sqlite3 db.sqlite3` or via Django's API.
+Invoke Django shell (normal Python shell with some imports) with:
+`./venv/bin/python3 manage.py shell`, import `stm_comm.models` and for more information
+refer to Django's documentation.
+
+## Running the server
+I developed the whole server on my machine, if you want to run the server on your own
+machine you have to make some arrangements:
+- Clone the whole repository
+- Create virtual environment
+    - with something like: `python3 -m venv ./venv`
+- Install Django and other dependencies into your virtual environment
+    - `./venv/bin/pip3 install Django pyDes`
+- Other directories may remain without any change, maybe you will have to remove
+  `__pycache__` subdirectories.
+- Before running server, do some checks
+    - `./venv/bin/python3 manage.py check`
+- And finally run the server
+    - `./venv/bin/python3 manage.py runserver 8000`
 
