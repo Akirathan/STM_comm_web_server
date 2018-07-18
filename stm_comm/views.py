@@ -95,7 +95,12 @@ def _try_decrypt_connect_req(request: HttpRequest) -> Device:
         if offline_device.get_key() is None:
             continue
         decrypted_body = decrypt_req_body(request, offline_device.get_key())
-        decrypted_body_str = str(decrypted_body, 'ascii')
+
+        try:
+            decrypted_body_str = str(decrypted_body, 'ascii')
+        except UnicodeDecodeError:
+            continue
+
         if decrypted_body_str == offline_device.device_id:
             return offline_device
 
