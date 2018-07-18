@@ -1,7 +1,16 @@
 /**
- * Represents both overview and editable interval.
+ * This class is an "object representation" of part of the DOM that represents
+ * one interval.
+ * Interval may be in two states - overview and editable.
+ * By default, it is in an overview (read-only state), when user presses "edit"
+ * button, it is switched to the editable state.
+ *
  */
 class IntervalWindow {
+    /**
+     * Searches for DOM elements representing this interval.
+     * @param $intervalElement
+     */
     constructor($intervalElement) {
         this._isChanged = false;
 
@@ -72,6 +81,10 @@ class IntervalWindow {
 
     }
 
+    /**
+     * Returns boolean whether these intervals were changed (edited) by the user.
+     * @return {boolean}
+     */
     isChanged() {
         return this._isChanged;
     }
@@ -155,8 +168,7 @@ class IntervalWindow {
 }
 
 /**
- * Time and Interval classes are used just for serialization into AJAX request and
- * deserialization from response.
+ * Helper class used for serialization and deserialization into AJAX request for AjaxPoller.
  */
 class Time {
     static compareTimes(timeA, timeB) {
@@ -173,6 +185,9 @@ class Time {
     }
 }
 
+/**
+ * Helper class used for serialization and deserialization into AJAX request for AjaxPoller.
+ */
 class Interval {
     /**
      * Compares given arrays of intervals.

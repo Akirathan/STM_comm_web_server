@@ -11,10 +11,13 @@ from .des_key import DesKey
 # before the device attempts to connect for the first time.
 
 
-# Create your models here.
 class Device(models.Model):
+    """
+    This class is a database-representation of STM device.
+    """
     # Serial number (or other ID) of device
     device_id = models.CharField(primary_key=True, max_length=20)
+    # user may not be set initially
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
                              null=True,
                              on_delete=models.SET_NULL)
@@ -108,6 +111,7 @@ class Device(models.Model):
 
 
 class Item(models.Model):
+    """ Base class for all device's items """
     class Meta:
         abstract = True
 
@@ -151,6 +155,65 @@ class TempItem(ActualItem):
         })
 
 
+class IntervalsItem(ConfigItem):
+    """
+    This class is a model representation of intervals setting. All the intervals
+    setting is kept in self.value in JSON format.
+    """
+    device = models.ForeignKey('Device', default=None, on_delete=models.CASCADE)
+    name = 'intervals'
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.intervals_num = len(self.get_intervals())
+        return
+
+    def __str__(self):
+        retval = '['
+        for interval in self.get_intervals():
+            retval += interval.__str__()
+            retval += ','
+        retval += ']'
+        return retval
+
+    def render(self) -> str:
+        return render_to_string('items/intervals.html', {
+            'interval_list': self.get_intervals(),
+            'device_model': self.device
+        })
+
+    def __parse_one_interval__(self, interval_dict: dict) -> 'Interval':
+        return Interval.from_json(interval_dict)
+
+    def get_intervals(self) -> ['Interval']:
+        """
+        Parses all the intervals that are in self.value in JSON format
+        """
+        return Interval.parse_intervals(self.value)
+
+    def add_interval(self, interval: 'Interval'):
+        # Remove last array bracket
+        self.value = self.value.replace(']', '')
+
+        if self.intervals_num >= 1:
+            self.value += ','
+        self.value += interval.to_json()
+        self.value += ']'
+
+        self.intervals_num += 1
+        return
+
+    def reset_intervals(self, intervals: ['Interval']):
+        """
+        Resets the value of this item with passed intervals. Note that the passed intervals
+        are already parsed.
+        :param intervals:
+        :return:
+        """
+        self.value = Interval.stringify_intervals(intervals)
+        self.save()
+
+
 class Time:
     def __init__(self, hours: int, minutes: int):
         self.__hours_num = hours
@@ -188,6 +251,10 @@ class Time:
 
 
 class Interval:
+    """
+    Helper class for IntervalsItem. Contains serialization both for binary format and for
+    JSON format.
+    """
     def __init__(self, from_time: Time, to_time: Time, temp: int):
         self.from_time = from_time
         self.to_time = to_time
@@ -256,61 +323,3 @@ class Interval:
     def __str__(self):
         return 'from: %s, to: %s, temp: %d' % (self.from_time, self.to_time, self.temp)
 
-
-class IntervalsItem(ConfigItem):
-    """
-    This class is a model representation of intervals setting. All the intervals
-    setting is kept in self.value in JSON format.
-    """
-    device = models.ForeignKey('Device', default=None, on_delete=models.CASCADE)
-    name = 'intervals'
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.intervals_num = len(self.get_intervals())
-        return
-
-    def __str__(self):
-        retval = '['
-        for interval in self.get_intervals():
-            retval += interval.__str__()
-            retval += ','
-        retval += ']'
-        return retval
-
-    def render(self) -> str:
-        return render_to_string('items/intervals.html', {
-            'interval_list': self.get_intervals(),
-            'device_model': self.device
-        })
-
-    def __parse_one_interval__(self, interval_dict: dict) -> Interval:
-        return Interval.from_json(interval_dict)
-
-    def get_intervals(self) -> [Interval]:
-        """
-        Parses all the intervals that are in self.value in JSON format
-        """
-        return Interval.parse_intervals(self.value)
-
-    def add_interval(self, interval: Interval):
-        # Remove last array bracket
-        self.value = self.value.replace(']', '')
-
-        if self.intervals_num >= 1:
-            self.value += ','
-        self.value += interval.to_json()
-        self.value += ']'
-
-        self.intervals_num += 1
-        return
-
-    def reset_intervals(self, intervals: [Interval]):
-        """
-        Resets the value of this item with passed intervals. Note that the passed intervals
-        are already parsed.
-        :param intervals:
-        :return:
-        """
-        self.value = Interval.stringify_intervals(intervals)
-        self.save()

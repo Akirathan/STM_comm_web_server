@@ -1,7 +1,12 @@
+/**
+ * This class contains a string for one interval.
+ * This is not a good idea and should be replaced when some frontend framework
+ * will be integrated.
+ */
 class IntervalTemplate {
     /**
      * @param deviceId {string}
-     * @param index {int}
+     * @param index {int} index of the new interval window to be rendered.
      * @param intervalClass {Interval} may be undefined - in that case, values are rendered default
      * @return {IntervalWindow}
      */

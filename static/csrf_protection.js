@@ -1,5 +1,9 @@
 let csrfProtectionSet = false;
 
+/**
+ * This class contains few static methods that ensures CSRF protection.
+ * Most of the code is copied from Django's tutorials.
+ */
 class CsrfProtection {
     static ensureCsrf() {
         if (csrfProtectionSet) {

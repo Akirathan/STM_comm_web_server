@@ -1,5 +1,6 @@
 /**
- * Represents all intervals for one device ie. list of all intervals
+ * Represents all intervals for one device ie. list of all intervals.
+ * More precisely this class represents part of the DOM.
  */
 class IntervalsWindow extends ConfigItem {
     static get NOTIFICATION_ID() {return "interval_changed_flag"}
@@ -39,7 +40,7 @@ class IntervalsWindow extends ConfigItem {
     }
 
     /**
-     * Returns values of all containing intervals
+     * Returns values of all containing intervals.
      * @return {[Interval]}
      */
     getIntervalValues() {
@@ -131,6 +132,10 @@ class IntervalsWindow extends ConfigItem {
         this._enableRefreshButton();
     }
 
+    /**
+     * Switches all intervals to the editable state.
+     * @param event
+     */
     editAll(event) {
         this._intervalValuesBeforeEditing = this.getIntervalValues();
 
