@@ -1,5 +1,4 @@
 from django.db import models
-from django.db.models.query import QuerySet
 from django.contrib.auth.models import User
 from django.conf import settings
 from django.template.loader import render_to_string
@@ -9,6 +8,9 @@ from .des_key import DesKey
 
 # Primary key (serial number or other ID) of Device is expected to be set
 # before the device attempts to connect for the first time.
+
+""" Maximum number of intervals (also set in STM) """
+INTERVALS_NUM = 15
 
 
 class Device(models.Model):
@@ -91,6 +93,9 @@ class Device(models.Model):
         return float(temp_item.value)
 
     def set_intervals(self, intervals: ['Interval'], timestamp: int):
+        if len(intervals) > INTERVALS_NUM:
+            raise ValueError('Attempting to set too much intervals')
+
         intervals_item = self.__get_intervals_item()
         intervals_item.set_timestamp(timestamp)
         intervals_item.reset_intervals(intervals)
