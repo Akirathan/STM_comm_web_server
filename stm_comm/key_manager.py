@@ -12,7 +12,7 @@ class KeyManager:
     keys alive forever.
     """
 
-    KEY_TIMEOUT_SECONDS = 4*60
+    KEY_TIMEOUT_SECONDS = 5*60
 
     """
     Dictionary <Key, timestamp(int)>. When time is reached, the key is disposed.

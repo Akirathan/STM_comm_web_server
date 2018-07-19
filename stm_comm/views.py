@@ -83,7 +83,12 @@ def _try_decrypt_connect_req(request: HttpRequest) -> Device:
     # Try all pending keys from KeyManager first.
     for key in KeyManager.get_all_pending_keys():
         decrypted_body = decrypt_req_body(request, key)
-        decrypted_body_str = str(decrypted_body, 'ascii')
+
+        try:
+            decrypted_body_str = str(decrypted_body, 'ascii')
+        except UnicodeDecodeError:
+            continue
+
         if _is_device_id(decrypted_body_str):
             device = Device.objects.get(device_id=decrypted_body_str)
             KeyManager.remove_from_pending_keys(key)
@@ -95,7 +100,12 @@ def _try_decrypt_connect_req(request: HttpRequest) -> Device:
         if offline_device.get_key() is None:
             continue
         decrypted_body = decrypt_req_body(request, offline_device.get_key())
-        decrypted_body_str = str(decrypted_body, 'ascii')
+
+        try:
+            decrypted_body_str = str(decrypted_body, 'ascii')
+        except UnicodeDecodeError:
+            continue
+
         if decrypted_body_str == offline_device.device_id:
             return offline_device
 
